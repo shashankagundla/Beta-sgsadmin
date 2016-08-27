@@ -2,7 +2,7 @@
 
 class Template {
 
-    function header($title) {
+function header($title) {
 return <<<HTML
 <html>
 <head>
@@ -12,7 +12,7 @@ return <<<HTML
     <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
 </head>
 HTML;
-    }
+}
 
     function footer(){
 
