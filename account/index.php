@@ -1,9 +1,5 @@
 <?php
 require_once("../includes/init.php");
-?>
-<html>
-
-<?php
 $template->header('User Account')
 ?>
 
