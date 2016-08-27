@@ -1,8 +1,9 @@
 <?php
-include_once("../includes/functions.php");
-$gUser = new Users();
-$gUser->checkAuth();
+require_once("../includes/initialize.php");
+$user = new Users();
+$user->checkAuth();
 ?>
+
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -55,3 +56,4 @@ color:#999999;
 </div>
 </body>
 </html>
+

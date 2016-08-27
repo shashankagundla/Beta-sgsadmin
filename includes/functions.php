@@ -24,10 +24,10 @@ class Users {
         if (! $db->Query("SELECT * FROM $this->tableName")) $db->Kill();
 
         //Check for user in db
-        $prevQuery = $db->Query("SELECT * FROM $this->tableName WHERE oauth_provider = '".$oauth_provider."' AND oauth_uid = '".$oauth_uid."'");
+        $userCheck = $db->Query("SELECT * FROM $this->tableName WHERE oauth_provider = '".$oauth_provider."' AND oauth_uid = '".$oauth_uid."'");
 
         //If users is in db then update
-        if($db->RowCount() > 0){
+        if($userCheck->RowCount() > 0){
 
             // Create a filter array the determines which record(s) to process
             // (you can specify more than one column if needed)
@@ -53,7 +53,6 @@ class Users {
 	}
 
 	function checkAuth(){
-        session_start();
         if(!isset($_SESSION['google_data'])):header("Location:/");endif;
     }
 }
