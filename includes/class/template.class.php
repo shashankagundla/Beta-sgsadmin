@@ -14,7 +14,7 @@ class Template {
     }
 
     function footer() {
-        return '';
+        return '</html>';
     }
 
 }

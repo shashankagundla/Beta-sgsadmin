@@ -4,7 +4,6 @@ echo $template->header('User Account', 10);
 ?>
 
 <body>
-<h1>Bootstrap</h1>
 <div class="alert alert-info">
     <div class="wrapper">
         <h1>Google Profile Details </h1>
@@ -24,11 +23,9 @@ echo $template->header('User Account', 10);
         ?>
     </div>
 </div>
-<select></select>
-
+<body>
 <?php
 echo $template->footer();
 ?>
 
-</body>
 
