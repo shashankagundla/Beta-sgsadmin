@@ -1,7 +1,5 @@
 <?php
-include_once("../includes/functions.php");
-$user = new Users;
-$user->checkAuth();
+require_once("../includes/init.php");
 ?>
 
 <html>
