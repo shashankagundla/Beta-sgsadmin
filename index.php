@@ -1,5 +1,6 @@
 <?php
-require_once("includes/config/auth.config.php");
+include("config.php");
+require_once("includes/init.php");
 
 if(isset($_REQUEST['code'])){
 	$gClient->authenticate();
