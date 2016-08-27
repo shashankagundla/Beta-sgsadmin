@@ -11,7 +11,7 @@ class Template {
     <link rel="stylesheet" href="/assets/css/theme/'.$theme.'.css">
     <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
 </head>
-' . navbar();
+';
 
         return $html;
     }
