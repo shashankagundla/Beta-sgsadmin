@@ -27,7 +27,7 @@ class Users {
         $userCheck = $db->Query("SELECT * FROM $this->tableName WHERE oauth_provider = '".$oauth_provider."' AND oauth_uid = '".$oauth_uid."'");
 
         //If users is in db then update
-        if($userCheck->RowCount() > 0){
+        if($db->RowCount() > 0){
 
             // Create a filter array the determines which record(s) to process
             // (you can specify more than one column if needed)
