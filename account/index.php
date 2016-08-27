@@ -1,6 +1,6 @@
 <?php
-require_once("../includes/functions.php");
-$user = new Users();
+include_once("../includes/functions.php");
+$user = new Users;
 $user->checkAuth();
 ?>
 
@@ -56,4 +56,3 @@ color:#999999;
 </div>
 </body>
 </html>
-
