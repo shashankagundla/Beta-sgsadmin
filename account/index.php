@@ -5,7 +5,7 @@ echo $template->header('User Account', 11);
 
     <div class="container-fluid">
     <div class = "page-header">
-        <h1>Example page header</h1>
+        <h2>Example page header</h2>
     </div>
         <?php
         echo '<div class="welcome_txt">Welcome <b>'.$_SESSION['google_data']['given_name'].'</b></div>';
