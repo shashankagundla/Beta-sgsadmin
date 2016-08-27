@@ -3,7 +3,6 @@ require_once("../includes/init.php");
 echo $template->header('User Account', 15);
 ?>
 
-<body>
 <div class="alert alert-info">
     <div class="wrapper">
         <h1>Google Profile Details </h1>
