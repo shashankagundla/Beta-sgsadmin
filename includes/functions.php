@@ -1,7 +1,6 @@
 <?php
 include("mysql.class.php");
 
-
 class Users {
     public $tableName = 'users';
 
