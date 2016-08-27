@@ -1,7 +1,6 @@
 <?php
-include_once("config.php");
-include_once("includes/functions.php");
-
+require_once("includes/init.php");
+require_once("includes/auth.config.php");
 //print_r($_GET);die;
 
 if(isset($_REQUEST['code'])){

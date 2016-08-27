@@ -1,6 +1,6 @@
 <?php
 //required PHP files
-require_once ('functions.php');
+require_once ('user.class.php');
 
 
 
