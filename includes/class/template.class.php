@@ -17,7 +17,7 @@ class Template {
 ';
     //Nav Bar
         $html .= '
-<body style="padding-top: 50px;">
+<body style="padding-top: 10px;">
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         
         <div class="navbar-header">
