@@ -1,6 +1,6 @@
 <?php
 require_once("../includes/init.php");
-$template->header('User Account')
+echo $template->header('User Account');
 ?>
 
 <body>

@@ -3,8 +3,7 @@
 class Template {
 
     function header($title) {
-
-        return <<<HTML
+return <<<HTML
             <html>
             <head>
                 <meta charset="utf-8">
