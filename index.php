@@ -1,7 +1,5 @@
 <?php
 require_once("includes/init.php");
-require_once("includes/auth.config.php");
-//print_r($_GET);die;
 
 if(isset($_REQUEST['code'])){
 	$gClient->authenticate();
@@ -28,7 +26,7 @@ if ($gClient->getAccessToken()) {
 if(isset($authUrl)) {
 	echo '<a href="'.$authUrl.'"><img src="assets/mages/glogin.png" alt=""/></a>';
 } else {
-	echo '<a href="logout.php?logout">Logout</a>';
+	echo '<a href="account/logout/?logout">Logout</a>';
 }
 
 ?>
