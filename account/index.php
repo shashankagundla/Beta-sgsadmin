@@ -2,7 +2,6 @@
 require_once("../includes/init.php");
 echo $template->header('User Account', 11);
 ?>
-
     <div class="container-fluid">
     <div class = "page-header">
         <h2>Example page header</h2>
@@ -22,10 +21,6 @@ echo $template->header('User Account', 11);
         echo '</div>';
         ?>
     </div>
-
-
-
-
 <?php
 echo $template->footer();
 ?>

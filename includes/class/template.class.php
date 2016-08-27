@@ -12,6 +12,7 @@ class Template {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>'.$title.'</title>
     <link rel="stylesheet" href="/assets/css/theme/'.$theme.'.css">
+    <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
     <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
 </head>
 ';
@@ -50,12 +51,11 @@ class Template {
             </ul>
             <button type="button" class="btn btn-default navbar-btn">Button</button>
             <div class="col-sm-3 col-md-3 pull-right">
-            <div class="navbar-text">Text</div>
             <form class="navbar-form" role="search">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
                 <div class="input-group-btn">
-                    <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                    <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
                 </div>
             </div>
             </form>
