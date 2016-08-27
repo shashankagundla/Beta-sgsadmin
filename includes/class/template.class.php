@@ -54,7 +54,9 @@ class Template {
             <form class="navbar-form" role="search">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
-                <button class="btn btn-default navbar-btn" type="submit"><i class="fa fa-search fa"></i></button>
+                <div class="input-group-btn">
+                    <button class="btn btn-default navbar-btn" type="submit"><i class="fa fa-search fa"></i></button>
+                </div>
             </div>
             </form>
             </div>
