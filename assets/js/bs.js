@@ -1,1 +1,23 @@
-$.getJSON("https://bootswatch.com/api/3.json",function(a){var b=a.themes,c=$("select");c.show(),$(".alert").toggleClass("alert-info alert-success"),$(".alert h4").text("Success!"),b.forEach(function(a,b){c.append($("<option />").val(b).text(a.name))}),c.change(function(){var a=b[$(this).val()];$("link").attr("href",a.css),$("h1").text(a.name)}).change()},"json").fail(function(){$(".alert").toggleClass("alert-info alert-danger"),$(".alert h4").text("Failure!")});
+$.getJSON("https://bootswatch.com/api/3.json", function (data) {
+    var themes = data.themes;
+    var select = $("select");
+    select.show();
+    $(".alert").toggleClass("alert-info alert-success");
+    $(".alert h4").text("Success!");
+
+    themes.forEach(function(value, index){
+        select.append($("<option />")
+            .val(index)
+            .text(value.name));
+    });
+
+    select.change(function(){
+        var theme = themes[$(this).val()];
+        $("link").attr("href", theme.css);
+        $("h1").text(theme.name);
+    }).change();
+
+}, "json").fail(function(){
+    $(".alert").toggleClass("alert-info alert-danger");
+    $(".alert h4").text("Failure!");
+});
