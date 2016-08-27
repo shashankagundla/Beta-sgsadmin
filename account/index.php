@@ -1,6 +1,7 @@
 <?php
-session_start();
-if(!isset($_SESSION['google_data'])):header("Location:index.php");endif;
+include_once("../includes/functions.php");
+$gUser = new Users();
+$gUser->checkAuth();
 ?>
 <html>
 <head>

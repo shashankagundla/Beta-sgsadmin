@@ -51,5 +51,10 @@ class Users {
 
         return $authUser;
 	}
+
+	function checkAuth(){
+        session_start();
+        if(!isset($_SESSION['google_data'])):header("Location:/");endif;
+    }
 }
 ?>
