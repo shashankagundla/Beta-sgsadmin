@@ -1,12 +1,13 @@
 <?php
-
 include("mysql.class.php");
-$db = new MySQL();
-if ($db->Error()) $db->Kill();
+
 
 class Users {
     public $tableName = 'users';
+
     function checkUser($oauth_provider,$oauth_uid,$fname,$lname,$email,$gender,$locale,$link,$picture){
+        $db = new MySQL();
+
         // Create an array that holds the update information
         // $arrayVariable["column name"] = formatted SQL value
         $oauthData["oauth_provider"] = MySQL::SQLValue($oauth_provider);
