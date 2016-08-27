@@ -24,7 +24,7 @@ class Users {
         if (! $db->Query("SELECT * FROM $this->tableName")) $db->Kill();
 
         //Check for user in db
-        $userCheck = $db->Query("SELECT * FROM $this->tableName WHERE oauth_provider = '".$oauth_provider."' AND oauth_uid = '".$oauth_uid."'");
+        $prevQuery = $db->Query("SELECT * FROM $this->tableName WHERE oauth_provider = '".$oauth_provider."' AND oauth_uid = '".$oauth_uid."'");
 
         //If users is in db then update
         if($db->RowCount() > 0){
