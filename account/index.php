@@ -3,7 +3,7 @@ require_once("../includes/init.php");
 echo $template->header('User Account', 11);
 ?>
 
-    <div class="container">
+    <div class="container-fluid">
     <div class = "page-header">
         <h1>Example page header</h1>
     </div>
