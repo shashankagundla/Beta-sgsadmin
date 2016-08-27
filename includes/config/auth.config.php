@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once("../src/Google_Client.php");
-require_once("../src/contrib/Google_Oauth2Service.php");
+include("../src/Google_Client.php");
+include("../src/contrib/Google_Oauth2Service.php");
 ######### edit details ##########
 $clientId = '94937420735-tbq29gtr5akj5gjermf58itn8hb95m56.apps.googleusercontent.com'; //Google CLIENT ID
 $clientSecret = 'RwB53vzf1-NSuaE9du62hWDC'; //Google CLIENT SECRET
