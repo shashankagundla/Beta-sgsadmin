@@ -83,8 +83,7 @@ class Template {
 
         </div>
       </div>
-    </div>    
-    <div class="container">
+    </div>
 ';
         return $html;
     }

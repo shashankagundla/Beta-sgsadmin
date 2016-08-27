@@ -1,11 +1,12 @@
 <?php
 require_once("../includes/init.php");
-echo $template->header('User Account', 15);
+echo $template->header('User Account', 1);
 ?>
-<div class = "page-header">
-    <h1>Example page header</h1>
-</div>
-        <h1>Google Profile Details </h1>
+
+    <div class="container">
+    <div class = "page-header">
+        <h1>Example page header</h1>
+    </div>
         <?php
         echo '<div class="welcome_txt">Welcome <b>'.$_SESSION['google_data']['given_name'].'</b></div>';
         echo '<div class="google_box">';
@@ -21,7 +22,10 @@ echo $template->header('User Account', 15);
         echo '</div>';
         ?>
     </div>
-</div>
+
+
+
+
 <?php
 echo $template->footer();
 ?>
