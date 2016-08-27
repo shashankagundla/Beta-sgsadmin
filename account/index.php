@@ -2,9 +2,9 @@
 require_once("../includes/init.php");
 echo $template->header('User Account', 15);
 ?>
-
-<div class="alert alert-info">
-    <div class="wrapper">
+<div class = "page-header">
+    <h1>Example page header</h1>
+</div>
         <h1>Google Profile Details </h1>
         <?php
         echo '<div class="welcome_txt">Welcome <b>'.$_SESSION['google_data']['given_name'].'</b></div>';
@@ -22,7 +22,6 @@ echo $template->header('User Account', 15);
         ?>
     </div>
 </div>
-<body>
 <?php
 echo $template->footer();
 ?>

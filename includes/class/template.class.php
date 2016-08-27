@@ -8,6 +8,8 @@ class Template {
 <html>
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>'.$title.'</title>
     <link rel="stylesheet" href="/assets/css/theme/'.$theme.'.css">
     <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
@@ -81,13 +83,16 @@ class Template {
 
         </div>
       </div>
-    </div>        
+    </div>    
+    <div class="container">
 ';
         return $html;
     }
 
     function footer() {
-        return '</html>';
+        return '
+</body>
+</html>';
     }
 
 }
