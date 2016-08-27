@@ -2,7 +2,10 @@
 
 class Template {
 
-    function header($title, $theme) {
+    function header($page, $subtitle) {
+    if ($subtitle){
+        $subtitle = '<small>'.$subtitle.'</small>';
+    }
     //Head Tag
         $html = '
 <html>
@@ -10,16 +13,17 @@ class Template {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>'.$title.'</title>
-    <link rel="stylesheet" href="/assets/css/theme/'.$theme.'.css">
+    <title>'.$page.'</title>
+    <link rel="stylesheet" href="/assets/css/theme/'.$_SESSION['user']['theme'].'.css">
     <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
-    <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
+    <link rel="stylesheet" href="/assets/css/theme/custom.css">
+    <link rel="stylesheet" href="/assets/css/theme/animate.min.css">
 </head>
 ';
     //Nav Bar
         $html .= '
-<body style="padding-top: 10px;">
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<body>
+    <div class="navbar navbar-default navbar-static-top" role="navigation">
         
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -28,40 +32,64 @@ class Template {
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" rel="home" href="#">Brand</a>
+            <a class="navbar-brand" rel="home" href="#">SGS Admin</a>
         </div>
         
         <div class="collapse navbar-collapse">
-            
             <ul class="nav navbar-nav">
-                <li><a href="#">Link</a></li>
-                <li><a href="#">Link</a></li>
-                <li><a href="#">Link</a></li>
                 <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dashboards <b class="caret"></b></a>
                   <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Inspections</a></li>
+                    <li><a href="#">Engineering</a></li>
+                    <li><a href="#">ATC</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Job Lists <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Inspections</a></li>
+                    <li><a href="#">Standard</a></li>
+                    <li><a href="#">Construction</a></li>
                     <li class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#">One more separated link</a></li>
+                    <li><a href="#">History</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Schedule <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Main</a></li>
+                    <li><a href="#">TIA</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Bids <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/bid/add/">Add Bid</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/job/add/">Add Job</a></li>
                   </ul>
                 </li>
             </ul>
-            <button type="button" class="btn btn-default navbar-btn">Button</button>
             <div class="col-sm-3 col-md-3 pull-right">
-            <form class="navbar-form" role="search">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
-                <div class="input-group-btn">
-                    <button class="btn btn-default navbar-btn" type="submit"><i class="fa fa-search fa"></i></button>
-                </div>
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search text">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" style="padding-top: 12px; padding-bottom: 10px;"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </form>
             </div>
-            </form>
-            </div>
-            
         </div>
+    </div>
+    <div class="container-fluid">
+    <div class="page-header">
+        <h4>'.$page.'</h4>'.$subtitle.'
     </div>
 ';
         return $html;
@@ -69,9 +97,21 @@ class Template {
 
     function footer() {
         return '
+</div>
 </body>
-</html>';
+<script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
+<script src="/assets/js/bs.js"></script>
+<script src="/assets/js/custom.js"></script>
+<script src="/assets/js/bootstrap-notify.min.js"></script>
+';
     }
 
+    function notify(){
+        if ($_SESSION['notify']){
+            $notification = '<script>$.notify({message: "'.$_SESSION["notify"]["message"].'"}, {type: "'.$_SESSION["notify"]["type"].'"});</script>';
+        }
+        unset($_SESSION['notify']);
+        return($notification);
+    }
 }
 ?>

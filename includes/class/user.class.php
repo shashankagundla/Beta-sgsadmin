@@ -2,13 +2,18 @@
 require_once("mysql.class.php");
 
 class Users {
-    public $tableName = 'users';
+    public $oAuthTable = 'oAuth';
+    public $employeeTable = 'employee';
 
     function auth($oauth_provider,$oauth_uid,$fname,$lname,$email,$gender,$locale,$link,$picture){
-        $db = new MySQL();
+        //first check if oauth is sgs hd
+        if ($_SESSION['google_data']['hd'] != "sgstowers.com") {
+            header("location: /error/oauth_domain/");
+            exit;
+        }
 
-        // Create an array that holds the update information
-        // $arrayVariable["column name"] = formatted SQL value
+        $db = new MySQL();
+        // Create an array that holds the google information
         $oauthData["oauth_provider"] = MySQL::SQLValue($oauth_provider);
         $oauthData["oauth_uid"] = MySQL::SQLValue($oauth_uid);
         $oauthData["fname"] = MySQL::SQLValue($fname);
@@ -20,40 +25,73 @@ class Users {
         $oauthData["gpluslink"] = MySQL::SQLValue($link);
         $oauthData["modified"] = MySQL::SQLValue(date("Y-m-d H:i:s"));
 
-        //Check if User table exists
-        if (! $db->Query("SELECT * FROM $this->tableName")) $db->Kill();
+        //Check for authenticating user in oauth table
+        $result = $db->Query("SELECT * FROM $this->oAuthTable WHERE oauth_uid = '".$oauth_uid."'");
+        if (! $result) { $db->Kill(); }
 
-        //Check for user in db
-        $prevQuery = $db->Query("SELECT * FROM $this->tableName WHERE oauth_provider = '".$oauth_provider."' AND oauth_uid = '".$oauth_uid."'");
-
-        //If users is in db then update
-        if($db->RowCount() > 0){
-
+        //If user already has oAuth update oAuth table
+        if($db->RowCount() == 1){
             // Create a filter array the determines which record(s) to process
-            // (you can specify more than one column if needed)
             $where["oauth_provider"] = MySQL::SQLValue($oauth_provider);
             $where["oauth_uid"] = MySQL::SQLValue($oauth_uid);
 
-            // Execute the update
-            $result = $db->UpdateRows($this->tableName, $oauthData, $where);
+            // Update oAuth Data
+            $result = $db->UpdateRows($this->oAuthTable, $oauthData, $where);
+            if (! $result) { $db->Kill(); }
 
-		}else{
+        }else{
 
-            // Insert New User to DB
-            $result = $db->InsertRow($this->tableName, $oauthData);
+            //create oAuth record
+            $oauthData["created"] = MySQL::SQLValue(date("Y-m-d H:i:s"));
+            $result = $db->InsertRow($this->oAuthTable, $oauthData);
+            if (! $result) { $db->Kill(); }
 
-		}
-        // If we have an error display & kill
+            //check if user e-mail is in employee table
+            $result = $db->Query("SELECT email FROM $this->employeeTable WHERE email = '".$email."'");
+            if (! $result) { $db->Kill(); }
+
+            if ($db->RowCount() == 0){
+                //if no create new employee
+                $employeeData["o_id"] = MySQL::SQLValue($oauth_uid);
+                $employeeData["fname"] = MySQL::SQLValue($fname);
+                $employeeData["lname"] = MySQL::SQLValue($lname);
+                $employeeData["email"] = MySQL::SQLValue($email);
+                $employeeData["picture"] = MySQL::SQLValue($picture);
+                $employeeData["theme"] = MySQL::SQLValue(1);
+                $employeeData["created"] = MySQL::SQLValue(date("Y-m-d H:i:s"));
+                $employeeData["modified"] = MySQL::SQLValue(date("Y-m-d H:i:s"));
+                $employeeData["login"] = MySQL::SQLValue(date("Y-m-d H:i:s"));
+                $result = $db->InsertRow($this->employeeTable, $employeeData);
+                if (! $result) { $db->Kill(); }
+
+            }else{
+
+                //if yes update employee
+                $employeeData["picture"] = MySQL::SQLValue($picture);
+                $employeeData["login"] = MySQL::SQLValue(date("Y-m-d H:i:s"));
+                $result = $db->UpdateRows($this->oAuthTable, $oauthData, $where);
+                if (! $result) { $db->Kill(); }
+
+            }
+        }
+
+        // Finally Lets Login!
+        $result = $db->QuerySingleRowArray("SELECT * FROM $this->employeeTable WHERE email = '".$email."'");
         if (! $result) { $db->Kill(); }
+        $_SESSION['user'] = $result;
 
-        //Finally requery db for user data
-        $authUser = $db->Query("SELECT * FROM $this->tableName WHERE oauth_provider = '".$oauth_provider."' AND oauth_uid = '".$oauth_uid."'");
+        //Successful login, now redirect
+        header("location: /account/");
 
-        return $authUser;
+        return;
 	}
 
+
 	function checkAuth(){
-        session_start();
+        /*
+         * TODO: Research how secure this really is.
+         */
+	    session_start();
         if(!isset($_SESSION['google_data'])):header("Location:/");endif;
     }
 }

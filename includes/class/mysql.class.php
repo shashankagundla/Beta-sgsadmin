@@ -989,9 +989,9 @@ class MySQL
      */
     public function Kill($message = "") {
         if (strlen($message) > 0) {
-            exit($message);
+            return($message);
         } else {
-            exit($this->Error());
+            return($this->Error());
         }
     }
 
