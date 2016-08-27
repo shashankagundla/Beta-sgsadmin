@@ -29,5 +29,4 @@ if(isset($authUrl)) {
 } else {
 	echo '<a href="account/logout/?logout">Logout</a>';
 }
-
 ?>
