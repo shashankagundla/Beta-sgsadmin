@@ -21,7 +21,7 @@ $nextSGSNumb = $form->nextSGSNum();
         <div class="panel-heading">
             <h3 class="panel-title">Next Available SGS Number: <?=$nextSGSNumb?></h3>
         </div>
-        <form method="post" action="/includes/class/form.class.php">
+        <form class="form-no-margins" method="post" action="/includes/class/form.class.php">
         <div class="panel-body">
             <div class="row">
                 <div class="col-sm-6 col-md-3 col-lg-2">
@@ -354,15 +354,15 @@ $nextSGSNumb = $form->nextSGSNum();
                 </div>
             </div>
         </div>
-        <div class="panel-footer">
-            <div class="pull-left">
-                <button type="reset" class="btn btn-default btn-sm" name="submit" value="addJob">Clear Form</button>
+            <div class="panel-footer">
+                <div class="pull-left">
+                    <button type="reset" class="btn btn-default btn-sm" name="submit" value="addJob">Clear Form</button>
+                </div>
+                <div class="pull-right">
+                    <button type="submit" class="btn btn-primary btn-sm" name="submit" value="addJob">Add Job</button>
+                </div>
+                <div class="clearfix"></div>
             </div>
-            <div class="pull-right">
-                <button type="submit" class="btn btn-primary btn-sm" name="submit" value="addJob">Create Job</button>
-            </div>
-            <div class="clearfix"></div>
-        </div>
         </form>
     </div>
 <?php

@@ -46,16 +46,6 @@ class Template {
                   </ul>
                 </li>
                 <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Job Lists <b class="caret"></b></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="#">Inspections</a></li>
-                    <li><a href="#">Standard</a></li>
-                    <li><a href="#">Construction</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#">History</a></li>
-                  </ul>
-                </li>
-                <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Schedule <b class="caret"></b></a>
                   <ul class="dropdown-menu">
                     <li><a href="#">Main</a></li>
@@ -63,22 +53,29 @@ class Template {
                   </ul>
                 </li>
                 <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Bids <b class="caret"></b></a>
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Jobs <b class="caret"></b></a>
                   <ul class="dropdown-menu">
-                    <li><a href="/bid/add/">Add Bid</a></li>
+                    <li class="dropdown-header">Job Lists</li>
+                    <li><a href="#">Inspections</a></li>
+                    <li><a href="#">Standard</a></li>
+                    <li><a href="#">Construction</a></li>
+                    <li><a href="#">History</a></li>
+                    <li class="dropdown-header">Job Management</li>
+                    <li><a href="/job/add/">Add Job</a></li>
                   </ul>
                 </li>
                 <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Bids <b class="caret"></b></a>
                   <ul class="dropdown-menu">
-                    <li><a href="/job/add/">Add Job</a></li>
+                    <li class="dropdown-header">Bid Management</li>
+                    <li><a href="/bid/add/">Add Bid</a></li>
                   </ul>
                 </li>
             </ul>
             <div class="col-sm-3 col-md-3 pull-right">
                 <form class="navbar-form" role="search">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search text">
+                        <input type="text" class="form-control" placeholder="Search SGS Admin">
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button" style="padding-top: 12px; padding-bottom: 10px;"><i class="fa fa-search"></i></button>
                         </span>

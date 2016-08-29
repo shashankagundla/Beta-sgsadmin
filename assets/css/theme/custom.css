@@ -16,3 +16,7 @@
 .fa-required {
     color: #ff0000;
 }
+
+.form-no-margins {
+    margin-bottom: 0px;
+}

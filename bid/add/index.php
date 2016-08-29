@@ -21,7 +21,7 @@ $nextBidNumb = 'B-16' . $form->nextBidNum();
         <div class="panel-heading">
             <h3 class="panel-title">Bid Number: <?=$nextBidNumb?></h3>
         </div>
-        <form method="post" action="/includes/class/form.class.php">
+        <form class="form-no-margins" method="post" action="/includes/class/form.class.php">
             <div class="panel-body">
                 <div class="row">
                     <div class="col-sm-6 col-md-3 col-lg-2">
