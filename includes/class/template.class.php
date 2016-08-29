@@ -40,9 +40,9 @@ class Template {
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dashboards <b class="caret"></b></a>
                   <ul class="dropdown-menu">
-                    <li><a href="#">Inspections</a></li>
-                    <li><a href="#">Engineering</a></li>
-                    <li><a href="#">ATC</a></li>
+                    <li><a href="/dashboard/inspection/">Inspections</a></li>
+                    <li><a href="/dashboard/engineering/">Engineering</a></li>
+                    <li><a href="/dashboard/atc/">ATC</a></li>
                   </ul>
                 </li>
                 <li class="dropdown">
@@ -56,10 +56,10 @@ class Template {
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Jobs <b class="caret"></b></a>
                   <ul class="dropdown-menu">
                     <li class="dropdown-header">Job Lists</li>
-                    <li><a href="#">Inspections</a></li>
-                    <li><a href="#">Standard</a></li>
-                    <li><a href="#">Construction</a></li>
-                    <li><a href="#">History</a></li>
+                    <li><a href="/list/inspection/">Inspections</a></li>
+                    <li><a href="/list/standard/">Standard</a></li>
+                    <li><a href="/list/construction/">Construction</a></li>
+                    <li><a href="/list/history/">History</a></li>
                     <li class="dropdown-header">Job Management</li>
                     <li><a href="/job/add/">Add Job</a></li>
                   </ul>
