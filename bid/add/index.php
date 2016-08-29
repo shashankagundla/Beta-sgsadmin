@@ -266,6 +266,12 @@ $nextBidNumb = 'B-16' . $form->nextBidNum();
         </form>
     </div>
 <?php
+if ($debug === 1) {
+    echo '<pre>' . var_export($allSelect, true) . '</pre>';
+}
+/*
+ * Page footer and notifications
+ */
 echo $template->footer();
 echo $template->notify();
 ?>

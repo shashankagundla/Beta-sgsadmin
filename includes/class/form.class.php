@@ -51,6 +51,7 @@ class Form
             $this->dbError($db->Kill());
         }
         $result = $db->RecordsArray();
+        $db->Close();
         return $result;
     }
 
@@ -73,6 +74,7 @@ class Form
             $this->dbError($db->Kill());
         }
         $result = $db->RecordsArray();
+        $db->Close();
         return $result;
     }
 
@@ -95,6 +97,8 @@ class Form
             $this->dbError($db->Kill());
         }
         $result = $db->RecordsArray();
+        $db->Close();
+
         return $result;
     }
 
@@ -155,11 +159,14 @@ class Form
         }
 
         //create job comment
-        $this->addComment($result, 'job');
-
+        if ($_POST['comment']){
+            $this->addComment($result, 'job');
+        }
         //notify end-user fo success
         $_SESSION['notify']['message'] = 'SGS#: '.$_POST['sgs']. ' Was Successfully Added!';
         $_SESSION['notify']['type'] = 'success';
+
+        $db->Close();
 
         //redirect back
         header('Location: ' . $_SERVER['HTTP_REFERER']);
@@ -172,28 +179,28 @@ class Form
     {
 
         //Prep for Insert
-        $insert['sgs_num'] = MySQL::SQLValue($_POST['sgs']);
-        $insert['revisit_num'] = MySQL::SQLValue($_POST['visit']);
-        $insert['site_num'] = MySQL::SQLValue($_POST['siteNumber']);
-        $insert['wo_num'] = MySQL::SQLValue($_POST['wo']);
-        $insert['po_num'] = MySQL::SQLValue($_POST['po']);
-        $insert['po_line'] = MySQL::SQLValue($_POST['poLine']);
-        $insert['site_name'] = MySQL::SQLValue($_POST['siteName']);
-        $insert['budget'] = MySQL::SQLValue($_POST['budget']);
-        $insert['jde_num'] = MySQL::SQLValue($_POST['jde']);
-        $insert['job_type'] = MySQL::SQLValue($_POST['jobType']);
-        $insert['client_company'] = MySQL::SQLValue($_POST['clientCompany']);
-        $insert['client_contact_email'] = MySQL::SQLValue($_POST['clientContact']);
-        $insert['district'] = MySQL::SQLValue($_POST['district']);
-        $insert['contractor_contact_email'] = MySQL::SQLValue($_POST['contractor']);
-        $insert['latitude'] = MySQL::SQLValue($_POST['latitude']);
-        $insert['longitude'] = MySQL::SQLValue($_POST['longitude']);
-        $insert['state'] = MySQL::SQLValue($_POST['state']);
-        $insert['city'] = MySQL::SQLValue($_POST['city']);
-        $insert['tower_height'] = MySQL::SQLValue($_POST['towerHeight']);
-        $insert['tower_man'] = MySQL::SQLValue($_POST['towerManufacturer']);
-        $insert['tower_owner'] = MySQL::SQLValue($_POST['towerOwner']);
-        $insert['overall_status'] = MySQL::SQLValue($_POST['overallStatus']);
+        $insert['sgs_num'] = MySQL::SQLValue(trim($_POST['sgs']));
+        $insert['revisit_num'] = MySQL::SQLValue(trim($_POST['visit']));
+        $insert['site_num'] = MySQL::SQLValue(trim($_POST['siteNumber']));
+        $insert['wo_num'] = MySQL::SQLValue(trim($_POST['wo']));
+        $insert['po_num'] = MySQL::SQLValue(trim($_POST['po']));
+        $insert['po_line'] = MySQL::SQLValue(trim($_POST['poLine']));
+        $insert['site_name'] = MySQL::SQLValue(trim($_POST['siteName']));
+        $insert['budget'] = MySQL::SQLValue(trim($_POST['budget']));
+        $insert['jde_num'] = MySQL::SQLValue(trim($_POST['jde']));
+        $insert['job_type'] = MySQL::SQLValue(trim($_POST['jobType']));
+        $insert['client_company'] = MySQL::SQLValue(trim($_POST['clientCompany']));
+        $insert['client_contact_email'] = MySQL::SQLValue(trim($_POST['clientContact']));
+        $insert['district'] = MySQL::SQLValue(trim($_POST['district']));
+        $insert['contractor_contact_email'] = MySQL::SQLValue(trim($_POST['contractor']));
+        $insert['latitude'] = MySQL::SQLValue(trim($_POST['latitude']));
+        $insert['longitude'] = MySQL::SQLValue(trim($_POST['longitude']));
+        $insert['state'] = MySQL::SQLValue(trim($_POST['state']));
+        $insert['city'] = MySQL::SQLValue(trim($_POST['city']));
+        $insert['tower_height'] = MySQL::SQLValue(trim($_POST['towerHeight']));
+        $insert['tower_man'] = MySQL::SQLValue(trim($_POST['towerManufacturer']));
+        $insert['tower_owner'] = MySQL::SQLValue(trim($_POST['towerOwner']));
+        $insert['overall_status'] = MySQL::SQLValue(trim($_POST['overallStatus']));
         $insert['field_status'] = MySQL::SQLValue("-");
         $insert['crew_1'] = MySQL::SQLValue("-");
         $insert['closeout_status'] = MySQL::SQLValue("-");
@@ -264,11 +271,15 @@ class Form
         }
 
         //create bid comment
-        $this->addComment($result,'bid');
-
+        if ($_POST['comment']){
+            $this->addComment($result,'bid');
+        }
         //notify end-user
         $_SESSION['notify']['message'] = 'Bid ID: B16-'.$newBidID.' was successfully added!';
         $_SESSION['notify']['type'] = 'success';
+
+        $db->Close();
+
 
         //redirect back
         header('Location: ' . $_SERVER['HTTP_REFERER']);
@@ -280,23 +291,23 @@ class Form
         //Prep for Insert
         $insert['bid_id'] = MySQL::SQLValue($newBidID);
         $insert['bid_yr'] = MySQL::SQLValue(16);
-        $insert['bid_appid'] = MySQL::SQLValue($_POST['appID']);
-        $insert['bid_status'] = MySQL::SQLValue($_POST['bidStatus']);
-        $insert['budget'] = MySQL::SQLValue($_POST['budget']);
-        $insert['site_name'] = MySQL::SQLValue($_POST['siteName']);
-        $insert['site_num'] = MySQL::SQLValue($_POST['siteNumber']);
-        $insert['state'] = MySQL::SQLValue($_POST['state']);
-        $insert['city'] = MySQL::SQLValue($_POST['city']);
-        $insert['job_type'] = MySQL::SQLValue($_POST['jobType']);
-        $insert['client'] = MySQL::SQLValue($_POST['clientContact']);
-        $insert['tower_type'] = MySQL::SQLValue($_POST['towerType']);
-        $insert['tower_height'] = MySQL::SQLValue($_POST['towerHeight']);
-        $insert['tower_owner'] = MySQL::SQLValue($_POST['towerOwner']);
-        $insert['tower_man'] = MySQL::SQLValue($_POST['towerManufacturer']);
-        $insert['district'] = MySQL::SQLValue($_POST['district']);
-        $insert['latitude'] = MySQL::SQLValue($_POST['latitude']);
-        $insert['longitude'] = MySQL::SQLValue($_POST['longitude']);
-        $insert['drawing_num'] = MySQL::SQLValue($_POST['drawing']);
+        $insert['bid_appid'] = MySQL::SQLValue(trim($_POST['appID']));
+        $insert['bid_status'] = MySQL::SQLValue(trim($_POST['bidStatus']));
+        $insert['budget'] = MySQL::SQLValue(trim($_POST['budget']));
+        $insert['site_name'] = MySQL::SQLValue(trim($_POST['siteName']));
+        $insert['site_num'] = MySQL::SQLValue(trim($_POST['siteNumber']));
+        $insert['state'] = MySQL::SQLValue(trim($_POST['state']));
+        $insert['city'] = MySQL::SQLValue(trim($_POST['city']));
+        $insert['job_type'] = MySQL::SQLValue(trim($_POST['jobType']));
+        $insert['client'] = MySQL::SQLValue(trim($_POST['clientContact']));
+        $insert['tower_type'] = MySQL::SQLValue(trim($_POST['towerType']));
+        $insert['tower_height'] = MySQL::SQLValue(trim($_POST['towerHeight']));
+        $insert['tower_owner'] = MySQL::SQLValue(trim($_POST['towerOwner']));
+        $insert['tower_man'] = MySQL::SQLValue(trim($_POST['towerManufacturer']));
+        $insert['district'] = MySQL::SQLValue(trim($_POST['district']));
+        $insert['latitude'] = MySQL::SQLValue(trim($_POST['latitude']));
+        $insert['longitude'] = MySQL::SQLValue(trim($_POST['longitude']));
+        $insert['drawing_num'] = MySQL::SQLValue(trim($_POST['drawing']));
         $insert = $this->addCreated($insert);
 
         return $insert;
@@ -309,6 +320,9 @@ class Form
         $bid_id = $db->QuerySingleValue("SELECT bid_id FROM bids ORDER BY bid_id DESC");
         $bid_id = sprintf('%04u', ($bid_id + 1));
 
+        $db->Close();
+
+
         return $bid_id;
 
     }
@@ -318,6 +332,9 @@ class Form
         $db = New MySQL();
         $nextSGSNum = $db->QuerySingleValue("SELECT sgs_num FROM admin_jobs ORDER BY sgs_num DESC");
         $nextSGSNum = floatval(($nextSGSNum + 1));
+
+        $db->Close();
+
 
         return $nextSGSNum;
 

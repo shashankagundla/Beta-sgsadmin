@@ -27,7 +27,7 @@ class Users {
 
         //Check for authenticating user in oauth table
         $result = $db->Query("SELECT * FROM $this->oAuthTable WHERE oauth_uid = '".$oauth_uid."'");
-        if (! $result) { $db->Kill(); }
+        if (! $result) { $db->killDisplay(); }
 
         //If user already has oAuth update oAuth table
         if($db->RowCount() == 1){
@@ -37,18 +37,18 @@ class Users {
 
             // Update oAuth Data
             $result = $db->UpdateRows($this->oAuthTable, $oauthData, $where);
-            if (! $result) { $db->Kill(); }
+            if (! $result) { $db->killDisplay(); }
 
         }else{
 
             //create oAuth record
             $oauthData["created"] = MySQL::SQLValue(date("Y-m-d H:i:s"));
             $result = $db->InsertRow($this->oAuthTable, $oauthData);
-            if (! $result) { $db->Kill(); }
+            if (! $result) { $db->killDisplay(); }
 
             //check if user e-mail is in employee table
             $result = $db->Query("SELECT email FROM $this->employeeTable WHERE email = '".$email."'");
-            if (! $result) { $db->Kill(); }
+            if (! $result) { $db->killDisplay(); }
 
             if ($db->RowCount() == 0){
                 //if no create new employee
@@ -58,11 +58,12 @@ class Users {
                 $employeeData["email"] = MySQL::SQLValue($email);
                 $employeeData["picture"] = MySQL::SQLValue($picture);
                 $employeeData["theme"] = MySQL::SQLValue(1);
+                $employeeData["collapsed"] = MySQL::SQLValue(0);
                 $employeeData["created"] = MySQL::SQLValue(date("Y-m-d H:i:s"));
                 $employeeData["modified"] = MySQL::SQLValue(date("Y-m-d H:i:s"));
                 $employeeData["login"] = MySQL::SQLValue(date("Y-m-d H:i:s"));
                 $result = $db->InsertRow($this->employeeTable, $employeeData);
-                if (! $result) { $db->Kill(); }
+                if (! $result) { $db->killDisplay(); }
 
             }else{
 
@@ -70,14 +71,14 @@ class Users {
                 $employeeData["picture"] = MySQL::SQLValue($picture);
                 $employeeData["login"] = MySQL::SQLValue(date("Y-m-d H:i:s"));
                 $result = $db->UpdateRows($this->oAuthTable, $oauthData, $where);
-                if (! $result) { $db->Kill(); }
+                if (! $result) { $db->killDisplay(); }
 
             }
         }
 
         // Finally Lets Login!
         $result = $db->QuerySingleRowArray("SELECT * FROM $this->employeeTable WHERE email = '".$email."'");
-        if (! $result) { $db->Kill(); }
+        if (! $result) { $db->killDisplay(); }
         $_SESSION['user'] = $result;
 
         //Successful login, now redirect
@@ -87,12 +88,23 @@ class Users {
 	}
 
 
-	function checkAuth(){
-        /*
-         * TODO: Research how secure this really is.
-         */
-	    session_start();
-        if(!isset($_SESSION['google_data'])):header("Location:/");endif;
+	function checkAuth($id, $o_id)
+    {
+        $db = New MySQL();
+        $laction = MySQL::SQLValue(date("Y-m-d H:i:s"));
+        $sql_id = MySQL::SQLValue($id);
+        $result = $db->QueryArray("SELECT id, o_id FROM $this->employeeTable WHERE id = $sql_id");
+
+        if ($result[0]['id'] != $id || $result[0]['o_id'] != $o_id) {
+            header("location: /account/logout/");
+            exit;
+        } else {
+            $result = $db->Query("UPDATE $this->employeeTable SET laction=$laction WHERE id=$sql_id");
+            if (! $result) { $db->killDisplay(); }
+        }
+        return;
     }
+
+
 }
 ?>

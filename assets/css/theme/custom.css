@@ -20,3 +20,17 @@
 .form-no-margins {
     margin-bottom: 0px;
 }
+
+.table-dash{
+    margin-bottom: 0px;
+    border-left: 0px;
+    border-right: 0px;
+}
+
+.panel-nopad{
+    padding: 0;
+}
+
+.list-group{
+    margin-bottom: 0;
+}

@@ -12,11 +12,13 @@ echo $template->header('User Account','');
         echo '</div>';
         ?>
     </div>
+
 <?php
+if ($debug === 1) {
+    echo '<pre>' . var_export($_SESSION, true) . '</pre>';
+}
 echo $template->footer();
 echo $template->notify();
-echo '<pre>' . var_export($_SESSION, true) . '</pre>';
-
 ?>
 
 

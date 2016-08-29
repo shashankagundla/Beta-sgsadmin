@@ -2,7 +2,7 @@
 
 class Template {
 
-    function header($page, $subtitle) {
+    function header($page, $subtitle = null) {
     if ($subtitle){
         $subtitle = '<small>'.$subtitle.'</small>';
     }
@@ -17,7 +17,8 @@ class Template {
     <link rel="stylesheet" href="/assets/css/theme/'.$_SESSION['user']['theme'].'.css">
     <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/css/theme/custom.css">
-    <link rel="stylesheet" href="/assets/css/theme/animate.min.css">
+    <link rel="stylesheet" href="/assets/css/animate.min.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap-sortable.css">
 </head>
 ';
     //Nav Bar
@@ -100,6 +101,8 @@ class Template {
 <script src="/assets/js/bs.js"></script>
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/bootstrap-notify.min.js"></script>
+<script src="/assets/js/moment.js"></script>
+
 ';
     }
 

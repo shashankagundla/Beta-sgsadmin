@@ -24,7 +24,7 @@ if ($gClient->getAccessToken()) {
 }
 
 if(isset($authUrl)) {
-	echo '<a href="'.$authUrl.'"><img src="assets/mages/glogin.png" alt=""/></a>';
+	echo '<a href="'.$authUrl.'"><img src="assets/mages/glogin.png" alt="Login with Google"/></a>';
 } else {
 	echo '<a href="account/logout/?logout">Logout</a>';
 }

@@ -146,7 +146,7 @@ class MySQL
      * @param boolean $showAlias (Optional) TRUE to show column alias
      * @return string Returns the SQL column list
      */
-    static private function BuildSQLColumns($columns, $addQuotes = true, $showAlias = true) {
+    static public function BuildSQLColumns($columns, $addQuotes = true, $showAlias = true) {
         if ($addQuotes) {
             $quote = "`";
         } else {
@@ -992,6 +992,14 @@ class MySQL
             return($message);
         } else {
             return($this->Error());
+        }
+    }
+
+    public function killDisplay($message = "") {
+        if (strlen($message) > 0) {
+            exit($message);
+        } else {
+            exit($this->Error());
         }
     }
 
