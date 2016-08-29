@@ -109,9 +109,9 @@ class Template {
     function notify(){
         if ($_SESSION['notify']){
             $notification = '<script>$.notify({message: "'.$_SESSION["notify"]["message"].'"}, {type: "'.$_SESSION["notify"]["type"].'"});</script>';
-        }
-        unset($_SESSION['notify']);
-        return($notification);
+            unset($_SESSION['notify']);
+            return($notification);
+        };
     }
 }
 ?>

@@ -122,6 +122,10 @@ class Form
         if ($_POST['submit'] === 'addJob') {
             $this->addJob();
         }
+
+        if ($_POST['submit'] === 'addBid') {
+            $this->addBid();
+        }
     }
 
 
@@ -130,25 +134,34 @@ class Form
      */
     private function addJob()
     {
-        //$this->displayArray($_POST);
-
+        //new-up SQL connection
         $db = New MySQL();
 
+        //prep _POST for SQL insert
         $insertPrepared = $this->adminJobPrep();
+
         //insert row in DB
         $result = $db->InsertRow('admin_jobs', $insertPrepared);
+
+        //check status of row insert
         if (!$result) {
+            //notify end-user of failure
             $_SESSION['notify']['message'] = 'Your Job Was Not Created! <br> Database Error: ';
             $_SESSION['notify']['message'] .= $db->Kill();
             $_SESSION['notify']['type'] = 'danger';
+            //redirect back & exit
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             exit;
         }
 
-        $this->addJobComment($result);
+        //create job comment
+        $this->addComment($result, 'job');
 
+        //notify end-user fo success
         $_SESSION['notify']['message'] = 'SGS#: '.$_POST['sgs']. ' Was Successfully Added!';
         $_SESSION['notify']['type'] = 'success';
+
+        //redirect back
         header('Location: ' . $_SERVER['HTTP_REFERER']);
     }
 
@@ -225,7 +238,78 @@ class Form
 
     }
 
-    private function getUserID(){
+    private function addBid(){
+        $db = New MySQL();
+
+        //create new bid ID
+        $newBidID = $this->nextBidNum();
+
+        //prep _POST for SQL insert
+        $insertPrepared = $this->addBidPrep($newBidID);
+
+        //insert row in DB
+        $result = $db->InsertRow('bids', $insertPrepared);
+
+        //check result of row insert
+        if (!$result) {
+
+            //notify user
+            $_SESSION['notify']['message'] = 'Your Bid Was Not Created! <br> Database Error: ';
+            $_SESSION['notify']['message'] .= $db->Kill();
+            $_SESSION['notify']['type'] = 'danger';
+
+            //redirect back & exit
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
+            exit;
+        }
+
+        //create bid comment
+        $this->addComment($result,'bid');
+
+        //notify end-user
+        $_SESSION['notify']['message'] = 'Bid ID: B16-'.$newBidID.' was successfully added!';
+        $_SESSION['notify']['type'] = 'success';
+
+        //redirect back
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+
+    }
+
+    private function addBidPrep($newBidID)
+    {
+        //Prep for Insert
+        $insert['bid_id'] = MySQL::SQLValue($newBidID);
+        $insert['bid_yr'] = MySQL::SQLValue(16);
+        $insert['bid_appid'] = MySQL::SQLValue($_POST['appID']);
+        $insert['bid_status'] = MySQL::SQLValue($_POST['bidStatus']);
+        $insert['budget'] = MySQL::SQLValue($_POST['budget']);
+        $insert['site_name'] = MySQL::SQLValue($_POST['siteName']);
+        $insert['site_num'] = MySQL::SQLValue($_POST['siteNumber']);
+        $insert['state'] = MySQL::SQLValue($_POST['state']);
+        $insert['city'] = MySQL::SQLValue($_POST['city']);
+        $insert['job_type'] = MySQL::SQLValue($_POST['jobType']);
+        $insert['client'] = MySQL::SQLValue($_POST['clientContact']);
+        $insert['tower_type'] = MySQL::SQLValue($_POST['towerType']);
+        $insert['tower_height'] = MySQL::SQLValue($_POST['towerHeight']);
+        $insert['tower_owner'] = MySQL::SQLValue($_POST['towerOwner']);
+        $insert['tower_man'] = MySQL::SQLValue($_POST['towerManufacturer']);
+        $insert['district'] = MySQL::SQLValue($_POST['district']);
+        $insert['latitude'] = MySQL::SQLValue($_POST['latitude']);
+        $insert['longitude'] = MySQL::SQLValue($_POST['longitude']);
+        $insert['drawing_num'] = MySQL::SQLValue($_POST['drawing']);
+        $insert = $this->addCreated($insert);
+
+        return $insert;
+
+    }
+
+    public function nextBidNum()
+    {
+        $db = New MySQL();
+        $bid_id = $db->QuerySingleValue("SELECT bid_id FROM bids ORDER BY bid_id DESC");
+        $bid_id = sprintf('%04u', ($bid_id + 1));
+
+        return $bid_id;
 
     }
 
@@ -244,23 +328,46 @@ class Form
 
     /*
      *TODO: Update the admin_comments table to have user_id when we go live, also add columns for addCreated, addUpdated
+     *
+     * This function will create a new comment for a job or bid
      */
-    private function addJobComment($adminID){
+    private function addComment($id,$type){
+        //create db connection
         $db = New MySQL();
 
+        //clear $insert array so it can be reused
         unset($insert);
-        $insert['admin_id'] = MySQL::SQLValue($adminID);
-        $insert['user'] = MySQL::SQLValue($_SESSION['user']['fname'] . ' ' . $_SESSION['user']['lname']);
-        $insert['date'] = MySQL::SQLValue(date("Y-m-d H:i:s"));
-        $insert['comment'] = MySQL::SQLValue($_POST['comment']);
-        $insert = $this->addCreated($insert);
-        $result = $db->InsertRow('admin_comments', $insert);
-        if (!$result) {
-            $_SESSION['notify']['message'] = 'Your job was added. However, your comment was not added.  <br> Database Error: ';
-            $_SESSION['notify']['message'] .= $db->Kill();
-            $_SESSION['notify']['type'] = 'danger';
-            header('Location: ' . $_SERVER['HTTP_REFERER']);
-            exit;
+
+        //Add Job Comment
+        if ($type === 'job'){
+            $insert['admin_id'] = MySQL::SQLValue($id);
+            $insert['user'] = MySQL::SQLValue($_SESSION['user']['fname'] . ' ' . $_SESSION['user']['lname']);
+            $insert['date'] = MySQL::SQLValue(date("Y-m-d H:i:s"));
+            $insert['comment'] = MySQL::SQLValue($_POST['comment']);
+            $insert = $this->addCreated($insert);
+            $result = $db->InsertRow('admin_comments', $insert);
+            if (!$result) {
+                $_SESSION['notify']['message'] = 'Your job was added. However, your comment was not added.  <br> Database Error: ';
+                $_SESSION['notify']['message'] .= $db->Kill();
+                $_SESSION['notify']['type'] = 'danger';
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            }
+        }
+
+        //Add Bid Comment
+        if ($type === 'bid'){
+            $insert['bidID'] = MySQL::SQLValue($id);
+            $insert['comment'] = MySQL::SQLValue($_POST['comment']);
+            $insert = $this->addCreated($insert);
+            $result = $db->InsertRow('bid_comments', $insert);
+            if (!$result) {
+                $_SESSION['notify']['message'] = 'Your bid was added. However, your comment was not added.  <br> Database Error: ';
+                $_SESSION['notify']['message'] .= $db->Kill();
+                $_SESSION['notify']['type'] = 'danger';
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            }
         }
 
         return;
