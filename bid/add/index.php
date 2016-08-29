@@ -238,6 +238,12 @@ $nextBidNumb = 'B-16' . $form->nextBidNum();
                             <input type="text" class="form-control input-sm" id="drawing" name="drawing" autocomplete="off">
                         </div>
                     </div>
+                    <div class="col-sm-6 col-md-3 col-lg-2">
+                        <div class="form-group">
+                            <label for="followUpDate">Follow Up Date</label>
+                            <input type="date" class="form-control input-sm" id="followUpDate" name="followUpDate" autocomplete="off">
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-12">

@@ -313,6 +313,16 @@ class Form
 
     }
 
+    public function nextSGSNum()
+    {
+        $db = New MySQL();
+        $nextSGSNum = $db->QuerySingleValue("SELECT sgs_num FROM admin_jobs ORDER BY sgs_num DESC");
+        $nextSGSNum = floatval(($nextSGSNum + 1));
+
+        return $nextSGSNum;
+
+    }
+
     private function addCreated($insert){
         $insert['created'] = MySQL::SQLValue(date("Y-m-d H:i:s"));
         $insert['created_by'] = MySQL::SQLValue($_SESSION['user']['id']);

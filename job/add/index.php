@@ -15,10 +15,11 @@ $form = new Form();
 $allSelect = $form->allSelectFields();
 $clientSelect = $form->selectClients();
 $contractorSelect = $form->selectContractors();
+$nextSGSNumb = $form->nextSGSNum();
 ?>
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title">Next SGS Number: </h3>
+            <h3 class="panel-title">Next Available SGS Number: <?=$nextSGSNumb?></h3>
         </div>
         <form method="post" action="/includes/class/form.class.php">
         <div class="panel-body">
@@ -119,7 +120,7 @@ $contractorSelect = $form->selectContractors();
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon" id="basic-addon1">$</span>
-                            <input type="text" class="form-control input-sm" id="budget" name="budget" autocomplete="off" required>
+                            <input type="number" min=0 max=9999999 step="any" class="form-control input-sm" id="budget" name="budget" autocomplete="off" required>
                         </div>
                     </div>
                 </div>
@@ -209,7 +210,7 @@ $contractorSelect = $form->selectContractors();
                 </div>
                 <div class="col-sm-6 col-md-3 col-lg-2">
                     <div class="form-group">
-                        <label for="towerHeight">Height</label>
+                        <label for="towerHeight">Tower Height</label>
                         <input type="text" class="form-control input-sm" id="towerHeight" name="towerHeight" autocomplete="off">
                     </div>
                 </div>
