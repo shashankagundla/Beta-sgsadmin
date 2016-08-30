@@ -14,7 +14,7 @@ echo $template->header('User Account','');
     </div>
 
 <?php
-if ($debug === 1) {
+if ($_SESSION['user']['debug'] != 0) {
     echo '<pre>' . var_export($_SESSION, true) . '</pre>';
 }
 echo $template->footer();

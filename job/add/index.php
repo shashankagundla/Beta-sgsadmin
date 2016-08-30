@@ -102,7 +102,7 @@ $nextSGSNumb = $form->nextSGSNum();
                             foreach($allSelect as $key => $val){
                                 if ($val['field'] === 'overallStatus'){;
                             ?>
-                                <option value="<?php echo $val['selectID']; ?>" <?php if($val['selectID'] === 'Pending' || $val['selectID'] === 'Paid' || $val['selectID'] === 'Cancel' || $val['selectID'] === 'Pending' ){echo 'disabled';} ?>>
+                                <option value="<?php echo $val['selectID']; ?>" <?php if($val['selectID'] === 'Pending' || $val['selectID'] === 'Cancel' || $val['selectID'] === 'Paid' AND $_SESSION['user']['role'] > '4'){ echo 'disabled'; }?>>
                                 <?php echo $val['selectField']; ?></option><?php
                                 }
                             }
@@ -367,7 +367,7 @@ $nextSGSNumb = $form->nextSGSNum();
     </div>
 
 <?php
-if ($debug === 1) {
+if ($_SESSION['user']['debug'] != 0) {
     echo '<pre>' . var_export($allSelect, true) . '</pre>';
 }
 /*

@@ -10,6 +10,31 @@ if(isset($_POST['submit']))
 
 class Form
 {
+    /**
+     *After submit, determine what function add job goes to
+     */
+    public function submit()
+    {
+        if ($_POST['submit'] === 'addJob') {
+            $this->addJob();
+        }
+
+        if ($_POST['submit'] === 'addBid') {
+            $this->addBid();
+        }
+
+        if ($_POST['submit'] === 'addCommentForm') {
+            $this->addComment($_POST['admin_id'],$_POST['submit']);
+        }
+
+        if ($_POST['submit'] === 'updateJobStatus') {
+            $this->updateJobStatus();
+        }
+
+
+    }
+
+
 
     /**
      * For testing purposes
@@ -78,6 +103,18 @@ class Form
         return $result;
     }
 
+    public function selectCrew()
+    {
+        $db = New MySQL();
+        $result = $db->Query("select id, CONCAT_WS(' ', fname, lname) as name from employee");
+        if (!$result) {
+            $this->dbError($db->Kill());
+        }
+        $result = $db->RecordsArray();
+        $db->Close();
+        return $result;
+    }
+
     /**
      * Get a contractor list from the wordpress tables
      *
@@ -117,21 +154,6 @@ class Form
         }
         return $selectArray;
     }
-
-    /**
-     *After submit, determine what function add job goes to
-     */
-    public function submit()
-    {
-        if ($_POST['submit'] === 'addJob') {
-            $this->addJob();
-        }
-
-        if ($_POST['submit'] === 'addBid') {
-            $this->addBid();
-        }
-    }
-
 
     /**
      *Add job to table admin_jobs
@@ -314,6 +336,59 @@ class Form
 
     }
 
+    private function updateJobStatus(){
+        $db = New MySQL();
+
+        //where states=nebt
+        $where['id'] = MySQL::SQLValue($_POST['id']);
+
+        //prep _POST for SQL insert
+        $insertPrepared = $this->updateJobStatusPrep();
+
+        //update row in DB
+        $result = $db->UpdateRows('admin_jobs', $insertPrepared, $where);
+
+        //check result of row insert
+        if (!$result) {
+
+            //notify user
+            $_SESSION['notify']['message'] = 'Job was not updated. <br> Database Error: ';
+            $_SESSION['notify']['message'] .= $db->Kill();
+            $_SESSION['notify']['type'] = 'danger';
+            //redirect back & exit
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
+            exit;
+        }
+
+        //notify end-user
+        $_SESSION['notify']['message'] = 'Job was successfully updated.';
+        $_SESSION['notify']['type'] = 'success';
+        $db->Close();
+
+        //redirect back
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+
+    }
+
+    private function updateJobStatusPrep()
+    {
+        //Prep for Insert
+        if($_POST['crew']){$insert['crew_1'] = MySQL::SQLValue($_POST['crew']);}
+        if($_POST['edos']){$insert['date_eos'] = MySQL::SQLValue($_POST['edos']);}
+        if($_POST['jobStatus']){$insert['overall_status'] = MySQL::SQLValue($_POST['jobStatus']);}
+        if($_POST['closeoutStatus']){$insert['closeout_status'] = MySQL::SQLValue($_POST['closeoutStatus']);}
+        if($_POST['punchStatus']){$insert['inspection_status'] = MySQL::SQLValue($_POST['punchStatus']);}
+        if($_POST['reportStatus']){$insert['report_status'] = MySQL::SQLValue($_POST['reportStatus']);}
+        if($_POST['closeoutMissing']){$insert['closeout_missing'] = MySQL::SQLValue($_POST['closeoutMissing']);}
+        if($_POST['punchMissing']){$insert['inspection_missing'] = MySQL::SQLValue($_POST['punchMissing']);}
+        if($_POST['reportLevel']){$insert['report_level'] = MySQL::SQLValue($_POST['reportLevel']);}
+        if($_POST['statusNotes']){$insert['status_notes'] = MySQL::SQLValue($_POST['statusNotes']);}
+        $insert = $this->addUpdated($insert);
+
+        return $insert;
+
+    }
+
     public function nextBidNum()
     {
         $db = New MySQL();
@@ -382,6 +457,27 @@ class Form
             }
         }
 
+        //Add Job Comment from Comment Form
+        if ($type === 'addCommentForm'){
+            $insert['admin_id'] = MySQL::SQLValue($id);
+            $insert['user'] = MySQL::SQLValue($_SESSION['user']['fname'] . ' ' . $_SESSION['user']['lname']);
+            $insert['date'] = MySQL::SQLValue(date("Y-m-d H:i:s"));
+            $insert['comment'] = MySQL::SQLValue($_POST['comment']);
+            $insert = $this->addCreated($insert);
+            $result = $db->InsertRow('admin_comments', $insert);
+            if (!$result) {
+                $_SESSION['notify']['message'] = 'Failed to add comment.  <br> Database Error: ';
+                $_SESSION['notify']['message'] .= $db->Kill();
+                $_SESSION['notify']['type'] = 'danger';
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            }else{
+                $_SESSION['notify']['message'] = 'Your comment was added.';
+                $_SESSION['notify']['type'] = 'success';
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+            }
+        }
+
         //Add Bid Comment
         if ($type === 'bid'){
             $insert['bidID'] = MySQL::SQLValue($id);
@@ -396,6 +492,8 @@ class Form
                 exit;
             }
         }
+
+
 
         return;
     }

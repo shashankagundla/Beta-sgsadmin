@@ -9,12 +9,10 @@ require_once('class/template.class.php');
 require_once('class/form.class.php');
 require_once('class/dashboard.class.php');
 require_once('class/job.class.php');
+require_once('class/schedule.class.php');
 
 //init template
 $template = new Template;
-
-//debug mode
-$debug = 0;
 
 //check if user is authenticated
 if (!$_SESSION['user']){
@@ -28,4 +26,7 @@ if (!$_SESSION['google_data']){
 $user = new Users;
 $user->checkAuth($_SESSION['user']['id'],$_SESSION['user']['o_id']);
 
+
+//check if mobile
+$_SESSION['mobile'] = checkMobile();
 ?>

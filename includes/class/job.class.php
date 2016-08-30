@@ -18,7 +18,7 @@ class Job {
     public function queryJobComments($adminID){
         $db = New MySQL();
         $adminID = MySQL::SQLValue($adminID);
-        $result = $db->QueryArray("SELECT * FROM $this->commentTable WHERE admin_id = $adminID");
+        $result = $db->QueryArray("select * from $this->commentTable where admin_id = ".$adminID." ORDER BY date DESC");
         $db->Close();
 
         return $result;

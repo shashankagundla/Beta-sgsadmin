@@ -15,13 +15,13 @@ $dashTable = $dash->dashATC();
 
 ?>
     <div class="row">
-        <div class="col-xs-12 col-sm-6 col-md-4">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <div class="panel-title">FWC</div>
                 </div>
                 <div class="panel-content">
-                    <table class="table table-condensed table-dash table-striped table-bordered small">
+                    <table class="table table-condensed table-dash table-hover table-bordered small">
                         <thead>
                             <tr>
                                 <th colspan="5" class="text-center">Field Work Complete</th>
@@ -36,7 +36,7 @@ $dashTable = $dash->dashATC();
                         </thead>
                         <tbody>
                             <?php foreach($dashTable['fwc'] as $row){?>
-                                <tr <?php if ($row['priority'] != 0){ echo 'class="danger"'; } ?>>
+                                <tr class="clickable-row <?php if ($row['priority'] != 0){ echo 'danger'; } ?>" data-href="/job/?sgs=<?=$row['sgs_num']?>">
                                     <td><?=$row['sgs_num']?></td>
                                     <td><?=substr($row['site_name'],0,15)?></td>
                                     <td><?=$dash->timeAgo(strtotime($row['overall_status_date']))?></td>
@@ -47,7 +47,7 @@ $dashTable = $dash->dashATC();
                         </tbody>
                     </table>
                     <br>
-                    <table class="table table-condensed table-dash table-striped table-bordered small">
+                    <table class="table table-condensed table-dash table-hover table-bordered small">
                         <thead>
                             <tr>
                                 <th colspan="5" class="text-center">Reports Not Started</th>
@@ -62,7 +62,7 @@ $dashTable = $dash->dashATC();
                         </thead>
                         <tbody>
                             <?php foreach($dashTable['reportNotStarted'] as $row){?>
-                                <tr <?php if ($row['priority'] != 0){ echo 'class="danger"'; } ?>>
+                                <tr class="clickable-row <?php if ($row['priority'] != 0){ echo 'danger'; } ?>" data-href="/job/?sgs=<?=$row['sgs_num']?>">
                                     <td><?=$row['sgs_num']?></td>
                                     <td><?=substr($row['site_name'],0,15)?></td>
                                     <td><?=$dash->timeAgo(strtotime($row['overall_status_date']))?></td>
@@ -75,13 +75,13 @@ $dashTable = $dash->dashATC();
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-6 col-md-4">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <div class="panel-title">Reports in Progress</div>
                 </div>
                 <div class="panel-content">
-                    <table class="table table-condensed table-dash table-striped table-bordered small">
+                    <table class="table table-condensed table-dash table-hover table-bordered small">
                         <thead>
                             <tr>
                                 <th colspan="4" class="text-center">Reports Being Written</th>
@@ -95,7 +95,7 @@ $dashTable = $dash->dashATC();
                         </thead>
                         <tbody>
                         <?php foreach($dashTable['reportWritten'] as $row){?>
-                            <tr <?php if ($row['priority'] != 0){ echo 'class="danger"'; } ?>>
+                            <tr class="clickable-row <?php if ($row['priority'] != 0){ echo 'danger'; } ?>" data-href="/job/?sgs=<?=$row['sgs_num']?>">
                                 <td><?=$row['sgs_num']?></td>
                                 <td><?=substr($row['site_name'],0,15)?></td>
                                 <td><?=$row['report_status']?></td>
@@ -105,7 +105,7 @@ $dashTable = $dash->dashATC();
                         </tbody>
                     </table>
                     <br>
-                    <table class="table table-condensed table-dash table-striped table-bordered small">
+                    <table class="table table-condensed table-dash table-hover table-bordered small">
                         <thead>
                             <tr>
                                 <th colspan="4" class="text-center">In Review</th>
@@ -119,7 +119,7 @@ $dashTable = $dash->dashATC();
                         </thead>
                         <tbody>
                         <?php foreach($dashTable['reportReview'] as $row){?>
-                            <tr <?php if ($row['priority'] != 0){ echo 'class="danger"'; } ?>>
+                            <tr class="clickable-row <?php if ($row['priority'] != 0){ echo 'danger'; } ?>" data-href="/job/?sgs=<?=$row['sgs_num']?>">
                                 <td><?=$row['sgs_num']?></td>
                                 <td><?=substr($row['site_name'],0,15)?></td>
                                 <td><?=$row['report_status']?></td>
@@ -129,7 +129,7 @@ $dashTable = $dash->dashATC();
                         </tbody>
                     </table>
                     <br>
-                    <table class="table table-condensed table-dash table-striped table-bordered small">
+                    <table class="table table-condensed table-dash table-hover table-bordered small">
                         <thead>
                             <tr>
                                 <th colspan="4" class="text-center">Reports Started</th>
@@ -143,7 +143,7 @@ $dashTable = $dash->dashATC();
                         </thead>
                         <tbody>
                         <?php foreach($dashTable['reportStarted'] as $row){?>
-                            <tr <?php if ($row['priority'] != 0){ echo 'class="danger"'; } ?>>
+                            <tr class="clickable-row <?php if ($row['priority'] != 0){ echo 'danger'; } ?>" data-href="/job/?sgs=<?=$row['sgs_num']?>">
                                 <td><?=$row['sgs_num']?></td>
                                 <td><?=substr($row['site_name'],0,15)?></td>
                                 <td><?=$row['job_type']?></td>
@@ -156,13 +156,13 @@ $dashTable = $dash->dashATC();
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-6 col-md-4">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <div class="panel-title">Reports Completed</div>
                 </div>
                 <div class="panel-content">
-                    <table class="table table-condensed table-dash table-striped table-bordered small">
+                    <table class="table table-condensed table-dash table-hover table-bordered small">
                         <thead>
                         <tr>
                             <th colspan="5" class="text-center">Ready for Seal</th>
@@ -177,7 +177,7 @@ $dashTable = $dash->dashATC();
                         </thead>
                         <tbody>
                         <?php foreach($dashTable['sealReady'] as $row){?>
-                            <tr <?php if ($row['priority'] != 0){ echo 'class="danger"'; } ?>>
+                            <tr class="clickable-row <?php if ($row['priority'] != 0){ echo 'danger'; } ?>" data-href="/job/?sgs=<?=$row['sgs_num']?>">
                                 <td><?=$row['sgs_num']?></td>
                                 <td><?=substr($row['site_name'],0,15)?></td>
                                 <td><?=$row['state']?></td>
@@ -188,7 +188,7 @@ $dashTable = $dash->dashATC();
                         </tbody>
                     </table>
                     <br>
-                    <table class="table table-condensed table-dash table-striped table-bordered small">
+                    <table class="table table-condensed table-dash table-hover table-bordered small">
                         <thead>
                         <tr>
                             <th colspan="4" class="text-center">Sealed in Box</th>
@@ -202,7 +202,7 @@ $dashTable = $dash->dashATC();
                         </thead>
                         <tbody>
                         <?php foreach($dashTable['sealed'] as $row){?>
-                            <tr <?php if ($row['priority'] != 0){ echo 'class="danger"'; } ?>>
+                            <tr class="clickable-row <?php if ($row['priority'] != 0){ echo 'danger'; } ?>" data-href="/job/?sgs=<?=$row['sgs_num']?>">
                                 <td><?=$row['sgs_num']?></td>
                                 <td><?=substr($row['site_name'],0,15)?></td>
                                 <td><?=$row['state']?></td>
@@ -221,7 +221,7 @@ $dashTable = $dash->dashATC();
 
 
 <?php
-if ($debug === 1) {
+if ($_SESSION['user']['debug'] != 0) {
     echo '<pre>' . var_export($dashTable, true) . '</pre>';
 }
 /*
@@ -230,3 +230,10 @@ if ($debug === 1) {
 echo $template->footer();
 echo $template->notify();
 ?>
+<script>
+jQuery(document).ready(function($) {
+        $(".clickable-row").click(function() {
+            window.document.location = $(this).data("href");
+        });
+});
+</script>

@@ -2,10 +2,11 @@
 
 class Template {
 
-    function header($page, $subtitle = null) {
+    function header($page = null, $subtitle = null) {
     if ($subtitle){
         $subtitle = '<small>'.$subtitle.'</small>';
     }
+
     //Head Tag
         $html = '
 <html>
@@ -15,12 +16,19 @@ class Template {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>'.$page.'</title>
     <link rel="stylesheet" href="/assets/css/theme/'.$_SESSION['user']['theme'].'.css">
+    <link rel="stylesheet" href="/assets/css/datatables.min.css">
     <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/css/theme/custom.css">
     <link rel="stylesheet" href="/assets/css/animate.min.css">
-    <link rel="stylesheet" href="/assets/css/bootstrap-sortable.css">
 </head>
 ';
+    //debug notice
+   if ($_SESSION['user']['debug'] != 0){
+$html .= '
+<div class="alert alert-danger text-center alert-no-pad">
+<strong>Oh snap!</strong> Site Debug Mode is Enabled!</div>';
+}
+    //TODO: Add Profile Image and Padding CSS class for right nav bar
     //Nav Bar
         $html .= '
 <body>
@@ -49,8 +57,8 @@ class Template {
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Schedule <b class="caret"></b></a>
                   <ul class="dropdown-menu">
-                    <li><a href="#">Main</a></li>
-                    <li><a href="#">TIA</a></li>
+                    <li><a href="/schedule/main/">Main</a></li>
+                    <li><a href="/schedule/tia/">TIA</a></li>
                   </ul>
                 </li>
                 <li class="dropdown">
@@ -73,7 +81,20 @@ class Template {
                   </ul>
                 </li>
             </ul>
-            <div class="col-sm-3 col-md-3 pull-right">
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown" style="padding-right: 10px;">
+                  <a href="#" class="dropdown-toggle profile-image" data-toggle="dropdown"><i class="fa fa-user"></i>&nbsp; 
+                  '.$_SESSION['user']['fname'].'&nbsp;<b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                      <li><a href="#">Action</a></li>
+                      <li><a href="#">Another action</a></li>
+                      <li><a href="#">Something else here</a></li>
+                      <li class="divider"></li>
+                      <li><a href="/account/logout/">Logout</a></li>
+                  </ul>
+              </li>
+          </ul>
+          <div class="col-sm-3 col-md-3 pull-right">
                 <form class="navbar-form" role="search">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Search SGS Admin">
@@ -85,11 +106,13 @@ class Template {
             </div>
         </div>
     </div>
-    <div class="container-fluid">
-    <div class="page-header">
-        <h4>'.$page.'</h4>'.$subtitle.'
-    </div>
-';
+    <div class="container-fluid">';
+        if ($page){
+        $html .='
+        <div class="page-header">
+            <h4>'.$page.'</h4>'.$subtitle.'
+        </div>';
+        }
         return $html;
     }
 

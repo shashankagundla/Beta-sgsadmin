@@ -58,7 +58,7 @@ class Users {
                 $employeeData["email"] = MySQL::SQLValue($email);
                 $employeeData["picture"] = MySQL::SQLValue($picture);
                 $employeeData["theme"] = MySQL::SQLValue(1);
-                $employeeData["collapsed"] = MySQL::SQLValue(0);
+                $employeeData["debug"] = MySQL::SQLValue(0);
                 $employeeData["created"] = MySQL::SQLValue(date("Y-m-d H:i:s"));
                 $employeeData["modified"] = MySQL::SQLValue(date("Y-m-d H:i:s"));
                 $employeeData["login"] = MySQL::SQLValue(date("Y-m-d H:i:s"));
