@@ -109,7 +109,7 @@ if ($gClient->getAccessToken()) {
 	<?php
 	if(isset($authUrl)) {
 	?>
-		<button name="employeeLogin" id="employeeLogin" class="btn btn-primary btn-block btn-large" onclick="window.location.href='<?=$authUrl?>'">Sign in with Google</button>';
+		<button name="employeeLogin" id="employeeLogin" class="btn btn-primary btn-block btn-large" onclick="window.location.href='<?=$authUrl?>'">Sign in with Google</button>
 	<?php
 	} else {
 	?>
