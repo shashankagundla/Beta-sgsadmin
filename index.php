@@ -116,9 +116,8 @@ if ($gClient->getAccessToken()) {
 		<button name="employeeLogout" id="employeeLogout" class="btn btn-primary btn-block btn-large" onclick="window.location.href='/account/logout/'">Logout</button>
 	<?php } ?>
 
-
 	<h1>Client Login</h1>
-	<form method="post">
+	<form name="loginform" id="loginform" action="https://sgsadmin.com/wp-login.php" method="post">
 		<input type="text" name="log" id="user_login" aria-describedby="login_error" class="input" value="" size="20" placeholder="Work E-Mail Address" required></label>
 		<input type="password" name="pwd" id="user_pass" aria-describedby="login_error" class="input" value="" size="20" placeholder="Password" required></label>
 		<input type="hidden" name="redirect_to" value="https://sgsadmin.com/wp-admin/">
