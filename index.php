@@ -104,7 +104,7 @@ if ($gClient->getAccessToken()) {
 </head>
 
 <body>
-<div class="login" name="loginform" id="loginform" action="https://sgsadmin.com/wp-login.php" method="post">
+<div class="login">
 	<h1>Employee Login</h1>
 	<?php
 	if(isset($authUrl)) {
