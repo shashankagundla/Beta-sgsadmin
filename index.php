@@ -23,12 +23,6 @@ if ($gClient->getAccessToken()) {
 	$authUrl = $gClient->createAuthUrl();
 }
 
-if(isset($authUrl)) {
-	echo '<a href="'.$authUrl.'"><img src="assets/mages/glogin.png" alt="Login with Google"/></a>';
-} else {
-	echo '<a href="account/logout/?logout">Logout</a>';
-}
-
 
 ?>
 <!DOCTYPE html>
@@ -114,11 +108,15 @@ if(isset($authUrl)) {
 	<h1>Employee Login</h1>
 	<?php
 	if(isset($authUrl)) {
-	echo '<a href="'.$authUrl.'"><button type="submit" name="wp-submit" id="wp-submit" class="btn btn-primary btn-block btn-large">Sign in with Google</button>';
-	} else {
-	echo '<button type="submit" name="wp-submit" id="wp-submit" class="btn btn-primary btn-block btn-large">Logout</button>';
-	}
 	?>
+		<button name="employeeLogin" id="employeeLogin" class="btn btn-primary btn-block btn-large" onclick="window.location.href='<?=$authUrl?>'">Sign in with Google</button>';
+	<?php
+	} else {
+	?>
+		<button name="employeeLogout" id="employeeLogout" class="btn btn-primary btn-block btn-large" onclick="window.location.href='/account/logout/'">Logout</button>
+	<?php } ?>
+
+
 	<h1>Client Login</h1>
 	<form method="post">
 		<input type="text" name="log" id="user_login" aria-describedby="login_error" class="input" value="" size="20" placeholder="Work E-Mail Address" required></label>
