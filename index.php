@@ -32,7 +32,7 @@ if(isset($authUrl)) {
 
 ?>
 <!DOCTYPE html>
-<html >
+<html>
 <head>
 	<meta charset="UTF-8">
 	<title>Login Form</title>
@@ -112,7 +112,13 @@ if(isset($authUrl)) {
 <body>
 <div class="login" name="loginform" id="loginform" action="https://sgsadmin.com/wp-login.php" method="post">
 	<h1>Employee Login</h1>
-	<button type="submit" name="wp-submit" id="wp-submit" class="btn btn-primary btn-block btn-large">Sign in with Google</button>
+	<?php
+	if(isset($authUrl)) {
+	echo '<a href="'.$authUrl.'"><button type="submit" name="wp-submit" id="wp-submit" class="btn btn-primary btn-block btn-large">Sign in with Google</button>';
+	} else {
+	echo '<button type="submit" name="wp-submit" id="wp-submit" class="btn btn-primary btn-block btn-large">Logout</button>';
+	}
+	?>
 	<h1>Client Login</h1>
 	<form method="post">
 		<input type="text" name="log" id="user_login" aria-describedby="login_error" class="input" value="" size="20" placeholder="Work E-Mail Address" required></label>
@@ -121,6 +127,7 @@ if(isset($authUrl)) {
 		<input type="hidden" name="testcookie" value="1">
 		<button type="submit" name="wp-submit" id="wp-submit" class="btn btn-primary btn-block btn-large">Log In</button>
 	</form>
+
 </div>
 
 <script src="index.js"></script>
