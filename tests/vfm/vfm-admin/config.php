@@ -85,7 +85,7 @@
   'smtp_auth' => false,
   'smtp_enable' => false,
   'smtp_server' => '',
-  'starting_dir' => '/data/',
+  'starting_dir' => './uploads/',
   'thumbnails' => true,
   'thumbnails_height' => 800,
   'thumbnails_width' => 760,
