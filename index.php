@@ -56,6 +56,7 @@ if ($gClient->getAccessToken()) {
 			width: 100%;
 			height:100%;
 			font-family: 'Open Sans', sans-serif;
+			background-image: url("https://sgstowers.com/images/slider/swiper/1.jpg");
 			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3E1D6D', endColorstr='#092756',GradientType=1 );
 		}
 		.login {
