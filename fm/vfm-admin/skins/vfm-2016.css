@@ -29,9 +29,7 @@ html {
   position: relative;
   min-height: 100%;
 }
-body{
-	padding-bottom: 60px;
-}
+
 .footer {
   position: absolute;
   bottom: 0;
@@ -44,9 +42,6 @@ body{
 
 /* Fixed navbar
 -------------------------------------------------- */
-body {
-  padding-top: 70px;
-}
 
 .navbar{
     -moz-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);

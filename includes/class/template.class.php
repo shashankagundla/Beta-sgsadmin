@@ -59,12 +59,13 @@ $html .= '
                   <ul class="dropdown-menu">
                     <li><a href="/schedule/main/">Main</a></li>
                     <li><a href="/schedule/tia/">TIA</a></li>
+                    <li class="dropdown-header">Schedule Settings</li>
+                    <li><a href="/schedule/color/">Change Crew Colors</a></li>
                   </ul>
                 </li>
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Jobs <b class="caret"></b></a>
                   <ul class="dropdown-menu">
-                    <li class="dropdown-header">Job Lists</li>
                     <li><a href="/list/inspection/">Inspections</a></li>
                     <li><a href="/list/standard/">Standard</a></li>
                     <li><a href="/list/construction/">Construction</a></li>
@@ -81,19 +82,6 @@ $html .= '
                   </ul>
                 </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
-              <li class="dropdown" style="padding-right: 10px;">
-                  <a href="#" class="dropdown-toggle profile-image" data-toggle="dropdown"><i class="fa fa-user"></i>&nbsp; 
-                  '.$_SESSION['user']['fname'].'&nbsp;<b class="caret"></b></a>
-                  <ul class="dropdown-menu">
-                      <li><a href="#">Action</a></li>
-                      <li><a href="#">Another action</a></li>
-                      <li><a href="#">Something else here</a></li>
-                      <li class="divider"></li>
-                      <li><a href="/account/logout/">Logout</a></li>
-                  </ul>
-              </li>
-          </ul>
           <div class="col-sm-3 col-md-3 pull-right">
                 <form class="navbar-form" role="search">
                     <div class="input-group">
@@ -125,7 +113,8 @@ $html .= '
 <script src="/assets/js/custom.js"></script>
 <script src="/assets/js/bootstrap-notify.min.js"></script>
 <script src="/assets/js/moment.js"></script>
-
+<script src="/assets/js/mt.min.js"></script>
+<script src="/assets/js/shortcuts.js"></script>
 ';
     }
 

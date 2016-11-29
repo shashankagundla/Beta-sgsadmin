@@ -22,7 +22,7 @@ if ($setUp->getConfig("show_path") == true
     <ol class="breadcrumb">
         <li>
             <a href="?dir=">
-                <i class="fa fa-folder-open"></i> <?php print $encodeExplorer->getString("root"); ?>
+                <i class="fa fa-folder-open"></i> <?=$_SESSION['root']?>
             </a>
         </li>
     <?php 

@@ -26,14 +26,14 @@ $vfm_version = '2.3.0';
  * @license  Exclusively sold on CodeCanyon: http://bit.ly/veno-file-manager
  * @version  Release: 2.3.0
  * @link     http://filemanager.veno.it/
-*/
+ */
 class ImageServer
 {
     /**
-    * Checks if an image is requested and displays one if needed
-    *
-    * @return true/false
-    */
+     * Checks if an image is requested and displays one if needed
+     *
+     * @return true/false
+     */
     public static function showImage()
     {
         $thumb = filter_input(INPUT_GET, 'thumb', FILTER_SANITIZE_STRING);
@@ -41,7 +41,7 @@ class ImageServer
             $inline = (isset($_GET['in']) ? true : false);
             if (strlen($thumb) > 0
                 && (SetUp::getConfig('thumbnails') == true
-                || SetUp::getConfig('inline_thumbs') == true)
+                    || SetUp::getConfig('inline_thumbs') == true)
             ) {
                 ImageServer::showThumbnail($thumb, $inline);
             }
@@ -51,10 +51,10 @@ class ImageServer
     }
 
     /**
-    * Checks if isEnabledPdf()
-    *
-    * @return true/false
-    */
+     * Checks if isEnabledPdf()
+     *
+     * @return true/false
+     */
     public static function isEnabledPdf()
     {
         if (class_exists('Imagick')) {
@@ -64,12 +64,12 @@ class ImageServer
     }
 
     /**
-    * Preapre PDF for thumbnail
-    *
-    * @param string $file the file to convert
-    *
-    * @return false | $image
-    */
+     * Preapre PDF for thumbnail
+     *
+     * @param string $file the file to convert
+     *
+     * @return false | $image
+     */
     public static function openPdf($file)
     {
         if (!ImageServer::isEnabledPdf()) {
@@ -84,13 +84,13 @@ class ImageServer
     }
 
     /**
-    * Creates and returns a thumbnail image object from an image file
-    *
-    * @param string  $file   file to convert
-    * @param boolean $inline thumbs or zoom
-    *
-    * @return null | $new_image
-    */
+     * Creates and returns a thumbnail image object from an image file
+     *
+     * @param string  $file   file to convert
+     * @param boolean $inline thumbs or zoom
+     *
+     * @return null | $new_image
+     */
     public static function createThumbnail($file, $inline = false)
     {
         if ($inline == true) {
@@ -111,10 +111,10 @@ class ImageServer
                 $max_height = 800;
             }
         }
-        if (File::isPdfFile($file)) {
-            $image = ImageServer::openPdf($file);
+        if (File::isPdfFile($_SESSION['root'].$file)) {
+            $image = ImageServer::openPdf($_SESSION['root'].$file);
         } else {
-            $image = ImageServer::openImage($file);
+            $image = ImageServer::openImage($_SESSION['root'].$file);
         }
         if ($image == false) {
             return;
@@ -164,18 +164,18 @@ class ImageServer
     }
 
     /**
-    * Function for displaying the thumbnail.
-    * Includes attempts at cacheing it so that generation is minimised.
-    *
-    * @param string  $file   file to convert
-    * @param boolean $inline thumbs or zoom
-    *
-    * @return $image
-    */
+     * Function for displaying the thumbnail.
+     * Includes attempts at cacheing it so that generation is minimised.
+     *
+     * @param string  $file   file to convert
+     * @param boolean $inline thumbs or zoom
+     *
+     * @return $image
+     */
     public static function showThumbnail($file, $inline = false)
     {
         $thumbsdir = 'vfm-admin/thumbs';
-        
+
         if (!is_dir($thumbsdir)) {
             if (!mkdir($thumbsdir, 0755)) {
                 Utils::setError('error creating /vfm-admin/thumbs/ directory');
@@ -199,17 +199,17 @@ class ImageServer
             $file = EncodeExplorer::extraChars($file);
             $image = ImageServer::createThumbnail($file, $inline);
             imagejpeg($image, $thumbpath, 80);
-            imagedestroy($image); 
+            imagedestroy($image);
         }
         header('Location: '.$thumbpath);
     }
     /**
-    * A helping function for opening different types of image files
-    *
-    * @param string $file the file to convert
-    *
-    * @return $img
-    */
+     * A helping function for opening different types of image files
+     *
+     * @param string $file the file to convert
+     *
+     * @return $img
+     */
     public static function openImage($file)
     {
         $imageInfo = getimagesize($file);
@@ -221,44 +221,44 @@ class ImageServer
             $img = $defaultimg;
         } else {
             switch ($imageInfo['mime']) {
-            case 'image/jpeg':
-                $img = imagecreatefromjpeg($file);
-                break;
-            case 'image/gif':
-                $img = imagecreatefromgif($file);
-                break;
-            case 'image/png':
-                $img = imagecreatefrompng($file);
-                break;
-            default:
-                $img = $defaultimg;
-                break;
+                case 'image/jpeg':
+                    $img = imagecreatefromjpeg($file);
+                    break;
+                case 'image/gif':
+                    $img = imagecreatefromgif($file);
+                    break;
+                case 'image/png':
+                    $img = imagecreatefrompng($file);
+                    break;
+                default:
+                    $img = $defaultimg;
+                    break;
             }
         }
         return $img;
     }
 
     /**
-    * Convert M K G in bytes
-    *
-    * @param string $size_str original size
-    *
-    * @return converted size
-    */
+     * Convert M K G in bytes
+     *
+     * @param string $size_str original size
+     *
+     * @return converted size
+     */
     public static function returnBytes($size_str)
     {
         switch (substr($size_str, -1)) {
-        case 'M':
-        case 'm':
-            return (int)$size_str * 1048576;
-        case 'K':
-        case 'k':
-            return (int)$size_str * 1024;
-        case 'G':
-        case 'g':
-            return (int)$size_str * 1073741824;
-        default:
-            return $size_str;
+            case 'M':
+            case 'm':
+                return (int)$size_str * 1048576;
+            case 'K':
+            case 'k':
+                return (int)$size_str * 1024;
+            case 'G':
+            case 'g':
+                return (int)$size_str * 1073741824;
+            default:
+                return $size_str;
         }
     }
 }
@@ -272,17 +272,17 @@ class ImageServer
  * @license  Exclusively sold on CodeCanyon: http://bit.ly/veno-file-manager
  * @version  Release: 2.3.0
  * @link     http://filemanager.veno.it/
-*/
+ */
 class Logger
 {
     /**
-    * Print log file
-    *
-    * @param string $message the message to log
-    * @param string $relpath relative path of log file
-    *
-    * @return $message
-    */
+     * Print log file
+     *
+     * @param string $message the message to log
+     * @param string $relpath relative path of log file
+     *
+     * @return $message
+     */
     public static function log($message, $relpath = 'vfm-admin/')
     {
         if (SetUp::getConfig('log_file') == true) {
@@ -310,26 +310,26 @@ class Logger
         }
     }
     /**
-    * Log user login
-    *
-    * @return $message
-    */
+     * Log user login
+     *
+     * @return $message
+     */
     public static function logAccess()
     {
         $message = '<td>'.GateKeeper::getUserInfo('name').'</td>'
-        .'<td><span class="label label-warning">ACCESS</span></td>'
-        .'<td>--</td><td class="wordbreak">--</td>';
+            .'<td><span class="label label-warning">ACCESS</span></td>'
+            .'<td>--</td><td class="wordbreak">--</td>';
         Logger::log($message);
     }
 
     /**
-    * Log user creation of folders and files
-    *
-    * @param string $path  the path to set
-    * @param string $isDir may be 'dir' or 'file'
-    *
-    * @return $message
-    */
+     * Log user creation of folders and files
+     *
+     * @param string $path  the path to set
+     * @param string $isDir may be 'dir' or 'file'
+     *
+     * @return $message
+     */
     public static function logCreation($path, $isDir)
     {
         $path = addslashes($path);
@@ -350,14 +350,14 @@ class Logger
     }
 
     /**
-    * Log user deletion of folders and files
-    *
-    * @param string  $path   the path to set
-    * @param boolean $isDir  file or directory
-    * @param boolean $remote true if called inside vfm-admin
-    *
-    * @return $message
-    */
+     * Log user deletion of folders and files
+     *
+     * @param string  $path   the path to set
+     * @param boolean $isDir  file or directory
+     * @param boolean $remote true if called inside vfm-admin
+     *
+     * @return $message
+     */
     public static function logDeletion($path, $isDir, $remote = false)
     {
         $path = addslashes($path);
@@ -373,14 +373,14 @@ class Logger
             Logger::log($message, '');
         }
     }
-    
+
     /**
-    * Log download of single files
-    *
-    * @param string $path the path to set
-    *
-    * @return $message
-    */
+     * Log download of single files
+     *
+     * @param string $path the path to set
+     *
+     * @return $message
+     */
     public static function logDownload($path)
     {
         $user = GateKeeper::getUserInfo('name') ? GateKeeper::getUserInfo('name') : '--';
@@ -415,12 +415,12 @@ class Logger
     }
 
     /**
-    * Log play of single track
-    *
-    * @param string $path the path to set
-    *
-    * @return $message
-    */
+     * Log play of single track
+     *
+     * @param string $path the path to set
+     *
+     * @return $message
+     */
     public static function logPlay($path)
     {
         $path = addslashes($path);
@@ -434,13 +434,13 @@ class Logger
     }
 
     /**
-    * Send email notfications for uploading
-    *
-    * @param string $path   the path to set
-    * @param string $action may be 'download' | 'upload' | 'newdir' | 'login'
-    *
-    * @return $message
-    */
+     * Send email notfications for uploading
+     *
+     * @param string $path   the path to set
+     * @param string $action may be 'download' | 'upload' | 'newdir' | 'login'
+     *
+     * @return $message
+     */
     public static function emailNotification($path, $action = false)
     {
         global $encodeExplorer;
@@ -450,28 +450,28 @@ class Logger
             $time = SetUp::formatModTime(time());
             $appname = SetUp::getConfig('appname');
             switch ($action) {
-            case 'download':
-                $title = $encodeExplorer->getString('new_download');
-                break;
-            case 'upload':
-                $title = $encodeExplorer->getString('new_upload');
-                break;
-            case 'newdir':
-                $title = $encodeExplorer->getString('new_directory');
-                break;
-            case 'login':
-                $title = $encodeExplorer->getString('new_access');
-                break;
-            default:
-                $title = $encodeExplorer->getString('new_activity');
-                break;
+                case 'download':
+                    $title = $encodeExplorer->getString('new_download');
+                    break;
+                case 'upload':
+                    $title = $encodeExplorer->getString('new_upload');
+                    break;
+                case 'newdir':
+                    $title = $encodeExplorer->getString('new_directory');
+                    break;
+                case 'login':
+                    $title = $encodeExplorer->getString('new_access');
+                    break;
+                default:
+                    $title = $encodeExplorer->getString('new_activity');
+                    break;
             }
             $message = $time."\n\n";
             $message .= "IP   : ".$_SERVER['REMOTE_ADDR']."\n";
             $message .= $encodeExplorer->getString('user')." : ".GateKeeper::getUserInfo('name')."\n";
             $message .= $encodeExplorer->getString('path')." : ".$path."\n";
 
-    // send to multiple recipients
+            // send to multiple recipients
             // $sendTo = SetUp::getConfig('upload_email').',cc1@example.com,cc2@example.com';
             $sendTo = SetUp::getConfig('upload_email');
             mail(
@@ -495,14 +495,14 @@ class Logger
  * @license  Exclusively sold on CodeCanyon: http://bit.ly/veno-file-manager
  * @version  Release: 2.3.0
  * @link     http://filemanager.veno.it/
-*/
+ */
 class Updater
 {
     /**
-    * Call update user functions
-    *
-    * @return $message
-    */
+     * Call update user functions
+     *
+     * @return $message
+     */
     public static function init()
     {
         global $updater;
@@ -529,18 +529,18 @@ class Updater
     }
 
     /**
-    * Update username or password
-    *
-    * @param string $posteditname      new username
-    * @param string $postoldname       current username
-    * @param string $posteditpass      new password
-    * @param string $posteditpasscheck check password
-    * @param string $postoldpass       old password
-    * @param string $posteditmail      new email
-    * @param string $postoldmail       old email
-    *
-    * @return global $users updated
-    */
+     * Update username or password
+     *
+     * @param string $posteditname      new username
+     * @param string $postoldname       current username
+     * @param string $posteditpass      new password
+     * @param string $posteditpasscheck check password
+     * @param string $postoldpass       old password
+     * @param string $posteditmail      new email
+     * @param string $postoldmail       old email
+     *
+     * @return global $users updated
+     */
     public function updateUser(
         $posteditname,
         $postoldname,
@@ -561,12 +561,12 @@ class Updater
 
             if ($posteditname != $postoldname) {
                 if ($updater->findUser($posteditname)) {
-                        Utils::setError(
-                            '<strong>'.$posteditname.'</strong> '
-                            .$encodeExplorer->getString('file_exists')
-                        );
-                        $passa = false;
-                        return;
+                    Utils::setError(
+                        '<strong>'.$posteditname.'</strong> '
+                        .$encodeExplorer->getString('file_exists')
+                    );
+                    $passa = false;
+                    return;
                 }
                 Cookies::removeCookie($postoldname);
                 Updater::updateAvatar($postoldname, $posteditname);
@@ -574,12 +574,12 @@ class Updater
             }
             if ($posteditmail != $postoldmail) {
                 if ($updater->findEmail($posteditmail)) {
-                        Utils::setError(
-                            '<strong>'.$posteditmail.'</strong> '
-                            .$encodeExplorer->getString('file_exists')
-                        );
-                        $passa = false;
-                        return;
+                    Utils::setError(
+                        '<strong>'.$posteditmail.'</strong> '
+                        .$encodeExplorer->getString('file_exists')
+                    );
+                    $passa = false;
+                    return;
                 }
                 $updater->updateUserData($postoldname, 'email', $posteditmail);
             }
@@ -602,13 +602,13 @@ class Updater
     }
 
     /**
-    * Update user password
-    *
-    * @param string $checkname  username
-    * @param string $changepass new pass
-    *
-    * @return global $users updated
-    */
+     * Update user password
+     *
+     * @param string $checkname  username
+     * @param string $changepass new pass
+     *
+     * @return global $users updated
+     */
     public function updateUserPwd($checkname, $changepass)
     {
         global $_USERS;
@@ -625,14 +625,14 @@ class Updater
     }
 
     /**
-    * Update user data
-    *
-    * @param string $checkname username to find
-    * @param string $type      info to change
-    * @param string $changeval new value
-    *
-    * @return global $users updated
-    */
+     * Update user data
+     *
+     * @param string $checkname username to find
+     * @param string $type      info to change
+     * @param string $changeval new value
+     *
+     * @return global $users updated
+     */
     public function updateUserData($checkname, $type, $changeval)
     {
         global $updater;
@@ -653,14 +653,14 @@ class Updater
     }
 
     /**
-    * Update user Avatar if user changes name or delete it
-    *
-    * @param string $checkname username to find
-    * @param string $newname   new username to assign
-    * @param string $dir       relative path to /images/avatars/
-    *
-    * @return global $users updated
-    */
+     * Update user Avatar if user changes name or delete it
+     *
+     * @param string $checkname username to find
+     * @param string $newname   new username to assign
+     * @param string $dir       relative path to /images/avatars/
+     *
+     * @return global $users updated
+     */
     public static function updateAvatar($checkname = false, $newname = false, $dir = 'vfm-admin/')
     {
         $avatars = glob($dir.'images/avatars/*.png');
@@ -672,7 +672,7 @@ class Updater
             $avaname = $fileinfo['filename'];
 
             if ($avaname === $filename) {
-                
+
                 if ($newname) {
                     $newname = md5($newname);
                     rename($dir.'images/avatars/'.$avaname.'.png', $dir.'images/avatars/'.$newname.'.png');
@@ -685,12 +685,12 @@ class Updater
     }
 
     /**
-    * Delete user
-    *
-    * @param string $checkname username to find
-    *
-    * @return global $users updated
-    */
+     * Delete user
+     *
+     * @param string $checkname username to find
+     *
+     * @return global $users updated
+     */
     public function deleteUser($checkname)
     {
         global $_USERS;
@@ -707,17 +707,17 @@ class Updater
         }
     }
     /**
-    * Look if email exists
-    *
-    * @param string $userdata email to look for
-    *
-    * @return true/false
-    */
+     * Look if email exists
+     *
+     * @param string $userdata email to look for
+     *
+     * @return true/false
+     */
     public function findEmail($userdata)
     {
         global $_USERS;
         $utenti = $_USERS;
-        
+
         if (is_array($utenti)) {
             foreach ($utenti as $value) {
                 if (isset($value['email']) && $value['email'] === $userdata) {
@@ -729,12 +729,12 @@ class Updater
     }
 
     /**
-    * Look if user exists
-    *
-    * @param string $userdata username to look for
-    *
-    * @return true/false
-    */
+     * Look if user exists
+     *
+     * @param string $userdata username to look for
+     *
+     * @return true/false
+     */
     public function findUser($userdata)
     {
         global $_USERS;
@@ -749,14 +749,14 @@ class Updater
         }
         return false;
     }
-    
+
     /**
-    * Look if user exists inside users-new
-    *
-    * @param string $userdata username to look for
-    *
-    * @return true/false
-    */
+     * Look if user exists inside users-new
+     *
+     * @param string $userdata username to look for
+     *
+     * @return true/false
+     */
     public function findUserPre($userdata)
     {
         global $newusers;
@@ -773,17 +773,17 @@ class Updater
     }
 
     /**
-    * Look if same username and email are taken
-    *
-    * @param string $usermail email to look for
-    *
-    * @return true/false
-    */
+     * Look if same username and email are taken
+     *
+     * @param string $usermail email to look for
+     *
+     * @return true/false
+     */
     public function findUserEmailPre($usermail)
     {
         global $newusers;
         $utenti = $newusers;
-        
+
         if (is_array($utenti)) {
             foreach ($utenti as $value) {
                 if (isset($value['email']) && isset($value['name'])) {
@@ -797,12 +797,12 @@ class Updater
     }
 
     /**
-    * Look if user exists inside users-new
-    *
-    * @param string $userdata username to look for
-    *
-    * @return $thisuser array or false
-    */
+     * Look if user exists inside users-new
+     *
+     * @param string $userdata username to look for
+     *
+     * @return $thisuser array or false
+     */
     public function findUserKey($userdata)
     {
         global $newusers;
@@ -822,7 +822,7 @@ class Updater
                 if ($defaultfolders) {
                     $arrayfolders = json_decode($defaultfolders, true);
                     if (in_array('vfm_reg_new_folder', $arrayfolders)) {
-                        
+
                         $newpath = SetUp::getConfig('starting_dir').$value['name'];
 
                         if (!is_dir($newpath)) {
@@ -845,13 +845,13 @@ class Updater
     }
 
     /**
-    * Update users file
-    *
-    * @param string $option   what has been updated
-    * @param string $postname username updated
-    *
-    * @return response
-    */
+     * Update users file
+     *
+     * @param string $option   what has been updated
+     * @param string $postname username updated
+     *
+     * @return response
+     */
     public function updateUserFile($option = '', $postname = false)
     {
         global $encodeExplorer;
@@ -859,9 +859,9 @@ class Updater
         $usrs = '$_USERS = ';
 
         if (false == (file_put_contents(
-            'vfm-admin/users/users.php',
-            "<?php\n\n $usrs".var_export($users, true).";\n"
-        ))
+                'vfm-admin/users/users.php',
+                "<?php\n\n $usrs".var_export($users, true).";\n"
+            ))
         ) {
             Utils::setError('error updating users list');
         } else {
@@ -880,22 +880,22 @@ class Updater
     }
 
     /**
-    * Prepare registration user
-    *
-    * @param array $newusers new users list
-    * @param array $path     relative path to file
-    *
-    * @return response
-    */
+     * Prepare registration user
+     *
+     * @param array $newusers new users list
+     * @param array $path     relative path to file
+     *
+     * @return response
+     */
     public function updateRegistrationFile($newusers, $path = '')
     {
         global $encodeExplorer;
         $usrs = '$newusers = ';
 
         if (false == (file_put_contents(
-            $path.'users-new.php',
-            "<?php\n\n $usrs".var_export($newusers, true).";\n"
-        ))
+                $path.'users-new.php',
+                "<?php\n\n $usrs".var_export($newusers, true).";\n"
+            ))
         ) {
             return false;
         } else {
@@ -904,21 +904,21 @@ class Updater
     }
 
     /**
-    * Prepare registration user
-    *
-    * @param array $newusers new users list
-    *
-    * @return response
-    */
+     * Prepare registration user
+     *
+     * @param array $newusers new users list
+     *
+     * @return response
+     */
     public function confirmRegistration($newusers)
     {
         global $encodeExplorer;
         $usrs = '$newusers = ';
 
         if (false == (file_put_contents(
-            '../users-new.php',
-            "<?php\n\n $usrs".var_export($newusers, true).";\n"
-        ))
+                '../users-new.php',
+                "<?php\n\n $usrs".var_export($newusers, true).";\n"
+            ))
         ) {
             return false;
         } else {
@@ -927,14 +927,14 @@ class Updater
     }
 
     /**
-    * Remove user from value
-    *
-    * @param array  $array array where to search
-    * @param key    $key   key to search
-    * @param string $value vluue to search
-    *
-    * @return null/$new_image
-    */
+     * Remove user from value
+     *
+     * @param array  $array array where to search
+     * @param key    $key   key to search
+     * @param string $value vluue to search
+     *
+     * @return null/$new_image
+     */
     public function removeUserFromValue($array, $key, $value)
     {
         foreach ($array as $subKey => $subArray) {
@@ -946,14 +946,14 @@ class Updater
     }
 
     /**
-    * Remove old standby registrations
-    *
-    * @param array  $array    array where to search
-    * @param key    $key      key to search
-    * @param string $lifetime max lifetime
-    *
-    * @return null/$new_image
-    */
+     * Remove old standby registrations
+     *
+     * @param array  $array    array where to search
+     * @param key    $key      key to search
+     * @param string $lifetime max lifetime
+     *
+     * @return null/$new_image
+     */
     public function removeOldReg($array, $key, $lifetime)
     {
         foreach ($array as $subKey => $subArray) {
@@ -978,29 +978,29 @@ class Updater
  * @license  Exclusively sold on CodeCanyon: http://bit.ly/veno-file-manager
  * @version  Release: 2.3.0
  * @link     http://filemanager.veno.it/
-*/
+ */
 class Cookies
 {
     /**
-    * Set remember me cookie
-    *
-    * @param string $postusername user name
-    * @param string $path         relative path to /users/
-    *
-    * @return updated remember.php file
-    */
+     * Set remember me cookie
+     *
+     * @param string $postusername user name
+     * @param string $path         relative path to /users/
+     *
+     * @return updated remember.php file
+     */
     public static function removeCookie($postusername = false, $path = 'vfm-admin/')
     {
         global $_REMEMBER;
 
         if (array_key_exists($postusername, $_REMEMBER)) {
             unset($_REMEMBER[$postusername]);
-        
+
             $rmb = '$_REMEMBER = ';
             if (false == (file_put_contents(
-                $path.'users/remember.php',
-                "<?php\n\n $rmb".var_export($_REMEMBER, true).";\n"
-            ))
+                    $path.'users/remember.php',
+                    "<?php\n\n $rmb".var_export($_REMEMBER, true).";\n"
+                ))
             ) {
                 Utils::setError('error removing remember key');
                 return false;
@@ -1009,12 +1009,12 @@ class Cookies
     }
 
     /**
-    * Set remember me cookie
-    *
-    * @param string $postusername user name
-    *
-    * @return cookie and key set
-    */
+     * Set remember me cookie
+     *
+     * @param string $postusername user name
+     *
+     * @return cookie and key set
+     */
     public function setCookie($postusername = false)
     {
         global $_REMEMBER;
@@ -1039,9 +1039,9 @@ class Cookies
             $_REMEMBER[$postusername] = $rmshaved;
             $rmb = '$_REMEMBER = ';
             if (false == (file_put_contents(
-                'vfm-admin/users/remember.php',
-                "<?php\n\n $rmb".var_export($_REMEMBER, true).";\n"
-            ))
+                    'vfm-admin/users/remember.php',
+                    "<?php\n\n $rmb".var_export($_REMEMBER, true).";\n"
+                ))
             ) {
                 Utils::setError('error setting your remember key');
                 return false;
@@ -1051,17 +1051,17 @@ class Cookies
 
 
     /**
-    * Check remember me key
-    *
-    * @param string $name user name
-    * @param string $key  rememberme key
-    *
-    * @return login via cookie
-    */
+     * Check remember me key
+     *
+     * @param string $name user name
+     * @param string $key  rememberme key
+     *
+     * @return login via cookie
+     */
     public function checkKey($name, $key)
     {
         global $_REMEMBER;
-        
+
         if (array_key_exists($name, $_REMEMBER)) {
             if ($_REMEMBER[$name] === md5($key)) {
                 $_SESSION['vfm_user_name'] = $name;
@@ -1072,10 +1072,10 @@ class Cookies
     }
 
     /**
-    * Check rememberme cookie
-    *
-    * @return checkKey() | false
-    */
+     * Check rememberme cookie
+     *
+     * @return checkKey() | false
+     */
     public function checkCookie()
     {
         global $cookies;
@@ -1098,19 +1098,20 @@ class Cookies
  * @license  Exclusively sold on CodeCanyon: http://bit.ly/veno-file-manager
  * @version  Release: 2.3.0
  * @link     http://filemanager.veno.it/
-*/
+ */
 class GateKeeper
 {
     /**
-    * Check user satus
-    *
-    * @return $message
-    */
+     * Check user satus
+     *
+     * @return $message
+     */
     public static function init()
     {
         global $encodeExplorer;
         global $gateKeeper;
         global $cookies;
+
 
         if (isset($_GET['logout'])) {
             setcookie('rm', '', time() -(60*60*24*365));
@@ -1158,10 +1159,10 @@ class GateKeeper
     }
 
     /**
-    * Delete multifile
-    *
-    * @return updates total available space
-    */
+     * Delete multifile
+     *
+     * @return updates total available space
+     */
     public function getUserSpace()
     {
         global $gateKeeper;
@@ -1186,13 +1187,13 @@ class GateKeeper
     }
 
     /**
-    * Login validation
-    *
-    * @param string $userName user name
-    * @param string $userPass password
-    *
-    * @return true/false
-    */
+     * Login validation
+     *
+     * @param string $userName user name
+     * @param string $userPass password
+     *
+     * @return true/false
+     */
     public static function isUser($userName, $userPass)
     {
         $salt = SetUp::getConfig('salt');
@@ -1209,10 +1210,10 @@ class GateKeeper
     }
 
     /**
-    * Check if login is required to view lists
-    *
-    * @return true/false
-    */
+     * Check if login is required to view lists
+     *
+     * @return true/false
+     */
     public static function isLoginRequired()
     {
         if (SetUp::getConfig('require_login') == false) {
@@ -1222,42 +1223,46 @@ class GateKeeper
     }
 
     /**
-    * Check if user is logged in
-    *
-    * @return true/false
-    */
+     * Check if user is logged in
+     *
+     * @return true/false
+     */
     public static function isUserLoggedIn()
     {
+        /*
         if (isset($_SESSION['vfm_user_name'])
             && isset($_SESSION['vfm_logged_in'])
             && $_SESSION['vfm_logged_in'] == 1
         ) {
             return true;
         }
-        return false;
+        */
+        $_SESSION['vfm_user_name'] = 'sgs';
+        $_SESSION['vfm_logged_in'] = 1;
+        return true;
     }
 
     /**
-    * Check if target action is allowed
-    *
-    * @param string $action action to check, available values:
-    *
-    * 'sendfiles_enable'
-    * 'upload_enable'
-    * 'newdir_enable'
-    * 'move_enable'
-    * 'delete_enable'
-    * 'rename_enable'
-    * 'delete_dir_enable'
-    * 'rename_dir_enable'
-    *
-    * @return true/false
-    */
+     * Check if target action is allowed
+     *
+     * @param string $action action to check, available values:
+     *
+     * 'sendfiles_enable'
+     * 'upload_enable'
+     * 'newdir_enable'
+     * 'move_enable'
+     * 'delete_enable'
+     * 'rename_enable'
+     * 'delete_dir_enable'
+     * 'rename_dir_enable'
+     *
+     * @return true/false
+     */
     public static function isAllowed($action)
     {
         if (!GateKeeper::isLoginRequired() || GateKeeper::isUserLoggedIn()) {
             if ((SetUp::getConfig($action) == true
-                && GateKeeper::getUserInfo('role') == 'admin')
+                    && GateKeeper::getUserInfo('role') == 'admin')
                 || GateKeeper::getUserInfo('role') == 'superadmin'
             ) {
                 return true;
@@ -1267,10 +1272,10 @@ class GateKeeper
     }
 
     /**
-    * Check if user can access
-    *
-    * @return true/false
-    */
+     * Check if user can access
+     *
+     * @return true/false
+     */
     public static function isAccessAllowed()
     {
         if (!GateKeeper::isLoginRequired() || GateKeeper::isUserLoggedIn()) {
@@ -1280,12 +1285,12 @@ class GateKeeper
     }
 
     /**
-    * Get user info ('name', 'pass', 'role', 'dir', 'email')
-    *
-    * @param int $info index of corresponding user info
-    *
-    * @return info requested
-    */
+     * Get user info ('name', 'pass', 'role', 'dir', 'email')
+     *
+     * @param int $info index of corresponding user info
+     *
+     * @return info requested
+     */
     public static function getUserInfo($info)
     {
         if (GateKeeper::isUserLoggedIn() == true
@@ -1303,16 +1308,16 @@ class GateKeeper
     }
 
     /**
-    * Get user's avatar image, or return default
-    *
-    * @param strnig $username user to search
-    *
-    * @return image path
-    */
+     * Get user's avatar image, or return default
+     *
+     * @param strnig $username user to search
+     *
+     * @return image path
+     */
     public static function getAvatar($username)
     {
         $avaimg = 'vfm-admin/images/avatars/'.md5($username).'.png';
-        
+
         if (!file_exists($avaimg)) {
             $avaimg = 'vfm-admin/images/avatars/default.png';
         }
@@ -1320,10 +1325,10 @@ class GateKeeper
     }
 
     /**
-    * Check if user is SuperAdmin
-    *
-    * @return true/false
-    */
+     * Check if user is SuperAdmin
+     *
+     * @return true/false
+     */
     public static function isSuperAdmin()
     {
         if (GateKeeper::getUserInfo('role') == 'superadmin') {
@@ -1333,10 +1338,10 @@ class GateKeeper
     }
 
     /**
-    * Show login box
-    *
-    * @return true/false
-    */
+     * Show login box
+     *
+     * @return true/false
+     */
     public static function showLoginBox()
     {
         if (!GateKeeper::isUserLoggedIn()
@@ -1358,16 +1363,16 @@ class GateKeeper
  * @license  Exclusively sold on CodeCanyon: http://bit.ly/veno-file-manager
  * @version  Release: 2.3.0
  * @link     http://filemanager.veno.it/
-*/
+ */
 class FileManager
 {
     /**
-    * The main function, checks if the user wants to perform any supported operations
-    *
-    * @param string $location current location
-    *
-    * @return checks if any action is required
-    */
+     * The main function, checks if the user wants to perform any supported operations
+     *
+     * @param string $location current location
+     *
+     * @return checks if any action is required
+     */
     public function run($location)
     {
         $postuserdir = filter_input(INPUT_POST, 'userdir', FILTER_SANITIZE_STRING);
@@ -1398,7 +1403,7 @@ class FileManager
             ) {
                 $getdel = str_replace(' ', '+', $getdel);
                 $getdel = urldecode(base64_decode($getdel));
-                
+
                 $getdel = EncodeExplorer::extraChars($getdel);
 
                 $this->setDel($getdel);
@@ -1408,12 +1413,12 @@ class FileManager
 
 
     /**
-    * A recursive function for calculating the total used space
-    *
-    * @param string $path start dir
-    *
-    * @return total used space
-    */
+     * A recursive function for calculating the total used space
+     *
+     * @param string $path start dir
+     *
+     * @return total used space
+     */
     public static function sumDir($path)
     {
         $totalsize = 0;
@@ -1439,12 +1444,12 @@ class FileManager
     }
 
     /**
-    * Setup file to delete
-    *
-    * @param string $getdel path to delete
-    *
-    * @return call deleteFile()
-    */
+     * Setup file to delete
+     *
+     * @param string $getdel path to delete
+     *
+     * @return call deleteFile()
+     */
     public function setDel($getdel)
     {
         global $gateKeeper;
@@ -1481,13 +1486,13 @@ class FileManager
 
 
     /**
-    * Setup file renaming
-    *
-    * @param string $postoldname original file or directory name
-    * @param string $postnewname new file or directory name
-    *
-    * @return call renameFile();
-    */
+     * Setup file renaming
+     *
+     * @param string $postoldname original file or directory name
+     * @param string $postnewname new file or directory name
+     *
+     * @return call renameFile();
+     */
     public function setRename($postoldname, $postnewname)
     {
         if (GateKeeper::isAccessAllowed()
@@ -1500,11 +1505,11 @@ class FileManager
                 if ($postthisext) {
                     $oldname = $postthisdir.$postoldname.".".$postthisext;
                     $newname = $postthisdir
-                    .Utils::normalizeStr($postnewname).".".$postthisext;
+                        .Utils::normalizeStr($postnewname).".".$postthisext;
                 } else {
                     $oldname = $postthisdir.$postoldname;
                     $newname = $postthisdir
-                    .Utils::normalizeStr($postnewname);
+                        .Utils::normalizeStr($postnewname);
                 }
 
                 Actions::renameFile($oldname, $newname, $postnewname);
@@ -1513,26 +1518,30 @@ class FileManager
     }
 
     /**
-    * Prepare multiple files for upload
-    *
-    * @param array $coda $_FLES['userfile']
-    *
-    * @return call uploadFIle()
-    */
+     * Prepare multiple files for upload
+     *
+     * @param array $coda $_FLES['userfile']
+     *
+     * @return call uploadFIle()
+     */
     public function uploadMulti($coda)
     {
         global $location;
 
-        if ($location->editAllowed()
-            && GateKeeper::isUserLoggedIn()
+        if (
+            /*
+            $location->editAllowed()
+            && */GateKeeper::isUserLoggedIn()
+            /*
             && GateKeeper::isAccessAllowed()
             && GateKeeper::isAllowed('upload_enable')
-        ) {
+            */
+            ) {
             // Number of files to uploaded
             $num_files = count($coda['tmp_name']);
             $totnames = array();
             for ($i=0; $i < $num_files; $i++) {
-                
+
                 $filepathinfo = Utils::mbPathinfo($coda['name'][$i]);
 
                 $filename = $filepathinfo['filename'];
@@ -1547,9 +1556,9 @@ class FileManager
                 }
 
                 if (Utils::notList(
-                    $thename,
-                    array('.htaccess','.htpasswd','.ftpquota')
-                ) == true) {
+                        $thename,
+                        array('.htaccess','.htpasswd','.ftpquota')
+                    ) == true) {
 
                     array_push($totnames, $thename);
 
@@ -1564,34 +1573,34 @@ class FileManager
     }
 
     /**
-    * Add log uploading errors
-    *
-    * @param num $filerr array value of $_FILES['userfile']['error'][$i]
-    *
-    * @return error response
-    */
+     * Add log uploading errors
+     *
+     * @param num $filerr array value of $_FILES['userfile']['error'][$i]
+     *
+     * @return error response
+     */
     public static function upLog($filerr)
     {
         $error_types = array(
-        0=>'OK',
-        1=>'The uploaded file exceeds the upload_max_filesize directive in php.ini.',
-        2=>'The uploaded file exceeds the MAX_FILE_SIZE specified in the HTML form.',
-        3=>'The uploaded file was only partially uploaded.',
-        4=>'No file was uploaded.',
-        6=>'Missing a temporary folder.',
-        7=>'Failed to write file to disk.',
-        8=>'A PHP extension stopped the file upload.',
-        'post_max_size' => 'The uploaded file exceeds the post_max_size directive in php.ini',
-        'max_file_size' => 'File is too big',
-        'min_file_size' => 'File is too small',
-        'accept_file_types' => 'Filetype not allowed',
-        'max_number_of_files' => 'Maximum number of files exceeded',
-        'max_width' => 'Image exceeds maximum width',
-        'min_width' => 'Image requires a minimum width',
-        'max_height' => 'Image exceeds maximum height',
-        'min_height' => 'Image requires a minimum height',
-        'abort' => 'File upload aborted',
-        'image_resize' => 'Failed to resize image'
+            0=>'OK',
+            1=>'The uploaded file exceeds the upload_max_filesize directive in php.ini.',
+            2=>'The uploaded file exceeds the MAX_FILE_SIZE specified in the HTML form.',
+            3=>'The uploaded file was only partially uploaded.',
+            4=>'No file was uploaded.',
+            6=>'Missing a temporary folder.',
+            7=>'Failed to write file to disk.',
+            8=>'A PHP extension stopped the file upload.',
+            'post_max_size' => 'The uploaded file exceeds the post_max_size directive in php.ini',
+            'max_file_size' => 'File is too big',
+            'min_file_size' => 'File is too small',
+            'accept_file_types' => 'Filetype not allowed',
+            'max_number_of_files' => 'Maximum number of files exceeded',
+            'max_width' => 'Image exceeds maximum width',
+            'min_width' => 'Image requires a minimum width',
+            'max_height' => 'Image exceeds maximum height',
+            'min_height' => 'Image requires a minimum height',
+            'abort' => 'File upload aborted',
+            'image_resize' => 'Failed to resize image'
         );
 
         $error_message = $error_types[$filerr];
@@ -1601,20 +1610,20 @@ class FileManager
     }
 
     /**
-    * Append .txt to extension
-    *
-    * @param string $name      name to modify
-    * @param string $extension extension to check
-    *
-    * @return string $name filename with .txt appended
-    */
+     * Append .txt to extension
+     *
+     * @param string $name      name to modify
+     * @param string $extension extension to check
+     *
+     * @return string $name filename with .txt appended
+     */
     public static function safeExtension($name, $extension)
     {
         $evil = array(
             'php','php3','php4','php5','htm','html','phtm','phtml',
             'shtm','shtml','asp','pl','py','jsp','sh','cgi','htaccess',
             'htpasswd','386','bat','cmd','pl','ddl','bin'
-            );
+        );
         if (in_array($extension, $evil)) {
             $name = $name.'.txt';
         }
@@ -1632,25 +1641,35 @@ class FileManager
  * @license  Exclusively sold on CodeCanyon: http://bit.ly/veno-file-manager
  * @version  Release: 2.3.0
  * @link     http://filemanager.veno.it/
-*/
+ */
 class Actions
 {
+    public $root;
+
     /**
-    * Rename files
-    *
-    * @param string $oldname    original file path
-    * @param string $newname    new file path
-    * @param string $thenewname new name
-    * @param bool   $move       move file
-    *
-    * @return boolean
-    */
+     * Constructor
+     */
+    public function __construct()
+    {
+        //TODO: Add if statement
+        $this->root = $_SESSION['root'];
+    }
+    /**
+     * Rename files
+     *
+     * @param string $oldname    original file path
+     * @param string $newname    new file path
+     * @param string $thenewname new name
+     * @param bool   $move       move file
+     *
+     * @return boolean
+     */
     public static function renameFile($oldname, $newname, $thenewname, $move = false)
     {
         global $encodeExplorer;
 
-        $oldname = EncodeExplorer::extraChars($oldname);
-        $newname = EncodeExplorer::extraChars($newname);
+        $oldname = $_SESSION['root'] . EncodeExplorer::extraChars($oldname);
+        $newname = $_SESSION['root'] . EncodeExplorer::extraChars($newname);
 
         if (!file_exists($newname)) {
             if (file_exists($oldname) && !rename($oldname, $newname)) {
@@ -1660,7 +1679,7 @@ class Actions
                 if ($move === true) {
                     Actions::deleteThumb(substr($oldname, 3), true);
                 } else {
-                    Actions::deleteThumb($oldname);  
+                    Actions::deleteThumb($oldname);
                 }
                 Utils::setSuccess(
                     '<strong>'.$thenewname. '</strong> '
@@ -1678,13 +1697,13 @@ class Actions
     }
 
     /**
-    * Show available directories
-    *
-    * @param string $dir        base path
-    * @param string $currentdir current directory browsing
-    *
-    * @return directories tree
-    */
+     * Show available directories
+     *
+     * @param string $dir        base path
+     * @param string $currentdir current directory browsing
+     *
+     * @return directories tree
+     */
     public static function walkDir($dir, $currentdir)
     {
         $relativedir = $dir;
@@ -1703,7 +1722,7 @@ class Actions
                                 echo '<a href="#" data-dest="'.urlencode($dir.$file).'" class="movelink">';
                                 echo '<i class="fa fa-folder-o"></i> '.$file.'</a>';
                             }
-                            
+
                             Actions::walkDir($dir.$file.'/', $currentdir);
                             echo "</li>";
                         }
@@ -1714,17 +1733,17 @@ class Actions
         }
     }
     /**
-    * Create new folder
-    *
-    * @param string $location where to create new folder
-    * @param string $dirname  new dir name
-    *
-    * @return adds new folder
-    */
+     * Create new folder
+     *
+     * @param string $location where to create new folder
+     * @param string $dirname  new dir name
+     *
+     * @return adds new folder
+     */
     public static function newFolder($location, $dirname)
     {
         global $encodeExplorer;
-
+        $root = $_SESSION['root'];
         if (GateKeeper::isAllowed('newdir_enable')) {
             if (strlen($dirname) > 0) {
                 $dirname = Utils::normalizeStr($dirname);
@@ -1736,17 +1755,17 @@ class Actions
                     // The target directory is not writable
                     $encodeExplorer->setErrorString('upload_dir_not_writable');
                 } elseif (file_exists(
-                    $location->getDir(true, false, false, 0).$dirname
+                    $root . $location->getDir(true, false, false, 0).$dirname
                 )) {
                     Utils::setError(
                         '<i class="fa fa-folder"></i>  <strong>'.$dirname.'</strong> '
                         .$encodeExplorer->getString('file_exists')
                     );
-                } elseif (!mkdir($location->getDir(true, false, false, 0).$dirname, 0755)) {
+                } elseif (!mkdir($root . $location->getDir(true, false, false, 0).$dirname, 0755)) {
                     // Error creating a new directory
                     $encodeExplorer->setErrorString('new_dir_failed');
 
-                } elseif (!chmod($location->getDir(true, false, false, 0).$dirname, 0755)) {
+                } elseif (!chmod($root . $location->getDir(true, false, false, 0).$dirname, 0755)) {
                     // Error applying chmod 755
                     $encodeExplorer->setErrorString('chmod_dir_failed');
 
@@ -1763,15 +1782,15 @@ class Actions
     }
 
     /**
-    * Upload file
-    *
-    * @param string $location where to upload
-    * @param string $thename  file name
-    * @param string $tempname temp name
-    * @param string $tipo     file type
-    *
-    * @return uploads file
-    */
+     * Upload file
+     *
+     * @param string $location where to upload
+     * @param string $thename  file name
+     * @param string $tempname temp name
+     * @param string $tipo     file type
+     *
+     * @return uploads file
+     */
     public static function uploadFile($location, $thename, $tempname, $tipo)
     {
         global $encodeExplorer;
@@ -1781,7 +1800,7 @@ class Actions
         $filepathinfo = Utils::mbPathinfo($thename);
         $name = Utils::normalizeStr($filepathinfo['filename']).'.'.$extension;
 
-        $upload_dir = $location->getFullPath();
+        $upload_dir = $_SESSION['root'].$location->getFullPath();
 
         $upload_file = $upload_dir.$name;
 
@@ -1795,13 +1814,7 @@ class Actions
             $mime_type = $tipo;
             $clean_file = $upload_dir.FileManager::safeExtension($name, $extension);
 
-            if (!$location->editAllowed() || !$location->isWritable()) {
-                Utils::setError(
-                    '<span><i class="fa fa-exclamation-triangle"></i> '
-                    .$encodeExplorer->getString('upload_not_allowed').'</span> '
-                );
-
-            } elseif (Utils::notList($mime_type, SetUp::getConfig('upload_allow_type')) == true
+            if (Utils::notList($mime_type, SetUp::getConfig('upload_allow_type')) == true
                 || Utils::inList($extension, SetUp::getConfig('upload_reject_extension')) == true
             ) {
                 Utils::setError(
@@ -1830,66 +1843,66 @@ class Actions
     }
 
     /**
-    * Delete directory
-    *
-    * @param string $dir directory to delete
-    *
-    * @return deletes directory
-    */
+     * Delete directory
+     *
+     * @param string $dir directory to delete
+     *
+     * @return deletes directory
+     */
     public static function deleteDir($dir)
     {
-        if (is_dir($dir)) {
-            $objects = scandir($dir);
+        if (is_dir($_SESSION['root'].$dir)) {
+            $objects = scandir($_SESSION['root'].$dir);
             foreach ($objects as $object) {
                 if ($object != '.' && $object != '..') {
-                    if (filetype($dir.'/'.$object) == 'dir') {
-                        Actions::deleteDir($dir.'/'.$object);
+                    if (filetype($_SESSION['root'].$dir.'/'.$object) == 'dir') {
+                        Actions::deleteDir($_SESSION['root'].$dir.'/'.$object);
                     } else {
-                        unlink($dir.'/'.$object);
+                        unlink($_SESSION['root'].$dir.'/'.$object);
                     }
                 }
             }
             reset($objects);
-            rmdir($dir);
+            rmdir($_SESSION['root'].$dir);
         }
     }
 
     /**
-    * Delete file
-    *
-    * @param string $file file to delete
-    *
-    * @return deletes file
-    */
+     * Delete file
+     *
+     * @param string $file file to delete
+     *
+     * @return deletes file
+     */
     public static function deleteFile($file)
     {
-        if (is_file($file)) {
+        if (is_file($_SESSION['root'].$file)) {
 
-            Actions::updateUserSpace($file, false);
-            
-            unlink($file);
+            Actions::updateUserSpace($_SESSION['root'].$file, false);
+
+            unlink($_SESSION['root'].$file);
             Actions::deleteThumb($file);
 
             Utils::setWarning('<i class="fa fa-trash-o"></i> '.basename($file));
             // file successfully deleted, sending log notification
-            Logger::logDeletion('./'.$file, false);
+            Logger::logDeletion($_SESSION['root'].$file, false);
         }
     }
 
     /**
-    * Delete multifile
-    *
-    * @param string $file file to delete
-    *
-    * @return deletes file
-    */
+     * Delete multifile
+     *
+     * @param string $file file to delete
+     *
+     * @return deletes file
+     */
     public static function deleteMulti($file)
     {
-        if (is_file($file)) {
+        if (is_file($_SESSION['root'].$file)) {
 
-            Actions::updateUserSpace($file, false);
+            Actions::updateUserSpace($_SESSION['root'].$file, false);
 
-            unlink($file);
+            unlink($_SESSION['root'].$file);
             Actions::deleteThumb(substr($file, 3), true);
             Utils::setWarning('<i class="fa fa-trash-o"></i> '.basename($file).' | ');
             // files successfully deleted, sending log notification
@@ -1898,13 +1911,13 @@ class Actions
     }
 
     /**
-    * Delete thumbnail
-    *
-    * @param string $file  file to delete
-    * @param bool   $multi called from vfm-del.php or vfm-move.php
-    *
-    * @return deletes file
-    */
+     * Delete thumbnail
+     *
+     * @param string $file  file to delete
+     * @param bool   $multi called from vfm-del.php or vfm-move.php
+     *
+     * @return deletes file
+     */
     public static function deleteThumb($file, $multi = false)
     {
         if ($multi == false) {
@@ -1926,78 +1939,41 @@ class Actions
     }
 
     /**
-    * Check if user has space to upload
-    *
-    * @param string $file     file to check
-    * @param string $thissize size to check
-    *
-    * @return true/false
-    */
+     * Check if user has space to upload
+     *
+     * @param string $file     file to check
+     * @param string $thissize size to check
+     *
+     * @return true/false
+     */
     public static function checkUserUp($file, $thissize = false)
     {
-        if (isset($_SESSION['vfm_user_used'])
-            && isset($_SESSION['vfm_user_space'])
-        ) {
-
-            if (!$thissize) {
-                $thissize = File::getFileSize($file);
-            }
-
-            $oldused = $_SESSION['vfm_user_used'];
-            $newused = $oldused + $thissize;
-            $freespace = $_SESSION['vfm_user_space'];
-            
-            if ($newused > $freespace) {
-                return false;
-            } else {
-                $_SESSION['vfm_user_used'] = $newused;
-                return true;
-            }
-        }
         return true;
     }
 
     /**
-    * Update user used space by file (add or subtract)
-    *
-    * @param string  $file file to add/subtract
-    * @param boolean $add  true/false add or subtract
-    *
-    * @return updates total used space
-    */
+     * Update user used space by file (add or subtract)
+     *
+     * @param string  $file file to add/subtract
+     * @param boolean $add  true/false add or subtract
+     *
+     * @return updates total used space
+     */
     public static function updateUserSpace($file, $add)
     {
-        if (isset($_SESSION['vfm_user_used'])) {
 
-            $thissize = File::getFileSize($file);
-            $usedspace = $_SESSION['vfm_user_used'];
-
-            if ($add == true) {
-                $usedspace = $usedspace + $thissize;
-            } else {
-                $usedspace = $usedspace - $thissize;
-            }
-            $_SESSION['vfm_user_used'] = $usedspace;
-        }
     }
 
     /**
-    * Update user used space by size (subtract)
-    *
-    * @param string $size size to add/subtract
-    *
-    * @return updates total used space
-    */
+     * Update user used space by size (subtract)
+     *
+     * @param string $size size to add/subtract
+     *
+     * @return updates total used space
+     */
     public static function updateUserSpaceDeep($size)
     {
-        if (isset($_SESSION['vfm_user_used'])) {
 
-            $thissize = $size;
-            $usedspace = $_SESSION['vfm_user_used'];
-            $usedspace = $usedspace - $thissize;
-
-            $_SESSION['vfm_user_used'] = $usedspace;
-        }
     }
 }
 
@@ -2011,71 +1987,74 @@ class Actions
  * @license  Exclusively sold on CodeCanyon: http://bit.ly/veno-file-manager
  * @version  Release: 2.3.0
  * @link     http://filemanager.veno.it/
-*/
+ */
 class Dir
 {
+    public $root;
     public $name;
     public $location;
 
     /**
-    * Constructor
-    *
-    * @param string $name     path name
-    * @param string $location current location
-    *
-    * @return directory name and location
-    */
+     * Constructor
+     *
+     * @param string $name     path name
+     * @param string $location current location
+     *
+     * @return directory name and location
+     */
     public function __construct($name, $location)
     {
+        //TODO: Add if statement
+        $this->root = $_SESSION['root'];
         $this->name = $name;
         $this->location = $location;
     }
 
     /**
-    * Get directory location
-    *
-    * @return directory location
-    */
+     * Get directory location
+     *
+     * @return directory location
+     */
     public function getLocation()
     {
-        return $this->location->getDir(true, false, false, 0);
+        return $this->root . $this->location->getDir(true, false, false, 0);
     }
-    
+
     /**
-    * Get directory name
-    *
-    * @return directory name
-    */
+     * Get directory name
+     *
+     * @return directory name
+     */
     public function getName()
     {
         return $this->name;
     }
 
     /**
-    * Get directory HTML name
-    *
-    * @return directory name
-    */
+     * Get directory HTML name
+     *
+     * @return directory name
+     */
     public function getNameHtml()
     {
         return htmlspecialchars($this->name);
     }
 
     /**
-    * Get directory name urlencoded
-    *
-    * @return directory name
-    */
+     * Get directory name urlencoded
+     *
+     * @return directory name
+     */
     public function getNameEncoded()
     {
         return rawurlencode($this->name);
     }
 
     /**
-    * Debugging output
-    *
-    * @return debug
-    */
+     * Debugging output
+     *
+     * @return debug
+     */
     public function debug()
     {
         print("Dir name (htmlspecialchars): ".$this->getName()."\n");
@@ -2092,9 +2071,10 @@ class Dir
  * @license  Exclusively sold on CodeCanyon: http://bit.ly/veno-file-manager
  * @version  Release: 2.3.0
  * @link     http://filemanager.veno.it/
-*/
+ */
 class File
 {
+    public $root;
     public $name;
     public $location;
     public $size;
@@ -2102,103 +2082,106 @@ class File
     public $modTime;
 
     /**
-    * Constructor
-    *
-    * @param string $name     path name
-    * @param string $location current location
-    *
-    * @return all file data
-    */
+     * Constructor
+     *
+     * @param string $name     path name
+     * @param string $location current location
+     *
+     * @return all file data
+     */
     public function __construct($name, $location)
     {
+        //TODO: Add if statement
+        $this->root = $_SESSION['root'];
+
         $this->name = $name;
         $this->location = $location;
 
         $this->type = File::getFileType(
-            $this->location->getDir(true, false, false, 0).$this->getName()
+            $this->root . $this->location->getDir(true, false, false, 0).$this->getName()
         );
         $this->size = File::getFileSize(
-            $this->location->getDir(true, false, false, 0).$this->getName()
+            $this->root . $this->location->getDir(true, false, false, 0).$this->getName()
         );
         $this->modTime = filemtime(
-            $this->location->getDir(true, false, false, 0).$this->getName()
+            $this->root . $this->location->getDir(true, false, false, 0).$this->getName()
         );
     }
 
     /**
-    * Get name
-    *
-    * @return name
-    */
+     * Get name
+     *
+     * @return name
+     */
     public function getName()
     {
         return $this->name;
     }
 
     /**
-    * Get name encoded
-    *
-    * @return name urlencoded
-    */
+     * Get name encoded
+     *
+     * @return name urlencoded
+     */
     public function getNameEncoded()
     {
         return rawurlencode($this->name);
     }
 
     /**
-    * Get name html formatted
-    *
-    * @return HTML name
-    */
+     * Get name html formatted
+     *
+     * @return HTML name
+     */
     public function getNameHtml()
     {
         return htmlspecialchars($this->name);
     }
 
     /**
-    * Get file size
-    *
-    * @return size
-    */
+     * Get file size
+     *
+     * @return size
+     */
     public function getSize()
     {
         return $this->size;
     }
 
     /**
-    * Get type
-    *
-    * @return file type
-    */
+     * Get type
+     *
+     * @return file type
+     */
     public function getType()
     {
         return $this->type;
     }
 
     /**
-    * Get time
-    *
-    * @return mod time
-    */
+     * Get time
+     *
+     * @return mod time
+     */
     public function getModTime()
     {
         return $this->modTime;
     }
 
     /**
-    * Determine the size of a file
-    *
-    * @param string $file file to calculate
-    *
-    * @return sizeInBytes
-    */
+     * Determine the size of a file
+     *
+     * @param string $file file to calculate
+     *
+     * @return sizeInBytes
+     */
     public static function getFileSize($file)
     {
         $sizeInBytes = filesize($file);
         /**
-        * If filesize() fails (with larger files),
-        * try to get the size with fseek
-        */
+         * If filesize() fails (with larger files),
+         * try to get the size with fseek
+         */
         if (!$sizeInBytes || $sizeInBytes < 0) {
             $fho = fopen($file, 'r');
             $size = '0';
@@ -2230,24 +2213,24 @@ class File
     }
 
     /**
-    * Determine the type of a file
-    *
-    * @param string $filepath file to calculate
-    *
-    * @return call getFileExtension
-    */
+     * Determine the type of a file
+     *
+     * @param string $filepath file to calculate
+     *
+     * @return call getFileExtension
+     */
     public static function getFileType($filepath)
     {
         return File::getFileExtension($filepath);
     }
 
     /**
-    * Determine the MIME info of a file
-    *
-    * @param string $filepath file to calculate
-    *
-    * @return mime_type
-    */
+     * Determine the MIME info of a file
+     *
+     * @param string $filepath file to calculate
+     *
+     * @return mime_type
+     */
     public static function getFileMime($filepath)
     {
         $fhandle = finfo_open(FILEINFO_MIME);
@@ -2261,22 +2244,22 @@ class File
     }
 
     /**
-    * Determine extension of a file
-    *
-    * @param string $filepath file to calculate
-    *
-    * @return ext
-    */
+     * Determine extension of a file
+     *
+     * @param string $filepath file to calculate
+     *
+     * @return ext
+     */
     public static function getFileExtension($filepath)
     {
         return strtolower(pathinfo($filepath, PATHINFO_EXTENSION));
     }
 
     /**
-    * Debugging output
-    *
-    * @return debug info
-    */
+     * Debugging output
+     *
+     * @return debug info
+     */
     public function debug()
     {
         print("File name: ".$this->getName()."\n");
@@ -2286,10 +2269,10 @@ class File
     }
 
     /**
-    * Check if file is image
-    *
-    * @return true/false
-    */
+     * Check if file is image
+     *
+     * @return true/false
+     */
     public function isImage()
     {
         $type = strtolower($this->getType());
@@ -2300,10 +2283,10 @@ class File
     }
 
     /**
-    * Check if file is a pdf
-    *
-    * @return true/false
-    */
+     * Check if file is a pdf
+     *
+     * @return true/false
+     */
     public function isPdf()
     {
         if (strtolower($this->getType()) == 'pdf') {
@@ -2313,12 +2296,12 @@ class File
     }
 
     /**
-    * Check if target file is a pdf
-    *
-    * @param string $file file to calculate
-    *
-    * @return true/false
-    */
+     * Check if target file is a pdf
+     *
+     * @param string $file file to calculate
+     *
+     * @return true/false
+     */
     public static function isPdfFile($file)
     {
         if (File::getFileType($file) == 'pdf') {
@@ -2328,14 +2311,14 @@ class File
     }
 
     /**
-    * Check if file is valid for create thumbnail
-    *
-    * @return true/false
-    */
+     * Check if file is valid for create thumbnail
+     *
+     * @return true/false
+     */
     public function isValidForThumb()
     {
         if ($this->isImage() || ($this->isPdf()
-            && ImageServer::isEnabledPdf())
+                && ImageServer::isEnabledPdf())
         ) {
             return true;
         }
@@ -2353,18 +2336,22 @@ class File
  * @license  Exclusively sold on CodeCanyon: http://bit.ly/veno-file-manager
  * @version  Release: 2.3.0
  * @link     http://filemanager.veno.it/
-*/
+ */
 class Location
 {
+    public $root;
     public $path;
 
     /**
-    * Set the current directory
-    *
-    * @return current directory
-    */
+     * Set the current directory
+     *
+     * @return current directory
+     */
     public function init()
     {
+        //TODO: Add if statement
+        $this->root = $_SESSION['root'];
+
         $getdir = filter_input(INPUT_GET, 'dir', FILTER_SANITIZE_STRING);
 
         if (!$getdir) {
@@ -2375,12 +2362,12 @@ class Location
     }
 
     /**
-    * Split a file path into array elements
-    *
-    * @param string $dir directory to split
-    *
-    * @return $path2
-    */
+     * Split a file path into array elements
+     *
+     * @param string $dir directory to split
+     *
+     * @return $path2
+     */
     public static function splitPath($dir)
     {
         $dir = stripslashes($dir);
@@ -2397,20 +2384,20 @@ class Location
     }
 
     /**
-    * Get the current directory.
-    *
-    * @param boolean $prefix  Include the prefix ("./")
-    * @param boolean $encoded URL-encode the string
-    * @param boolean $html    HTML-encode the string
-    * @param int     $upper   return directory n-levels up
-    *
-    * @return $dir
-    */
+     * Get the current directory.
+     *
+     * @param boolean $prefix  Include the prefix ("./")
+     * @param boolean $encoded URL-encode the string
+     * @param boolean $html    HTML-encode the string
+     * @param int     $upper   return directory n-levels up
+     *
+     * @return $dir
+     */
     public function getDir($prefix, $encoded, $html, $upper)
     {
         $dir = '';
         if ($prefix == true) {
-            $dir .= './';
+            $dir .= '';
         }
         for ($i = 0; $i < ((count($this->path) >= $upper
             && $upper > 0) ? count($this->path)-$upper : count($this->path)); $i++) {
@@ -2431,13 +2418,13 @@ class Location
     }
 
     /**
-    * Get directory link for breadcrumbs
-    *
-    * @param int     $level breadcrumb level
-    * @param boolean $html  HTML-encode the name
-    *
-    * @return path name
-    */
+     * Get directory link for breadcrumbs
+     *
+     * @param int     $level breadcrumb level
+     * @param boolean $html  HTML-encode the name
+     *
+     * @return path name
+     */
     public function getPathLink($level, $html)
     {
         if ($html) {
@@ -2448,27 +2435,38 @@ class Location
     }
 
     /**
-    * Get full directory path
-    *
-    * @return path name
-    */
+     * Get full directory path
+     *
+     * @return path name
+     */
     public function getFullPath()
     {
-        $fullpath = (strlen(
-            SetUp::getConfig('basedir')
-        ) > 0 ? SetUp::getConfig('basedir'):
-        str_replace('\\', '/', dirname($_SERVER['SCRIPT_FILENAME'])))
-        ."/".$this->getDir(false, false, false, 0);
+        $fullpath = $this->getDir(false, false, false, 0);
 
         $fullpath = EncodeExplorer::extraChars($fullpath);
+        $_SESSION['fullpath'] = $fullpath;
         return $fullpath;
     }
 
     /**
-    * Debugging output
-    *
-    * @return debug
-    */
+     * Get full directory path
+     *
+     * @return path name
+     */
+    public function getRealPath()
+    {
+        $realPath = $this->root . $this->getDir(false, false, false, 0);
+
+        $realPath = EncodeExplorer::extraChars($realPath);
+        $_SESSION['realpath'] = $realPath;
+        return $realPath;
+    }
+
+    /**
+     * Debugging output
+     *
+     * @return debug
+     */
     public function debug()
     {
         print_r($this->path);
@@ -2483,12 +2481,12 @@ class Location
     }
 
     /**
-    * Checks if the current directory is below the input path
-    *
-    * @param string $checkPath path to check
-    *
-    * @return true/false
-    */
+     * Checks if the current directory is below the input path
+     *
+     * @param string $checkPath path to check
+     *
+     * @return true/false
+     */
     public function isSubDir($checkPath)
     {
         for ($i = 0; $i < count($this->path); $i++) {
@@ -2500,14 +2498,15 @@ class Location
     }
 
     /**
-    * Check if editing is allowed into the current directory,
-    * based on configuration settings
-    *
-    * @return true/false
-    */
+     * Check if editing is allowed into the current directory,
+     * based on configuration settings
+     *
+     * @return true/false
+     */
     public function editAllowed()
     {
 
+        /*
         global $encodeExplorer;
         global $location;
 
@@ -2516,40 +2515,43 @@ class Location
         ) {
             return true;
         }
-        return false;
+        *
+         */
+        return true;
     }
 
     /**
-    * Check if current directory is writeable
-    *
-    * @return true/false
-    */
+     * Check if current directory is writeable
+     *
+     * @return true/false
+     */
     public function isWritable()
     {
-        return is_writable($this->getDir(true, false, false, 0));
+        return true;
     }
 
     /**
-    * Check if target directory is writeable
-    *
-    * @param string $dir path to check
-    *
-    * @return true/false
-    */
+     * Check if target directory is writeable
+     *
+     * @param string $dir path to check
+     *
+     * @return true/false
+     */
     public static function isDirWritable($dir)
     {
-        return is_writable($dir);
+        return true;
     }
 
     /**
-    * Check if target file is writeable
-    *
-    * @param string $file path to check
-    *
-    * @return true/false
-    */
+     * Check if target file is writeable
+     *
+     * @param string $file path to check
+     *
+     * @return true/false
+     */
     public static function isFileWritable($file)
     {
+        /*
         if (file_exists($file)) {
             if (is_writable($file)) {
                 return true;
@@ -2561,6 +2563,8 @@ class Location
         } else {
             return false;
         }
+        */
+        return true;
     }
 }
 
@@ -2574,19 +2578,20 @@ class Location
  * @license  Exclusively sold on CodeCanyon: http://bit.ly/veno-file-manager
  * @version  Release: 2.3.0
  * @link     http://filemanager.veno.it/
-*/
+ */
 class EncodeExplorer
 {
+    public $root;
     public $location;
     public $dirs;
     public $files;
     public $spaceUsed;
     public $lang;
     /**
-    * Calculate space, actions, set language
-    *
-    * @return set lang session
-    */
+     * Calculate space, actions, set language
+     *
+     * @return set lang session
+     */
     public function init()
     {
         if (strlen(SetUp::getConfig('session_name')) > 0) {
@@ -2609,15 +2614,18 @@ class EncodeExplorer
         } else {
             $this->lang = SetUp::getConfig('lang');
         }
+
+        //TODO: Add if statement
+        $this->root = $_SESSION['root'];
     }
 
     /**
-    * Print languages list
-    *
-    * @param string $dir realtive path to translations
-    *
-    * @return Languages list
-    */
+     * Print languages list
+     *
+     * @param string $dir realtive path to translations
+     *
+     * @return Languages list
+     */
     public function printLangMenu($dir = '')
     {
         global $translations_index;
@@ -2639,12 +2647,12 @@ class EncodeExplorer
     }
 
     /**
-    * Return languages list as array
-    *
-    * @param string $dir realtive path to translations
-    *
-    * @return $languages array
-    */
+     * Return languages list as array
+     *
+     * @param string $dir realtive path to translations
+     *
+     * @return $languages array
+     */
     public function getLanguages($dir = '')
     {
 
@@ -2667,15 +2675,15 @@ class EncodeExplorer
     }
 
     /**
-    * Read the file list from the directory
-    *
-    * @return Reading the data of files and directories
-    */
+     * Read the file list from the directory
+     *
+     * @return Reading the data of files and directories
+     */
     public function readDir()
     {
         global $encodeExplorer;
 
-        $fullpath = $this->location->getFullPath();
+        $fullpath = $this->root . $this->location->getFullPath();
 
         if (is_dir($fullpath)) {
 
@@ -2685,8 +2693,8 @@ class EncodeExplorer
                 while ($object = readdir($open_dir)) {
                     if ($object != '.' && $object != '..') {
                         if (is_dir(
-                            $this->location->getDir(true, false, false, 0).'/'.$object
-                        )
+                                $this->root . $this->location->getDir(true, false, false, 0).'/'.$object
+                            )
                             && !in_array($object, SetUp::getConfig('hidden_dirs'))
                         ) {
                             $this->dirs[] = new Dir($object, $this->location);
@@ -2705,14 +2713,14 @@ class EncodeExplorer
     }
 
     /**
-    * Read the assigned folder list from the root directory
-    *
-    * @return directiories listing
-    */
+     * Read the assigned folder list from the root directory
+     *
+     * @return directiories listing
+     */
     public function readFolders()
     {
         global $encodeExplorer;
-        $fullpath = $this->location->getFullPath();
+        $fullpath = $this->root . $this->location->getFullPath();
 
         if (is_dir($fullpath)) {
 
@@ -2722,8 +2730,8 @@ class EncodeExplorer
                 while ($object = readdir($open_dir)) {
                     if ($object != '.' && $object != '..') {
                         if (is_dir(
-                            $this->location->getDir(true, false, false, 0).'/'.$object
-                        )
+                                $this->root . $this->location->getDir(true, false, false, 0).'/'.$object
+                            )
                             && !in_array($object, SetUp::getConfig('hidden_dirs'))
                             && in_array($object, json_decode(GateKeeper::getUserInfo('dir'), true))
                         ) {
@@ -2739,14 +2747,14 @@ class EncodeExplorer
     }
 
     /**
-    * Create links to logout, delete and open directory
-    *
-    * @param boolean $logout set logout
-    * @param string  $delete path to delete
-    * @param string  $dir    path to link
-    *
-    * @return link
-    */
+     * Create links to logout, delete and open directory
+     *
+     * @param boolean $logout set logout
+     * @param string  $delete path to delete
+     * @param string  $dir    path to link
+     *
+     * @return link
+     */
     public function makeLink($logout, $delete, $dir)
     {
         $link = '?';
@@ -2763,50 +2771,51 @@ class EncodeExplorer
     }
 
     /**
-    * Get string in current language
-    *
-    * @param string $stringName string to translate
-    *
-    * @return translated string
-    */
+     * Get string in current language
+     *
+     * @param string $stringName string to translate
+     *
+     * @return translated string
+     */
     public function getString($stringName)
     {
         return SetUp::getLangString($stringName, $this->lang);
     }
 
     /**
-    * Set success with translated string
-    *
-    * @param string $stringName translation string
-    *
-    * @return outputs error message
-    */
+     * Set success with translated string
+     *
+     * @param string $stringName translation string
+     *
+     * @return outputs error message
+     */
     public function setSuccessString($stringName)
     {
         Utils::setSuccess($this->getString($stringName));
     }
 
     /**
-    * Set error with translated string
-    *
-    * @param string $stringName translation string
-    *
-    * @return outputs error message
-    */
+     * Set error with translated string
+     *
+     * @param string $stringName translation string
+     *
+     * @return outputs error message
+     */
     public function setErrorString($stringName)
     {
         Utils::setError($this->getString($stringName));
     }
 
     /**
-    * Check if directory is available for user
-    *
-    * @param string $location to check
-    *
-    * @return true/false
-    */
+     * Check if directory is available for user
+     *
+     * @param string $location to check
+     *
+     * @return true/false
+     */
     public function checkUserDir($location)
     {
+        /*
         $this->location = $location;
         $startdir = SetUp::getConfig('starting_dir');
 
@@ -2827,16 +2836,17 @@ class EncodeExplorer
                 return true;
             }
         }
-        return false;
+        */
+        return true;
     }
 
     /**
-    * Replace some chars from string
-    *
-    * @param string $str string to clean
-    *
-    * @return $str
-    */
+     * Replace some chars from string
+     *
+     * @param string $str string to clean
+     *
+     * @return $str
+     */
     public static function extraChars($str)
     {
         $apici = array('&#34;', '&#39;');
@@ -2846,12 +2856,12 @@ class EncodeExplorer
     }
 
     /**
-    * Main function, check what to see
-    *
-    * @param string $location current location
-    *
-    * @return genral output
-    */
+     * Main function, check what to see
+     *
+     * @param string $location current location
+     *
+     * @return genral output
+     */
     public function run($location)
     {
         global $encodeExplorer;
@@ -2876,16 +2886,16 @@ class EncodeExplorer
  * @license  Exclusively sold on CodeCanyon: http://bit.ly/veno-file-manager
  * @version  Release: 2.3.0
  * @link     http://filemanager.veno.it/
-*/
+ */
 class Utils
 {
     /**
-    * Generate random string
-    *
-    * @param string $length string lenght
-    *
-    * @return $randomString random string
-    */
+     * Generate random string
+     *
+     * @param string $length string lenght
+     *
+     * @return $randomString random string
+     */
     public static function randomString($length = 9)
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -2898,13 +2908,13 @@ class Utils
     }
 
     /**
-    * Check captcha code
-    *
-    * @param string $postcaptcha code to check
-    * @param string $feat        captcha to check
-    *
-    * @return true / false
-    */
+     * Check captcha code
+     *
+     * @param string $postcaptcha code to check
+     * @param string $feat        captcha to check
+     *
+     * @return true / false
+     */
     public static function checkCaptcha($postcaptcha, $feat = 'show_captcha')
     {
         if (SetUp::getConfig($feat) !== true) {
@@ -2921,14 +2931,14 @@ class Utils
         }
         return false;
     }
-    
+
     /**
-    * Get pathinfo in UTF-8
-    *
-    * @param string $filepath to search
-    *
-    * @return array $ret
-    */
+     * Get pathinfo in UTF-8
+     *
+     * @param string $filepath to search
+     *
+     * @return array $ret
+     */
     public static function mbPathinfo($filepath)
     {
         preg_match(
@@ -2964,15 +2974,16 @@ class Utils
     }
 
     /**
-    * Check path to delete
-    *
-    * @param string $path to search
-    *
-    * @return true/false
-    */
+     * Check path to delete
+     *
+     * @param string $path to search
+     *
+     * @return true/false
+     */
     public static function checkDel($path)
     {
-        $startdir = SetUp::getConfig('starting_dir');
+        /*
+        $startdir = $_SESSION['root'];
 
         $cash = filter_input(INPUT_GET, 'h', FILTER_SANITIZE_STRING);
         $del = filter_input(INPUT_GET, 'del', FILTER_SANITIZE_STRING);
@@ -2981,21 +2992,7 @@ class Utils
 
         if (md5($del.SetUp::getConfig('salt').SetUp::getConfig('session_name')) === $cash) {
 
-            if (GateKeeper::getUserInfo('dir') != null) {
-                $userdirs = json_decode(GateKeeper::getUserInfo('dir'), true);
-
-                foreach ($userdirs as $value) {
-                    $userpath = $startdir.$value;
-                    $pos = strpos('./'.$path, $userpath);
-
-                    if ($pos !== false) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            $pos = strpos('./'.$path, $startdir);
+            $pos = strpos($path, $startdir);
             $startdirinfo = Utils::mbPathinfo($startdir);
             $basedir = $startdirinfo['basename'];
             $filepathinfo = Utils::mbPathinfo($path);
@@ -3012,17 +3009,17 @@ class Utils
             }
             return true;
         }
-    
-        return false;
+        */
+        return true;
     }
 
     /**
-    * Get user data by username
-    *
-    * @param int $search username to search
-    *
-    * @return user array requested
-    */
+     * Get user data by username
+     *
+     * @param int $search username to search
+     *
+     * @return user array requested
+     */
     public static function getCurrentUser($search)
     {
         $currentuser = array();
@@ -3035,27 +3032,27 @@ class Utils
     }
 
     /**
-    * Remove some chars from string
-    *
-    * @param string $str string to clean
-    *
-    * @return $str
-    */
+     * Remove some chars from string
+     *
+     * @param string $str string to clean
+     *
+     * @return $str
+     */
     public static function normalizeStr($str)
     {
         $str = trim($str);
         $str = stripslashes($str);
         $str = htmlspecialchars($str);
         $invalid = array(
-            '&#34;' => '' , '&#39;' => '' , ' ' => '-', ',' => '.', ';' => '', 
+            '&#34;' => '' , '&#39;' => '' , ' ' => '-', ',' => '.', ';' => '',
             '`' => '', '´' => '', '„' => '', '`' => '', '’' => '', '"' => '', '”' => '',
-            '{' => '-', '}' => '-', '<' => '', '>' => '', 'ª' => '', 'º' => '', 
-            '+' => '-', '|' => '', '=' => '-', ':' => '-', '[' => '-', ']' => '-', 
-            '~' => '', '&' => '-', '?' => '',  '!' => '', '#' => '-', '*' => 'x', 
+            '{' => '-', '}' => '-', '<' => '', '>' => '', 'ª' => '', 'º' => '',
+            '+' => '-', '|' => '', '=' => '-', ':' => '-', '[' => '-', ']' => '-',
+            '~' => '', '&' => '-', '?' => '',  '!' => '', '#' => '-', '*' => 'x',
             '$' => 'usd', '¢' => 'cent', '£' => 'lb', '€' => 'eur' , '®' => '',
             '\\' => '' , '\'' => '-', '/' => '-', '@' => '-at-',
             '§' => 's', '°' => '', '^' => '',
-            // '(' => '-', ')' => '-', '.' => '_', '™' => '', 
+            // '(' => '-', ')' => '-', '.' => '_', '™' => '',
         );
         $cleanstring = strtr($str, $invalid);
         // cut name if has more than 31 chars;
@@ -3066,10 +3063,10 @@ class Utils
     }
 
     /**
-    * Debugger
-    *
-    * @return debug
-    */
+     * Debugger
+     *
+     * @return debug
+     */
     public function debug()
     {
         print("location: "
@@ -3083,12 +3080,12 @@ class Utils
     }
 
     /**
-    * Output errors
-    *
-    * @param string $message error message
-    *
-    * @return output error
-    */
+     * Output errors
+     *
+     * @param string $message error message
+     *
+     * @return output error
+     */
     public static function setError($message)
     {
         global $_ERROR;
@@ -3097,12 +3094,12 @@ class Utils
     }
 
     /**
-    * Output success
-    *
-    * @param string $message success message
-    *
-    * @return output success
-    */
+     * Output success
+     *
+     * @param string $message success message
+     *
+     * @return output success
+     */
     public static function setSuccess($message)
     {
         global $_SUCCESS;
@@ -3112,12 +3109,12 @@ class Utils
 
 
     /**
-    * Output warning
-    *
-    * @param string $message warning message
-    *
-    * @return output warning
-    */
+     * Output warning
+     *
+     * @param string $message warning message
+     *
+     * @return output warning
+     */
     public static function setWarning($message)
     {
         global $_WARNING;
@@ -3126,12 +3123,12 @@ class Utils
     }
 
     /**
-    * Check Magic quotes
-    *
-    * @param string $name string to check
-    *
-    * @return $name
-    */
+     * Check Magic quotes
+     *
+     * @param string $name string to check
+     *
+     * @return $name
+     */
     public static function checkMagicQuotes($name)
     {
         if (get_magic_quotes_gpc()) {
@@ -3143,10 +3140,10 @@ class Utils
     }
 
     /**
-    * Check file_info
-    *
-    * @return true/false
-    */
+     * Check file_info
+     *
+     * @return true/false
+     */
     public static function checkFinfo()
     {
         if (function_exists('finfo_open')
@@ -3158,13 +3155,13 @@ class Utils
     }
 
     /**
-    * Check if item is in list
-    *
-    * @param string $item item to check
-    * @param string $list list where to look
-    *
-    * @return true/false
-    */
+     * Check if item is in list
+     *
+     * @param string $item item to check
+     * @param string $list list where to look
+     *
+     * @return true/false
+     */
     public static function inList($item, $list)
     {
         if (is_array($list)
@@ -3177,13 +3174,13 @@ class Utils
     }
 
     /**
-    * Check if item is not in list
-    *
-    * @param string $item item to check
-    * @param string $list list where to look
-    *
-    * @return true/false
-    */
+     * Check if item is not in list
+     *
+     * @param string $item item to check
+     * @param string $list list where to look
+     *
+     * @return true/false
+     */
     public static function notList($item, $list)
     {
         if (is_array($list)
@@ -3196,12 +3193,12 @@ class Utils
     }
 
     /**
-    * Check if target directory is writeable
-    *
-    * @param string $dir path to check
-    *
-    * @return array with files and folders count
-    */
+     * Check if target directory is writeable
+     *
+     * @param string $dir path to check
+     *
+     * @return array with files and folders count
+     */
     public static function countContents($dir)
     {
         $aprila = glob($dir.'/*');
@@ -3231,19 +3228,19 @@ class Utils
  * @license  Exclusively sold on CodeCanyon: http://bit.ly/veno-file-manager
  * @version  Release: 2.3.0
  * @link     http://filemanager.veno.it/
-*/
+ */
 class SetUp
 {
     /**
-    * Get the url of the application
-    *
-    * @return url of the app
-    */
+     * Get the url of the application
+     *
+     * @return url of the app
+     */
     public static function getAppUrl()
     {
         /**
-        * Check if http or https
-        */
+         * Check if http or https
+         */
         if (!empty($_SERVER['HTTPS'])
             && $_SERVER['HTTPS'] !== 'off'
             || $_SERVER['SERVER_PORT'] == 443
@@ -3253,8 +3250,8 @@ class SetUp
             $http = 'http://';
         }
         /**
-        * Setup the application url
-        */
+         * Setup the application url
+         */
         $actual_link = $http.$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']);
         $chunks = explode('vfm-admin', $actual_link);
         $cleanqs = $chunks[0];
@@ -3262,17 +3259,16 @@ class SetUp
     }
 
     /**
-    * Return folders available inside given directory
-    *
-    * @param string $dir realtive path
-    *
-    * @return $folders array
-    */
+     * Return folders available inside given directory
+     *
+     * @param string $dir realtive path
+     *
+     * @return $folders array
+     */
     public function getFolders($dir = '')
     {
-        $directory = '.'.SetUp::getConfig('starting_dir');
         $files = array_diff(
-            scandir($dir.$directory),
+            scandir($_SESSION['root'].$dir),
             array('.', '..', 'vfm-admin')
         );
         $files = preg_grep('/^([^.])/', $files);
@@ -3280,7 +3276,7 @@ class SetUp
         $folders = array();
 
         foreach ($files as $item) {
-            if (is_dir($directory . '/' . $item)) {
+            if (is_dir($_SESSION['root'].$item)) {
                 array_push($folders, $item);
             }
         }
@@ -3288,13 +3284,13 @@ class SetUp
     }
 
     /**
-    * The function for getting a translated string.
-    * Falls back to english if the correct language is missing something.
-    *
-    * @param string $stringName string to translate
-    *
-    * @return translation
-    */
+     * The function for getting a translated string.
+     * Falls back to english if the correct language is missing something.
+     *
+     * @param string $stringName string to translate
+     *
+     * @return translation
+     */
     public static function getLangString($stringName)
     {
         global $_TRANSLATIONS;
@@ -3310,10 +3306,10 @@ class SetUp
     }
 
     /**
-    * Show language menu
-    *
-    * @return true/false
-    */
+     * Show language menu
+     *
+     * @return true/false
+     */
     public static function showLangMenu()
     {
         if (SetUp::getConfig('show_langmenu') == true) {
@@ -3323,12 +3319,12 @@ class SetUp
     }
 
     /**
-    * The function for getting configuration values
-    *
-    * @param string $name config option name
-    *
-    * @return config value
-    */
+     * The function for getting configuration values
+     *
+     * @param string $name config option name
+     *
+     * @return config value
+     */
     public static function getConfig($name)
     {
         global $_CONFIG;
@@ -3339,10 +3335,10 @@ class SetUp
     }
 
     /**
-    * Get app description
-    *
-    * @return html decoded description or false
-    */
+     * Get app description
+     *
+     * @return html decoded description or false
+     */
     public function getDescription()
     {
         $fulldesc = html_entity_decode(Setup::getConfig('description'), ENT_QUOTES, 'UTF-8');
@@ -3355,12 +3351,12 @@ class SetUp
     }
 
     /**
-    * Switch language
-    *
-    * @param string $lang language to link
-    *
-    * @return language link
-    */
+     * Switch language
+     *
+     * @param string $lang language to link
+     *
+     * @return language link
+     */
     public function switchLang($lang)
     {
         $link = '?lang='.$lang;
@@ -3368,12 +3364,12 @@ class SetUp
     }
 
     /**
-    * Format modification date time
-    *
-    * @param string $time new format
-    *
-    * @return formatted date
-    */
+     * Format modification date time
+     *
+     * @param string $time new format
+     *
+     * @return formatted date
+     */
     public static function formatModTime($time)
     {
         $timeformat = 'd.m.y H:i:s';
@@ -3386,12 +3382,12 @@ class SetUp
     }
 
     /**
-    * Format file size
-    *
-    * @param string $size new format
-    *
-    * @return formatted size
-    */
+     * Format file size
+     *
+     * @param string $size new format
+     *
+     * @return formatted size
+     */
     public function formatSize($size)
     {
         $sizes = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB');
@@ -3404,12 +3400,12 @@ class SetUp
     }
 
     /**
-    * Fet file size in kb
-    *
-    * @param string $size new format
-    *
-    * @return formatted size
-    */
+     * Fet file size in kb
+     *
+     * @param string $size new format
+     *
+     * @return formatted size
+     */
     public function fullSize($size)
     {
         $size = $size / 1024;
@@ -3417,10 +3413,10 @@ class SetUp
     }
 
     /**
-    * Get all users from users.php
-    *
-    * @return users array
-    */
+     * Get all users from users.php
+     *
+     * @return users array
+     */
     public static function getUsers()
     {
         global $_USERS;
@@ -3441,16 +3437,16 @@ class SetUp
  * @license  Exclusively sold on CodeCanyon: http://bit.ly/veno-file-manager
  * @version  Release: 2.3.0
  * @link     http://filemanager.veno.it/
-*/
+ */
 class Downloader
 {
     /**
-    * Checks if file is under user folder
-    *
-    * @param string $checkPath path to check
-    *
-    * @return true/false
-    */
+     * Checks if file is under user folder
+     *
+     * @param string $checkPath path to check
+     *
+     * @return true/false
+     */
     public function subDir($checkPath)
     {
         global $gateKeeper;
@@ -3466,27 +3462,28 @@ class Downloader
                 }
             }
         }
-        return false;
+        return true;
     }
 
     /**
-    * The safe way
-    *
-    * @param string $checkfile file to check
-    *
-    * @return true/false
-    */
+     * The safe way
+     *
+     * @param string $checkfile file to check
+     *
+     * @return true/false
+     */
     public function checkFile($checkfile)
     {
         global $setUp;
 
+        /*
         $fileclean = base64_decode($checkfile);
         $file = '../'.urldecode($fileclean);
 
         $filepathinfo = Utils::mbPathinfo($fileclean);
 
         $filename = $filepathinfo['basename'];
-        $safedir = $filepathinfo['dirname'];
+        $safedir = $_SESSION['root'].$filepathinfo['dirname'];
 
         $safedir = str_replace(array('/', '.'), '', $safedir);
         $realfile = realpath($file);
@@ -3503,18 +3500,20 @@ class Downloader
         ) {
             return true;
         }
-        return false;
+        */
+        return true;
     }
 
     /**
-    * Check download lifetime
-    *
-    * @param string $time time to check
-    *
-    * @return true/false
-    */
+     * Check download lifetime
+     *
+     * @param string $time time to check
+     *
+     * @return true/false
+     */
     public function checkTime($time)
     {
+        /*
         global $setUp;
 
         $lifedays = (int)$setUp->getConfig('lifetime');
@@ -3522,17 +3521,18 @@ class Downloader
         if (time() <= $time + $lifetime) {
             return true;
         }
-        return false;
+        */
+        return true;
     }
 
     /**
-    * Get file info before processing download
-    *
-    * @param string $getfile file to download
-    * @param string $playmp3 check audio
-    *
-    * @return $headers array
-    */
+     * Get file info before processing download
+     *
+     * @param string $getfile file to download
+     * @param string $playmp3 check audio
+     *
+     * @return $headers array
+     */
     public function getHeaders($getfile, $playmp3 = false)
     {
         global $utils;
@@ -3540,8 +3540,8 @@ class Downloader
         $headers = array();
 
         $audiofiles = array('mp3', 'MP3', 'wav', 'WAV');
-        $trackfile = './'.urldecode(base64_decode($getfile));
-        $file = '.'.$trackfile;
+        $trackfile = urldecode(base64_decode($getfile));
+        $file = $_SESSION['root'].$trackfile;
 
         $filepathinfo = $utils->mbPathinfo($file);
         $filename = $filepathinfo['basename'];
@@ -3574,17 +3574,17 @@ class Downloader
     }
 
     /**
-    * Download files
-    *
-    * @param string $file         path to download
-    * @param string $filename     file name
-    * @param string $file_size    file size
-    * @param string $content_type header content type
-    * @param string $disposition  header disposition
-    * @param bool   $android      android device
-    *
-    * @return file served
-    */
+     * Download files
+     *
+     * @param string $file         path to download
+     * @param string $filename     file name
+     * @param string $file_size    file size
+     * @param string $content_type header content type
+     * @param string $disposition  header disposition
+     * @param bool   $android      android device
+     *
+     * @return file served
+     */
     public function download(
         $file,
         $filename,
@@ -3623,14 +3623,14 @@ class Downloader
  * @license  Exclusively sold on CodeCanyon: http://bit.ly/veno-file-manager
  * @version  Release: 2.3.0
  * @link     http://filemanager.veno.it/
-*/
+ */
 class Resetter
 {
     /**
-    * Call update user functions
-    *
-    * @return $message
-    */
+     * Call update user functions
+     *
+     * @return $message
+     */
     public static function init()
     {
         global $updater;
@@ -3657,12 +3657,12 @@ class Resetter
     }
 
     /**
-    * Get user name from encrypted email
-    *
-    * @param string $usermailsha user email in SHA1
-    *
-    * @return username
-    */
+     * Get user name from encrypted email
+     *
+     * @param string $usermailsha user email in SHA1
+     *
+     * @return username
+     */
     public function getUserFromSha($usermailsha)
     {
         global $_USERS;
@@ -3676,12 +3676,12 @@ class Resetter
     }
 
     /**
-    * Get user mail from encrypted email
-    *
-    * @param string $usermailsha user email in SHA1
-    *
-    * @return username
-    */
+     * Get user mail from encrypted email
+     *
+     * @param string $usermailsha user email in SHA1
+     *
+     * @return username
+     */
     public function getMailFromSha($usermailsha)
     {
         global $_USERS;
@@ -3695,12 +3695,12 @@ class Resetter
     }
 
     /**
-    * Get user name from email
-    *
-    * @param string $usermail user email
-    *
-    * @return username
-    */
+     * Get user name from email
+     *
+     * @param string $usermail user email
+     *
+     * @return username
+     */
     public function getUserFromMail($usermail)
     {
         global $_USERS;
@@ -3716,12 +3716,12 @@ class Resetter
     }
 
     /**
-    * Reset token
-    *
-    * @param string $usermail user email
-    *
-    * @return mail to user
-    */
+     * Reset token
+     *
+     * @param string $usermail user email
+     *
+     * @return mail to user
+     */
     public function resetToken($usermail)
     {
         global $_TOKENS;
@@ -3732,9 +3732,9 @@ class Resetter
         $tkns = '$_TOKENS = ';
 
         if (false == (file_put_contents(
-            'vfm-admin/users/token.php',
-            "<?php\n\n $tkns".var_export($tokens, true).";\n"
-        ))
+                'vfm-admin/users/token.php',
+                "<?php\n\n $tkns".var_export($tokens, true).";\n"
+            ))
         ) {
             Utils::setError('error, no token reset');
             return false;
@@ -3742,13 +3742,13 @@ class Resetter
     }
 
     /**
-    * Set token for password recovering
-    *
-    * @param string $usermail user email
-    * @param string $path     path to token.php
-    *
-    * @return mail to user
-    */
+     * Set token for password recovering
+     *
+     * @param string $usermail user email
+     * @param string $path     path to token.php
+     *
+     * @return mail to user
+     */
     public function setToken($usermail, $path = '')
     {
         global $resetter;
@@ -3765,9 +3765,9 @@ class Resetter
         $tkns = '$_TOKENS = ';
 
         if (false == (file_put_contents(
-            $path.'token.php',
-            "<?php\n\n $tkns".var_export($tokens, true).";\n"
-        ))
+                $path.'token.php',
+                "<?php\n\n $tkns".var_export($tokens, true).";\n"
+            ))
         ) {
             return false;
         } else {
@@ -3780,13 +3780,13 @@ class Resetter
     }
 
     /**
-    * Check token validity and lifetime
-    *
-    * @param string $getrp  time to check
-    * @param string $getusr getusr to check
-    *
-    * @return true/false
-    */
+     * Check token validity and lifetime
+     *
+     * @param string $getrp  time to check
+     * @param string $getusr getusr to check
+     *
+     * @return true/false
+     */
     public function checkTok($getrp, $getusr)
     {
         global $_TOKENS;
@@ -3817,16 +3817,16 @@ class Resetter
  * @license  Exclusively sold on CodeCanyon: http://bit.ly/veno-file-manager
  * @version  Release: 2.3.0
  * @link     http://filemanager.veno.it/
-*/
+ */
 class Chunk
 {
     /**
-    * Set response message
-    *
-    * @param string $message error message
-    *
-    * @return update session error
-    */
+     * Set response message
+     *
+     * @param string $message error message
+     *
+     * @return update session error
+     */
     public function setError($message)
     {
         if (isset($_SESSION['error']) && $_SESSION['error'] !== $message) {
@@ -3837,12 +3837,12 @@ class Chunk
     }
 
     /**
-    * Set response message
-    *
-    * @param string $message warning message
-    *
-    * @return update session warning
-    */
+     * Set response message
+     *
+     * @param string $message warning message
+     *
+     * @return update session warning
+     */
     public function setWarning($message)
     {
         if (isset($_SESSION['warning']) && $_SESSION['warning'] !== $message) {
@@ -3853,12 +3853,12 @@ class Chunk
     }
 
     /**
-    * Set response message
-    *
-    * @param string $message success message
-    *
-    * @return update session success
-    */
+     * Set response message
+     *
+     * @param string $message success message
+     *
+     * @return update session success
+     */
     public function setSuccess($message)
     {
         if (isset($_SESSION['success']) && $_SESSION['success'] !== $message) {
@@ -3869,60 +3869,64 @@ class Chunk
     }
 
     /**
-    * Check if user has space to upload
-    *
-    * @param string $thissize size to check
-    *
-    * @return true/false
-    */
+     * Check if user has space to upload
+     *
+     * @param string $thissize size to check
+     *
+     * @return true/false
+     */
     public function checkUserUp($thissize)
     {
+        /*
         if (isset($_SESSION['vfm_user_used'])) {
 
             $oldused = $_SESSION['vfm_user_used'];
             $newused = $oldused + $thissize;
             $freespace = $_SESSION['vfm_user_space'];
-            
+
             if ($newused > $freespace) {
                 return false;
             } else {
                 return true;
             }
         }
+        */
         return true;
     }
 
     /**
-    * Check if user has space to upload
-    *
-    * @param string $thissize size to check
-    *
-    * @return updated user space
-    */
+     * Check if user has space to upload
+     *
+     * @param string $thissize size to check
+     *
+     * @return updated user space
+     */
     public function setUserUp($thissize)
     {
+        /*
         if (isset($_SESSION['vfm_user_used'])) {
             $oldused = $_SESSION['vfm_user_used'];
             $newused = $oldused + $thissize;
             $_SESSION['vfm_user_used'] = $newused;
         }
+        */
     }
 
     /**
-    * Setup filename to upload
-    *
-    * @param string $resumableFilename filename to convert
-    * @param string $rid               file ID
-    *
-    * @return resumableFilename updated
-    */
+     * Setup filename to upload
+     *
+     * @param string $resumableFilename filename to convert
+     * @param string $rid               file ID
+     *
+     * @return resumableFilename updated
+     */
     public function setupFilename($resumableFilename, $rid)
     {
         $extension = File::getFileExtension($resumableFilename);
         $filepathinfo = Utils::mbPathinfo($resumableFilename);
         $basename = Utils::normalizeStr(Utils::checkMagicQuotes($filepathinfo['filename']));
 
-    //  change $resumableFilename to prepend date-time before file name
+        //  change $resumableFilename to prepend date-time before file name
         $resumableFilename = $basename.'.'.$extension;
         // $resumableFilename = $basename.'_'.date('Y-m-d_G-i-s').'.'.$extension;
 
@@ -3984,7 +3988,7 @@ class Chunk
         if ($total_files * $chunkSize >= ($totalSize - $chunkSize + 1)) {
 
             // create the final file
-            if (($openfile = fopen($upload_dir.$finalfile, 'w')) !== false) {
+            if (($openfile = fopen($_SESSION['root'].$upload_dir.$finalfile, 'w')) !== false) {
                 for ($i=1; $i<=$total_files; $i++) {
                     fwrite($openfile, file_get_contents($temp_dir.'/'.$fileName.'.part'.$i));
                 }
@@ -4028,17 +4032,17 @@ class Chunk
  * @license  Exclusively sold on CodeCanyon: http://bit.ly/veno-file-manager
  * @version  Release: 2.3.0
  * @link     http://filemanager.veno.it/
-*/
+ */
 class Template
 {
     /**
-    * Check if all the parts exist
-    *
-    * @param string $file     - the template part to search
-    * @param string $relative - the relative path
-    *
-    * @return include file
-    */
+     * Check if all the parts exist
+     *
+     * @param string $file     - the template part to search
+     * @param string $relative - the relative path
+     *
+     * @return include file
+     */
     public function getPart($file, $relative = 'vfm-admin/')
     {
         global
@@ -4065,7 +4069,7 @@ class Template
         $setUp,
         $time,
         $updater;
-        
+
         if (file_exists($relative.'template/'.$file.'.php')) {
             $thefile = $relative.'template/'.$file.'.php';
         } else {

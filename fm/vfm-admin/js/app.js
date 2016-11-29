@@ -582,35 +582,36 @@ function callFilesTable($sPaginationType, $bPaginate, $bFilter, $iDisplayLength,
         sSortAsc  : 'header headerSortDown',
         sSortDesc : 'header headerSortUp',
         sSortable : 'header'
-    }); 
+    });
 
     oTable = $('#sort').DataTable({
         dom : '<"table-controls-top"fl>rt<"table-controls-bottom"ip>',
         pagingType : $sPaginationType,
         paging : $bPaginate,
         searching : $bFilter,
+        lengthMenu : [[10, 25, 50, 100, 500], [10, 25, 50, 100, 500]],
         pageLength : $iDisplayLength,
         order : [ [$fnSortcol, $fnSortdir] ],
         columnDefs : [
-            { 
+            {
                 width      : '50%',
                 targets    : [ 2 ],
                 orderable  : true,
                 searchable : true,
                 type       : 'natural'
             },
-            { 
+            {
                 width      : '10%',
                 targets   : [ 3 ],
                 orderable : true
             },
-            { 
+            {
                 width      : '20%',
                 targets   : [ 4 ],
                 orderable : true
             },
-            { 
-                targets    : ['_all'], 
+            {
+                targets    : ['_all'],
                 orderable  : false,
                 searchable : false
             }
@@ -624,7 +625,7 @@ function callFilesTable($sPaginationType, $bPaginate, $bFilter, $iDisplayLength,
             // hide pagination if we have only one page
             var api = this.api();
             var pageinfo = api.page.info();
-            var paginateRow = $(this).parent().find('.dataTables_paginate');  
+            var paginateRow = $(this).parent().find('.dataTables_paginate');
 
             if (pageinfo.recordsDisplay <= api.page.len()) {
                 paginateRow.css('display', 'none');

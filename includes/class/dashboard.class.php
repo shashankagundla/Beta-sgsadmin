@@ -7,6 +7,7 @@ class Dashboard
 {
     private $jobTable = 'admin_jobs';
     private $revTable = 'admin_revisions_current';
+    private $empTable = 'employee';
 
     public function dashATC(){
         /*
@@ -114,7 +115,6 @@ class Dashboard
          */
         //columns needed for this query
         $select[] = 'closeout_status';
-        $select[] = 'closeout_status_id';
         $select[] = 'closeout_status_date';
         $select[] = 'closeout_missing';
 
@@ -131,11 +131,15 @@ class Dashboard
         /*
          * In Review Table
          */
-
+        unset($select);
+        $select[] = 'closeout_status';
+        $select[] = 'closeout_missing';
+        $select[] = 'fname';
+        $select[] = 'lname';
         //build where
         $where = '(closeout_status = "Reviewing" OR closeout_status = "Training Review") ORDER BY closeout_status_date DESC';
         //add join
-        $join = ' LEFT JOIN ' .$this->revTable . ' ON admin_jobs.id = admin_revisions_current.admin_id';
+        $join = ' LEFT JOIN ' .$this->revTable . ' ON admin_jobs.id = admin_revisions_current.admin_id LEFT JOIN ' .$this->empTable . ' ON admin_revisions_current.closeout_status_id = employee.id';
         //build query
         $result['closeoutReview'] = $this->runQuery($where,$select,$join);
 
@@ -145,11 +149,7 @@ class Dashboard
         //columns needed for these queries
         unset($select);
         $select[] = 'inspection_status';
-        $select[] = 'inspection_status_id';
-        $select[] = 'inspection_status_date';
         $select[] = 'inspection_missing';
-
-
         /*
          * Received Table
          */
@@ -163,16 +163,23 @@ class Dashboard
         /*
          * In Review Table
          */
+        //columns needed for this query
+        unset($select);
+        $select[] = 'inspection_status';
+        $select[] = 'inspection_missing';
+        $select[] = 'fname';
+        $select[] = 'lname';
         //build where
         $where = 'inspection_status = "Reviewing" OR inspection_status = "Training Review" ORDER BY inspection_status_date DESC';
         //add join
-        $join = ' LEFT JOIN ' .$this->revTable . ' ON admin_jobs.id = admin_revisions_current.admin_id';
+        $join = ' LEFT JOIN ' .$this->revTable . ' ON admin_jobs.id = admin_revisions_current.admin_id LEFT JOIN ' .$this->empTable . ' ON admin_revisions_current.inspection_status_id = employee.id';
         //build query
         $result['punchReview'] = $this->runQuery($where,$select,$join);
 
         /*
          * Needs Punch List Table
          */
+        //columns needed for this query
         unset($select);
         $select[] = 'overall_status_date';
 
@@ -191,18 +198,20 @@ class Dashboard
         unset($select);
         $select[] = 'closeout_status_date';
         $select[] = 'inspection_status_date';
-        $select[] = 'report_status_id';
         $select[] = 'report_status';
         $select[] = 'report_level';
+        $select[] = 'fname';
+        $select[] = 'lname';
+
 
         /*
         * Reports Being Written
         */
         //build where
-        $where = 'report_status = "Writing Report" ORDER BY CASE WHEN closeout_status_date > inspection_status_date THEN closeout_status_date ELSE inspection_status_date END';
+        $where = '(report_status = "Writing Report") AND (job_type = "MI" OR job_type = "Legacy MI" OR job_type = "CWI" OR job_type = "NDE") ORDER BY CASE WHEN closeout_status_date > inspection_status_date THEN closeout_status_date ELSE inspection_status_date END';
 
         //add join
-        $join = ' LEFT JOIN ' .$this->revTable . ' ON admin_jobs.id = admin_revisions_current.admin_id';
+        $join = ' LEFT JOIN ' .$this->revTable . ' ON admin_jobs.id = admin_revisions_current.admin_id LEFT JOIN ' .$this->empTable . ' ON admin_revisions_current.report_status_id = employee.id';
 
         //build query
         $result['reportWritten'] = $this->runQuery($where,$select,$join);
@@ -210,6 +219,12 @@ class Dashboard
         /*
         * Closeout & Punch Approved Table
         */
+        //columns needed for these queries
+        unset($select);
+        $select[] = 'closeout_status_date';
+        $select[] = 'inspection_status_date';
+        $select[] = 'report_status';
+        $select[] = 'report_level';
         //build where
         $where = '(inspection_status = "Approved" AND closeout_status = "Approved" AND report_status != "Sealed in Box" AND report_status != "Writing Report" AND report_status != "Ready for Seal" AND overall_status = "FWC") ORDER BY CASE WHEN closeout_status_date > inspection_status_date THEN closeout_status_date ELSE inspection_status_date END';
 

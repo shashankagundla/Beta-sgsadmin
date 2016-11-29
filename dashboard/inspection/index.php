@@ -62,7 +62,7 @@ $dashTable = $dash->dashInspections();
                             <tr class="clickable-row <?php if ($row['priority'] != 0){ echo 'danger'; } ?>" data-href="/job/?sgs=<?=$row['sgs_num']?>">
                                 <td><?=$row['sgs_num']?></td>
                                 <td><?=substr($row['site_name'],0,15)?></td>
-                                <td><?=$dash->timeAgo(strtotime($row['closeout_status_date']))?></td>
+                                <td><?=$row['fname']?> <?=$row['lname']?></td>
                                 <td><?=$row['closeout_missing']?></td>
                             </tr>
                         <?php } ?>
@@ -118,7 +118,7 @@ $dashTable = $dash->dashInspections();
                             <tr class="clickable-row <?php if ($row['priority'] != 0){ echo 'danger'; } ?>" data-href="/job/?sgs=<?=$row['sgs_num']?>">
                                 <td><?=$row['sgs_num']?></td>
                                 <td><?=substr($row['site_name'],0,15)?></td>
-                                <td><?=$row['inspection_status_id']?></td>
+                                <td><?=$row['fname']?> <?=$row['lname']?></td>
                                 <td><?=$row['inspection_missing']?></td>
                             </tr>
                         <?php } ?>
@@ -180,11 +180,10 @@ $dashTable = $dash->dashInspections();
                                         echo $dash->timeAgo(strtotime($row['closeout_status_date']));
                                     }else{
                                         echo $dash->timeAgo(strtotime($row['inspection_status_date']));
-
                                     }
                                     ?>
                                 </td>
-                                <td><?=$row['report_status_id']?></td>
+                                <td><?=$row['fname']?> <?=$row['lname']?></td>
                                 <td><?php if ($row['report_level'] != ''){ ?><i class="fa fa-shield"></i> <?php echo ' ' . $row['report_level']; } ?></td>
                             </tr>
                         <?php } ?>
@@ -245,7 +244,7 @@ $dashTable = $dash->dashInspections();
                                 <td><?=substr($row['site_name'],0,15)?></td>
                                 <td><?=$row['state']?></td>
                                 <td><?=$row['job_type']?></td>
-                                <td>-</td>
+                                <td><?=reportSize($row['sgs_num'])?></td>
                             </tr>
                         <?php } ?>
                         </tbody>

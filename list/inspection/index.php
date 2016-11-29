@@ -12,7 +12,7 @@ echo $template->header();
 ?>
     <div class="row">
         <div class="table-padding">
-            <table id="example" class="table table-striped table-bordered table-condensed table-list" cellspacing="0" width="100%">
+            <table id="dt" class="table table-striped table-bordered table-condensed table-list" cellspacing="0" width="100%">
                 <thead>
                 <tr>
                     <th>SGS#</th>
@@ -32,6 +32,25 @@ echo $template->header();
                     <th>Notes</th>
                 </tr>
                 </thead>
+                <tfoot>
+                <tr>
+                    <th>SGS#</th>
+                    <th>Site Name</th>
+                    <th>Site#</th>
+                    <th>Job Type</th>
+                    <th>Status</th>
+                    <th>District</th>
+                    <th>Client</th>
+                    <th>Contractor</th>
+                    <th>Report</th>
+                    <th>Closeout</th>
+                    <th>Punch</th>
+                    <th>Missing Closeout#</th>
+                    <th>Waiting on Punch#</th>
+                    <th>ATC Origin</th>
+                    <th>Notes</th>
+                </tr>
+                </tfoot>
             </table>
         </div>
     </div>
@@ -49,7 +68,7 @@ echo $template->notify();
     $(document).ready(function() {
         editor = new $.fn.dataTable.Editor( {
             ajax: "/includes/queries/inspection.table.php",
-            table: "#example",
+            table: "#dt",
             fields: [ {
                 label: "SGS#:",
                 name: "admin_jobs.sgs_num"
@@ -99,7 +118,12 @@ echo $template->notify();
             ]
         } );
 
-        $('#example').DataTable( {
+        $('#dt tfoot th').each( function () {
+            var title = $(this).text();
+            $(this).html( '<input id="'+title+'" type="text" placeholder="Filter '+title+'" />' );
+        } );
+
+        var dt = $('#dt').DataTable( {
             dom:
             "<'row'<'col-sm-3'l><'col-sm-6 text-center'B><'col-sm-3'f>>" +
             "<'row'<'col-sm-12'tr>>" +
@@ -109,7 +133,7 @@ echo $template->notify();
                 type: "POST"
             },
             serverSide: true,
-            "lengthMenu": [[20, 50, 100, 250, 500], [20, 50, 100, 250, 500]],
+            lengthMenu: [[20, 50, 100, 250, 500], [20, 50, 100, 250, 500]],
             columns: [
                 { data: "admin_jobs.sgs_num" },
                 { data: "admin_jobs.site_name" },
@@ -131,8 +155,30 @@ echo $template->notify();
             responsive: true,
             buttons: [
                 { extend: "edit",   editor: editor },
+                'copy', 'csv', 'excel', 'pdf',
                 'colvis'
-            ]
+            ],
+            initComplete: function ()
+            {
+                var r = $('#dt tfoot tr');
+                r.find('th').each(function(){
+                    $(this).css('padding', 8);
+                });
+                $('#dt thead').append(r);
+                $('#search_0').css('text-align', 'center');
+            }
         } );
+        dt.columns().every( function () {
+            var that = this;
+
+            $( 'input', this.footer() ).on( 'keyup change', function () {
+                if ( that.search() !== this.value ) {
+                    that
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        } );
+
     } );
 </script>

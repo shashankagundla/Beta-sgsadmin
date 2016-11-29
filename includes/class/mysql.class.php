@@ -22,7 +22,7 @@ class MySQL
     private $db_host    = "sgsdb.cxdcv7nlogaf.us-east-1.rds.amazonaws.com"; // server name
     private $db_user    = "sgsadmin";          // user name
     private $db_pass    = "8UWGozkMw3mpak";          // password
-    private $db_dbname  = "sgsadmin_beta";          // database name
+    private $db_dbname  = "sgsadmin";          // database name
     private $db_charset = "";          // optional character set (i.e. utf8)
     private $db_pcon    = false;      // use persistent connection?
 

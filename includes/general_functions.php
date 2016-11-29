@@ -74,4 +74,100 @@ function checkMobile(){
     return $mobile;
 }
 
+function filePath($type, $sgs, $site, $state){
+    $sgs_floor = floor($sgs);
+    $sgs_miom = substr($sgs_floor, 2, -3);
+    $sgs_50 = substr($sgs_floor, -2);
+    $sgs_4 = substr($sgs_floor, 0, -2);
+    //$sgs_year = substr($sgs_floor, 0, -4);
+
+    if ($sgs_floor > 159999){
+        $year = '2016';
+    }else{
+        if ($sgs_miom > 4){
+            $year = 'Michigan';
+        }else{
+            $year = 'Omaha';
+        };
+    };
+    if ($sgs_floor < 140000){
+        $year = 'Michigan';
+    };
+    if ($sgs_50 >= 50){
+        $sgs_2 = '50';
+    }else{
+        $sgs_2 = '00';
+    };
+
+    if ($type === 'quick'){
+        $path = '/data/box/SGS WIP/' . $year . '/SGS WIP ' . $sgs_4 . $sgs_2 . '/' . $sgs_floor . ' - ' . $site . ' - ' . $state. '/';
+    }elseif ($type === 'box'){
+        $path = 'https://sgsbox.com/index.php/apps/files?dir=SGS WIP/' . $year . '/SGS WIP ' . $sgs_4 . $sgs_2 . '/' . $sgs_floor . ' - ' . $site . ' - ' . $site_state;
+    }elseif ($type === 'server'){
+        $path = 'file:///S:/SGS WIP/' . $year . '/SGS WIP ' . $sgs_4 . $sgs_2 . '/' . $sgs_floor . ' - ' . $site . ' - ' . $state;
+    }
+
+    return $path;
+}
+
+function FileSizeConvert($bytes)
+{
+    $bytes = floatval($bytes);
+    $arBytes = array(
+        0 => array(
+            "UNIT" => "TB",
+            "VALUE" => pow(1024, 4)
+        ),
+        1 => array(
+            "UNIT" => "GB",
+            "VALUE" => pow(1024, 3)
+        ),
+        2 => array(
+            "UNIT" => "MB",
+            "VALUE" => pow(1024, 2)
+        ),
+        3 => array(
+            "UNIT" => "KB",
+            "VALUE" => 1024
+        ),
+        4 => array(
+            "UNIT" => "B",
+            "VALUE" => 1
+        ),
+    );
+
+    foreach($arBytes as $arItem)
+    {
+        if($bytes >= $arItem["VALUE"])
+        {
+            $result = $bytes / $arItem["VALUE"];
+            $result = str_replace(".", "," , strval(round($result, 2)))." ".$arItem["UNIT"];
+            break;
+        }
+    }
+    return $result;
+}
+
+function reportSize($sgs){
+    $sgs_floor = floor($sgs);
+    $sgs_miom = substr($sgs_floor, 2, -3);
+    $sgs_50 = substr($sgs_floor, -2);
+    $sgs_4 = substr($sgs_floor, 0, -2);
+    $sgs_year = substr($sgs_floor, 0, -4);
+    if ($sgs_50 >= 50){
+        $sgs_2 = '50';
+    }else{
+        $sgs_2 = '00';
+    };
+    foreach (glob('/data/box/SGS WIP/' . $sgs_year . '/SGS WIP ' . $sgs_4 . $sgs_2 . '/' . $sgs_floor . ' - ' . $row[site_num] . ' - ' . $row[state] . '/Inspection/Deliverables/*.pdf') as $filename) {
+        $filename = basename($filename);
+        $report = '/data/box/SGS WIP/' . $sgs_year . '/SGS WIP ' . $sgs_4 . $sgs_2 . '/' . $sgs_floor . ' - ' . $row[site_num] . ' - ' . $row[state] . '/Inspection/Deliverables/' . $filename;
+    }
+    $size = filesize($report);
+
+
+    return 'test';
+}
+
+
 ?>
