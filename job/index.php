@@ -30,7 +30,7 @@ $allSelect = $form->allSelectFields();
 echo $template->header($page);
 ?>
     <div class="row">
-        <div class="col-xs-12 col-md-12 col-lg-7 col-lg-push-2">
+        <div class="col-xs-12 col-md-12 col-lg-6 col-lg-push-3">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <div class="panel-title">Edit</div>
@@ -38,12 +38,12 @@ echo $template->header($page);
                 <div class="panel-content">
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Status</a></li>
-                        <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Revisions</a></li>
+                        <li role="presentation"><a href="#revisions" aria-controls="revisions" role="tab" data-toggle="tab">Revisions</a></li>
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Files
                                 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="javascript:window.open('/fm/?root=<?=filePath('quick',$j['sgs_num'],$j['site_num'],$j['state'])?>','QV - <?=$j['sgs_num']?>','width=750,height=750')")">Quick View</a></li>
+                                <li><a href="/fm/?root=<?=filePath('quick',$j['sgs_num'],$j['site_num'],$j['state'])?>" target="SGS Admin - File Browser">File Browser</a></li>
                                 <li><a href="<?=filePath('server',$j['sgs_num'],$j['site_num'],$j['state'])?>">Office/VPN Server</a></li>
                                 <li><a href="javascript:window.open('<?=filePath('box',$j['sgs_num'],$j['site_num'],$j['state'])?>','SGS Box - <?=$j['sgs_num']?>','width=750,height=750')")">SGS Box</a></li>
                             </ul>
@@ -206,13 +206,12 @@ echo $template->header($page);
                                 </div>
                             </form>
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="profile">...</div>
-                        <div role="tabpanel" class="tab-pane" id="profile">...</div>
+                        <div role="tabpanel" class="tab-pane" id="revisions">...</div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 col-md-6 col-lg-2 col-lg-pull-7">
+        <div class="col-xs-12 col-md-6 col-lg-3 col-lg-pull-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <div class="panel-title">Details</div>
@@ -290,19 +289,19 @@ echo $template->header($page);
                                             <span class="pull-right"><?=$j['city']?></span>
                                         </li>
                                         <li class="list-group-item">
-                                            <strong>Tower Type</strong>
+                                            <strong>Type</strong>
                                             <span class="pull-right"><?=$j['tower_type']?></span>
                                         </li>
                                         <li class="list-group-item">
-                                            <strong>Tower Height</strong>
+                                            <strong>Height</strong>
                                             <span class="pull-right"><?=$j['tower_height']?></span>
                                         </li>
                                         <li class="list-group-item">
-                                            <strong>Tower Manufacturer</strong>
-                                            <span class="pull-right"><?=$j['tower_man']?></span>
+                                            <strong>Manufacturer</strong>
+                                            <span class="pull-right"><?=substr($j['tower_man'],?></span>
                                         </li>
                                         <li class="list-group-item">
-                                            <strong>Tower Owner</strong>
+                                            <strong>Owner</strong>
                                             <span class="pull-right"><?=$j['tower_owner']?></span>
                                         </li>
                                     </ul>
