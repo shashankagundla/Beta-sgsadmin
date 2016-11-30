@@ -34,31 +34,31 @@ function timeAgo($datefrom, $dateto = -1)
             if ($datediff == 12) {
                 $datediff--;
             }
-            $res = ($datediff == 1) ? "$datediff month ago" : "$datediff months ago";
+            $res = ($datediff == 1) ? "$datediff month" : "$datediff months";
             break;
         case "y":
             $datediff = floor($difference / 60 / 60 / 24 / 365);
-            $res = ($datediff == 1) ? "$datediff year ago" : "$datediff years ago";
+            $res = ($datediff == 1) ? "$datediff year" : "$datediff years";
             break;
         case "d":
             $datediff = floor($difference / 60 / 60 / 24);
-            $res = ($datediff == 1) ? "$datediff day ago" : "$datediff days ago";
+            $res = ($datediff == 1) ? "$datediff day" : "$datediff days";
             break;
         case "ww":
             $datediff = floor($difference / 60 / 60 / 24 / 7);
-            $res = ($datediff == 1) ? "$datediff week ago" : "$datediff weeks ago";
+            $res = ($datediff == 1) ? "$datediff week" : "$datediff weeks";
             break;
         case "h":
             $datediff = floor($difference / 60 / 60);
-            $res = ($datediff == 1) ? "$datediff hour ago" : "$datediff hours ago";
+            $res = ($datediff == 1) ? "$datediff hour" : "$datediff hours";
             break;
         case "n":
             $datediff = floor($difference / 60);
-            $res = ($datediff == 1) ? "$datediff minute ago" : "$datediff minutes ago";
+            $res = ($datediff == 1) ? "$datediff minute" : "$datediff minutes";
             break;
         case "s":
             $datediff = $difference;
-            $res = ($datediff == 1) ? "$datediff second ago" : "$datediff seconds ago";
+            $res = ($datediff == 1) ? "$datediff second" : "$datediff seconds";
             break;
     }
     return $res;
@@ -76,41 +76,26 @@ function checkMobile(){
 
 function filePath($type, $sgs, $site, $state){
     $sgs_floor = floor($sgs);
-    $sgs_miom = substr($sgs_floor, 2, -3);
     $sgs_50 = substr($sgs_floor, -2);
     $sgs_4 = substr($sgs_floor, 0, -2);
-    //$sgs_year = substr($sgs_floor, 0, -4);
-
-    if ($sgs_floor > 159999){
-        $year = '2016';
-    }else{
-        if ($sgs_miom > 4){
-            $year = 'Michigan';
-        }else{
-            $year = 'Omaha';
-        };
-    };
-    if ($sgs_floor < 140000){
-        $year = 'Michigan';
-    };
+    $sgs_year = substr($sgs_floor, 0, -4);
     if ($sgs_50 >= 50){
         $sgs_2 = '50';
     }else{
         $sgs_2 = '00';
     };
-
     if ($type === 'quick'){
-        $path = '/data/box/SGS WIP/' . $year . '/SGS WIP ' . $sgs_4 . $sgs_2 . '/' . $sgs_floor . ' - ' . $site . ' - ' . $state. '/';
+        $path = '/data/box/SGS WIP/' . $sgs_year . '/SGS WIP ' . $sgs_4 . $sgs_2 . '/' . $sgs_floor . ' - ' . $site . ' - ' . $state. '/';
     }elseif ($type === 'box'){
         $path = 'https://sgsbox.com/index.php/apps/files?dir=SGS WIP/' . $year . '/SGS WIP ' . $sgs_4 . $sgs_2 . '/' . $sgs_floor . ' - ' . $site . ' - ' . $site_state;
     }elseif ($type === 'server'){
-        $path = 'file:///S:/SGS WIP/' . $year . '/SGS WIP ' . $sgs_4 . $sgs_2 . '/' . $sgs_floor . ' - ' . $site . ' - ' . $state;
+        $path = 'file:///S:/SGS WIP/' . $sgs_year . '/SGS WIP ' . $sgs_4 . $sgs_2 . '/' . $sgs_floor . ' - ' . $site . ' - ' . $state;
     }
 
     return $path;
 }
 
-function FileSizeConvert($bytes)
+function fileSizeConvert($bytes)
 {
     $bytes = floatval($bytes);
     $arBytes = array(
@@ -141,16 +126,15 @@ function FileSizeConvert($bytes)
         if($bytes >= $arItem["VALUE"])
         {
             $result = $bytes / $arItem["VALUE"];
-            $result = str_replace(".", "," , strval(round($result, 2)))." ".$arItem["UNIT"];
+            $result = str_replace(",", "." , strval(round($result, 2)))." ".$arItem["UNIT"];
             break;
         }
     }
     return $result;
 }
 
-function reportSize($sgs){
+function reportSize($sgs, $site, $state){
     $sgs_floor = floor($sgs);
-    $sgs_miom = substr($sgs_floor, 2, -3);
     $sgs_50 = substr($sgs_floor, -2);
     $sgs_4 = substr($sgs_floor, 0, -2);
     $sgs_year = substr($sgs_floor, 0, -4);
@@ -159,14 +143,14 @@ function reportSize($sgs){
     }else{
         $sgs_2 = '00';
     };
-    foreach (glob('/data/box/SGS WIP/' . $sgs_year . '/SGS WIP ' . $sgs_4 . $sgs_2 . '/' . $sgs_floor . ' - ' . $row[site_num] . ' - ' . $row[state] . '/Inspection/Deliverables/*.pdf') as $filename) {
+    foreach (glob('/data/box/SGS WIP/' . $sgs_year . '/SGS WIP ' . $sgs_4 . $sgs_2 . '/' . $sgs_floor . ' - ' . $site . ' - ' . $state . '/Inspection/Deliverables/*.pdf') as $filename) {
         $filename = basename($filename);
-        $report = '/data/box/SGS WIP/' . $sgs_year . '/SGS WIP ' . $sgs_4 . $sgs_2 . '/' . $sgs_floor . ' - ' . $row[site_num] . ' - ' . $row[state] . '/Inspection/Deliverables/' . $filename;
+        $report = '/data/box/SGS WIP/' . $sgs_year . '/SGS WIP ' . $sgs_4 . $sgs_2 . '/' . $sgs_floor . ' - ' . $site . ' - ' . $state . '/Inspection/Deliverables/' . $filename;
     }
-    $size = filesize($report);
+    $size = fileSizeConvert(filesize($report));
 
+    return $size;
 
-    return 'test';
 }
 
 

@@ -2,21 +2,23 @@
 /*
  * Page Setup
  */
-$page = 'Inspection Dashboard';
-$subtitle = '';
 require_once("../../includes/init.php");
-echo $template->header($page,$subtitle);
-
 /*
  * Init dashboard class and get required select field info
  */
 $dash = New Dashboard();
 $dashTable = $dash->dashInspections();
 
+$page = 'Inspection Dashboard <span class="pull-right small"><span class="label label-default hidden-sm hidden-xs">PO: '.$dashTable['poTotal'].'</span><span class="label label-success hidden-sm hidden-xs">GO: '.$dashTable['goTotal'].' </span><span class="label label-primary hidden-sm hidden-xs">FWC: '.$dashTable['fwcTotal'].'</span></span>';
+$subtitle = '';
+echo $template->header($page,$subtitle);
+
+
+
 ?>
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
-            <div class="panel panel-primary">
+            <div class="panel panel-primary panel-no-border">
                 <div class="panel-heading">
                    <div class="panel-title">Closeouts</div>
                 </div>
@@ -24,7 +26,7 @@ $dashTable = $dash->dashInspections();
                     <table class="table table-condensed table-dash table-hover table-bordered small">
                         <thead>
                             <tr>
-                                <th colspan="5" class="text-center">Received - Waiting for Review</th>
+                                <th colspan="5" class="text-center">Received - Waiting for Review <?php if ($dashTable['closeoutReceived']!= false){ echo '('. count($dashTable['closeoutReceived']). ')'; } ?></th>
                             </tr>
                             <tr>
                                 <th class="col-xs-2">SGS#</th>
@@ -38,7 +40,7 @@ $dashTable = $dash->dashInspections();
                             <tr class="clickable-row <?php if ($row['priority'] != 0){ echo 'danger'; } ?>" data-href="/job/?sgs=<?=$row['sgs_num']?>">
                                 <td><?=$row['sgs_num']?></td>
                                 <td><?=substr($row['site_name'],0,15)?></td>
-                                <td><?=$dash->timeAgo(strtotime($row['closeout_status_date']))?></td>
+                                <td><?=timeAgo(strtotime($row['closeout_status_date']))?></td>
                                 <td><?=$row['closeout_missing']?></td>
                             </tr>
                         <?php } ?>
@@ -48,7 +50,7 @@ $dashTable = $dash->dashInspections();
                     <table class="table table-condensed table-dash table-hover table-bordered small">
                         <thead>
                             <tr>
-                                <th colspan="5" class="text-center">In Review</th>
+                                <th colspan="5" class="text-center">In Review <?php if ($dashTable['closeoutReview']!= false){ echo '('. count($dashTable['closeoutReview']). ')'; } ?></th>
                             </tr>
                             <tr>
                                 <th class="col-xs-2">SGS#</th>
@@ -72,7 +74,7 @@ $dashTable = $dash->dashInspections();
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
-            <div class="panel panel-primary">
+            <div class="panel panel-primary panel-no-border">
                 <div class="panel-heading">
                     <div class="panel-title">Punch</div>
                 </div>
@@ -80,7 +82,7 @@ $dashTable = $dash->dashInspections();
                     <table class="table table-condensed table-dash table-hover table-bordered small">
                         <thead>
                             <tr>
-                                <th colspan="5" class="text-center">Received - Waiting for Review</th>
+                                <th colspan="5" class="text-center">Received - Waiting for Review <?php if ($dashTable['punchReceived']!= false){ echo '('. count($dashTable['punchReceived']). ')'; } ?></th>
                             </tr>
                             <tr>
                                 <th class="col-xs-2">SGS#</th>
@@ -94,7 +96,7 @@ $dashTable = $dash->dashInspections();
                             <tr class="clickable-row <?php if ($row['priority'] != 0){ echo 'danger'; } ?>" data-href="/job/?sgs=<?=$row['sgs_num']?>">
                                 <td><?=$row['sgs_num']?></td>
                                 <td><?=substr($row['site_name'],0,15)?></td>
-                                <td><?=$dash->timeAgo(strtotime($row['inspection_status_date']))?></td>
+                                <td><?=timeAgo(strtotime($row['inspection_status_date']))?></td>
                                 <td><?=$row['inspection_missing']?></td>
                             </tr>
                         <?php } ?>
@@ -104,7 +106,7 @@ $dashTable = $dash->dashInspections();
                     <table class="table table-condensed table-dash table-hover table-bordered small">
                         <thead>
                             <tr>
-                                <th colspan="5" class="text-center">In Review</th>
+                                <th colspan="5" class="text-center">In Review <?php if ($dashTable['punchReview']!= false){ echo '('. count($dashTable['punchReview']). ')'; } ?></th>
                             </tr>
                             <tr>
                                 <th class="col-xs-2">SGS#</th>
@@ -128,7 +130,7 @@ $dashTable = $dash->dashInspections();
                     <table class="table table-condensed table-dash table-hover table-bordered small">
                         <thead>
                             <tr>
-                                <th colspan="5" class="text-center">Needs Punch List Sent</th>
+                                <th colspan="5" class="text-center">Needs Punch List Sent <?php if ($dashTable['needsPunch']!= false){ echo '('. count($dashTable['needsPunch']). ')'; } ?></th>
                             </tr>
                             <tr>
                                 <th class="col-xs-2">SGS#</th>
@@ -142,7 +144,7 @@ $dashTable = $dash->dashInspections();
                             <tr class="clickable-row <?php if ($row['priority'] != 0){ echo 'danger'; } ?>" data-href="/job/?sgs=<?=$row['sgs_num']?>">
                                 <td><?=$row['sgs_num']?></td>
                                 <td><?=substr($row['site_name'],0,15)?></td>
-                                <td><?=$dash->timeAgo(strtotime($row['overall_status_date']))?></td>
+                                <td><?=timeAgo(strtotime($row['overall_status_date']))?></td>
                                 <td><?=$row['job_type']?></td>
                             </tr>
                         <?php } ?>
@@ -152,7 +154,7 @@ $dashTable = $dash->dashInspections();
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
-            <div class="panel panel-primary">
+            <div class="panel panel-primary panel-no-border">
                 <div class="panel-heading">
                     <div class="panel-title">Reports</div>
                 </div>
@@ -160,7 +162,7 @@ $dashTable = $dash->dashInspections();
                     <table class="table table-condensed table-dash table-hover table-bordered small">
                         <thead>
                         <tr>
-                            <th colspan="5" class="text-center">Reports Being Written</th>
+                            <th colspan="5" class="text-center">Reports Being Written <?php if ($dashTable['reportWritten']!= false){ echo '('. count($dashTable['reportWritten']). ')'; } ?></th>
                         </tr>
                         <tr>
                             <th class="col-xs-2">SGS#</th>
@@ -177,9 +179,9 @@ $dashTable = $dash->dashInspections();
                                 <td><?=substr($row['site_name'],0,15)?></td>
                                 <td>
                                     <?php if (strtotime($row['closeout_status_date']) > strtotime($row['inspection_status_date'])) {
-                                        echo $dash->timeAgo(strtotime($row['closeout_status_date']));
+                                        echo timeAgo(strtotime($row['closeout_status_date']));
                                     }else{
-                                        echo $dash->timeAgo(strtotime($row['inspection_status_date']));
+                                        echo timeAgo(strtotime($row['inspection_status_date']));
                                     }
                                     ?>
                                 </td>
@@ -193,7 +195,7 @@ $dashTable = $dash->dashInspections();
                     <table class="table table-condensed table-dash table-hover table-bordered small">
                         <thead>
                             <tr>
-                                <th colspan="5" class="text-center">Closeout & Punch Approved</th>
+                                <th colspan="5" class="text-center">Closeout & Punch Approved <?php if ($dashTable['approved']!= false){ echo '('. count($dashTable['approved']). ')'; } ?></th>
                             </tr>
                             <tr>
                                 <th class="col-xs-2">SGS#</th>
@@ -210,9 +212,9 @@ $dashTable = $dash->dashInspections();
                                 <td><?=substr($row['site_name'],0,15)?></td>
                                 <td>
                                 <?php if (strtotime($row['closeout_status_date']) > strtotime($row['inspection_status_date'])) {
-                                    echo $dash->timeAgo(strtotime($row['closeout_status_date']));
+                                    echo timeAgo(strtotime($row['closeout_status_date']));
                                 }else{
-                                    echo $dash->timeAgo(strtotime($row['inspection_status_date']));
+                                    echo timeAgo(strtotime($row['inspection_status_date']));
 
                                 }
                                 ?>
@@ -227,7 +229,7 @@ $dashTable = $dash->dashInspections();
                     <table class="table table-condensed table-dash table-hover table-bordered small">
                         <thead>
                             <tr>
-                                <th colspan="5" class="text-center">Ready for Seal</th>
+                                <th colspan="5" class="text-center">Ready for Seal <?php if ($dashTable['sealReady']!= false){ echo '('. count($dashTable['sealReady']). ')'; } ?></th>
                             </tr>
                             <tr>
                                 <th class="col-xs-2">SGS#</th>
@@ -239,12 +241,15 @@ $dashTable = $dash->dashInspections();
                         </thead>
                         <tbody>
                         <?php foreach($dashTable['sealReady'] as $row){?>
-                            <tr class="clickable-row <?php if ($row['priority'] != 0){ echo 'danger'; } ?>" data-href="/job/?sgs=<?=$row['sgs_num']?>">
-                                <td><?=$row['sgs_num']?></td>
-                                <td><?=substr($row['site_name'],0,15)?></td>
-                                <td><?=$row['state']?></td>
-                                <td><?=$row['job_type']?></td>
-                                <td><?=reportSize($row['sgs_num'])?></td>
+                            <tr <?php if ($row['priority'] != 0){ echo 'class="danger"'; } ?>>
+                                <td class="clickable-row" data-href="/job/?sgs=<?=$row['sgs_num']?>"><?=$row['sgs_num']?></td>
+                                <td class="clickable-row" data-href="/job/?sgs=<?=$row['sgs_num']?>"><?=substr($row['site_name'],0,15)?></td>
+                                <td class="clickable-row" data-href="/job/?sgs=<?=$row['sgs_num']?>"><?=$row['state']?></td>
+                                <td class="clickable-row" data-href="/job/?sgs=<?=$row['sgs_num']?>"><?=$row['job_type']?></td>
+                                <td>
+                                    <a href="/download/report/?sgs=<?=$row['sgs_num']?>&site=<?=$row['site_num']?>&state=<?=$row['state']?>" target="_blank"><i class="fa fa-download"></i></a>
+                                    <?=reportSize($row['sgs_num'],$row['site_num'],$row['state'])?>
+                                </td>
                             </tr>
                         <?php } ?>
                         </tbody>
@@ -253,7 +258,7 @@ $dashTable = $dash->dashInspections();
                     <table class="table table-condensed table-dash table-hover table-bordered small">
                         <thead>
                             <tr>
-                                <th colspan="5" class="text-center">Sealed in Box</th>
+                                <th colspan="5" class="text-center">Sealed in Box <?php if ($dashTable['sealed']!= false){ echo '('. count($dashTable['sealed']). ')'; } ?></th>
                             </tr>
                             <tr>
                                 <th class="col-xs-2">SGS#</th>

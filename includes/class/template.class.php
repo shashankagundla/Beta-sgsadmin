@@ -59,7 +59,7 @@ $html .= '
                   <ul class="dropdown-menu">
                     <li><a href="/schedule/main/">Main</a></li>
                     <li><a href="/schedule/tia/">TIA</a></li>
-                    <li class="dropdown-header">Schedule Settings</li>
+		            <li role="separator" class="divider"></li>
                     <li><a href="/schedule/color/">Change Crew Colors</a></li>
                   </ul>
                 </li>
@@ -70,14 +70,14 @@ $html .= '
                     <li><a href="/list/standard/">Standard</a></li>
                     <li><a href="/list/construction/">Construction</a></li>
                     <li><a href="/list/history/">History</a></li>
-                    <li class="dropdown-header">Job Management</li>
+		            <li role="separator" class="divider"></li>
                     <li><a href="/job/add/">Add Job</a></li>
                   </ul>
                 </li>
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Bids <b class="caret"></b></a>
                   <ul class="dropdown-menu">
-                    <li class="dropdown-header">Bid Management</li>
+		            <li role="separator" class="divider"></li>
                     <li><a href="/bid/add/">Add Bid</a></li>
                   </ul>
                 </li>

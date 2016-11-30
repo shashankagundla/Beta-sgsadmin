@@ -390,10 +390,15 @@ echo $template->header($page);
                         <?php foreach($jobComments as $c){ ?>
                         <li>
                             <?php if (!$_SESSION['mobile']){?>
-                            <div class="commenterImage">
-                                <img src="https://lh4.googleusercontent.com/-oUozwkil0JM/AAAAAAAAAAI/AAAAAAAABoA/ShUKvKu0akQ/photo.jpg" />
-                            </div>
-                            <div class="commentText">
+                            <?php
+                            /*
+                             * TODO: CommenterImages
+                              <div class="commenterImage">
+                                    <img src="https://lh4.googleusercontent.com/-oUozwkil0JM/AAAAAAAAAAI/AAAAAAAABoA/ShUKvKu0akQ/photo.jpg" />
+                                </div>
+                             */
+                            ?>
+                            <div class="">
                             <?php } ?>
                                 <p><?=nl2br($c['comment'])?></p>
                                 <span class="date sub-text">By <?=$c['user']?> - <?=timeAgo(strtotime($c['date'])) ?></span>
@@ -406,7 +411,7 @@ echo $template->header($page);
                     </ul>
                     <form class="form-inline" role="form" method="post" action="/includes/class/form.class.php">
                         <div class="form-group">
-                            <textarea class="form-control input-sm" rows="1" name="comment" placeholder="Quick Add Comment"></textarea>
+                            <textarea class="form-control input-sm" rows="4" name="comment" placeholder="Add Comment"></textarea>
                         </div>
                         <div class="form-group">
                             <input type="hidden" name="admin_id" value="<?=$j['id']?>">
@@ -416,7 +421,6 @@ echo $template->header($page);
                 </div>
             </div>
         </div>
-
     </div>
 
 <?php

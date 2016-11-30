@@ -2,20 +2,20 @@
 /*
  * Page Setup
  */
-$page = 'Engineering Dashboard';
-$subtitle = '';
 require_once("../../includes/init.php");
-echo $template->header($page,$subtitle);
-
 /*
  * Init dashboard class and get required select field info
  */
 $dash = New Dashboard();
 $dashTable = $dash->dashEngineering();
+
+$page = 'Engineering Dashboard <span class="pull-right small"><span class="label label-default hidden-sm hidden-xs">PO: '.$dashTable['poTotal'].'</span><span class="label label-success hidden-sm hidden-xs">GO: '.$dashTable['goTotal'].' </span><span class="label label-primary hidden-sm hidden-xs">FWC: '.$dashTable['fwcTotal'].'</span></span>';
+$subtitle = '';
+echo $template->header($page,$subtitle);
 ?>
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
-            <div class="panel panel-primary">
+            <div class="panel panel-primary panel-no-border">
                 <div class="panel-heading">
                     <div class="panel-title">Go</div>
                 </div>
@@ -37,7 +37,7 @@ $dashTable = $dash->dashEngineering();
                                     <td><?=substr($row['site_name'],0,15)?></td>
                                     <td><?=$row['job_type']?></td>
                                     <td><?=$row['crew_1']?></td>
-                                    <td><?=$dash->timeAgo(strtotime($row['overall_status_date']))?></td>
+                                    <td><?=timeAgo(strtotime($row['overall_status_date']))?></td>
                                 </tr>
                             <?php } ?>
                         </tbody>
@@ -46,7 +46,7 @@ $dashTable = $dash->dashEngineering();
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
-            <div class="panel panel-primary">
+            <div class="panel panel-primary panel-no-border">
                 <div class="panel-heading">
                     <div class="panel-title">FWC</div>
                 </div>
@@ -77,7 +77,7 @@ $dashTable = $dash->dashEngineering();
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
-            <div class="panel panel-primary">
+            <div class="panel panel-primary panel-no-border">
                 <div class="panel-heading">
                     <div class="panel-title">Reports</div>
                 </div>
@@ -85,7 +85,7 @@ $dashTable = $dash->dashEngineering();
                     <table class="table table-condensed table-dash table-hover table-bordered small">
                         <thead>
                             <tr>
-                                <th colspan="5" class="text-center">Reports being Written</th>
+                                <th colspan="5" class="text-center">Reports being Written <?php if ($dashTable['reportsWritten']!= false){ echo '('. count($dashTable['reportsWritten']). ')'; } ?></th>
                             </tr>
                             <tr>
                                 <th class="col-xs-2">SGS#</th>
@@ -111,7 +111,7 @@ $dashTable = $dash->dashEngineering();
                     <table class="table table-condensed table-dash table-hover table-bordered small">
                         <thead>
                             <tr>
-                                <th colspan="5" class="text-center">Reports in Review</th>
+                                <th colspan="5" class="text-center">Reports in Review <?php if ($dashTable['reportsReview']!= false){ echo '('. count($dashTable['reportsReview']). ')'; } ?></th>
                             </tr>
                             <tr>
                                 <th class="col-xs-2">SGS#</th>
@@ -137,7 +137,7 @@ $dashTable = $dash->dashEngineering();
                     <table class="table table-condensed table-dash table-hover table-bordered small">
                         <thead>
                             <tr>
-                                <th colspan="5" class="text-center">All SGS Jobs Ready for Seal</th>
+                                <th colspan="5" class="text-center">All SGS Jobs Ready for Seal <?php if ($dashTable['sealReady']!= false){ echo '('. count($dashTable['sealReady']). ')'; } ?></th>
                             </tr>
                             <tr>
                                 <th class="col-xs-2">SGS#</th>
@@ -163,7 +163,7 @@ $dashTable = $dash->dashEngineering();
                     <table class="table table-condensed table-dash table-hover table-bordered small">
                         <thead>
                             <tr>
-                                <th colspan="5" class="text-center">Sealed in Box</th>
+                                <th colspan="5" class="text-center">Sealed in Box <?php if ($dashTable['sealed']!= false){ echo '('. count($dashTable['sealed']). ')'; } ?></th>
                             </tr>
                             <tr>
                                 <th class="col-xs-2">SGS#</th>
