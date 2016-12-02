@@ -81,8 +81,12 @@ class Users {
         if (! $result) { $db->killDisplay(); }
         $_SESSION['user'] = $result;
 
-        //Successful login, now redirect
-        header("location: /account/");
+        if ($_SESSION['user']['lpage']){
+            header("Location: " . $_SESSION['user']['lpage']);
+            exit;
+        }else{
+            header("Location: /account/");
+        }
 
         return;
 	}
@@ -92,6 +96,7 @@ class Users {
     {
         $db = New MySQL();
         $laction = MySQL::SQLValue(date("Y-m-d H:i:s"));
+        $lpage = MySQL::SQLValue($_SESSION['user']['lpage']);
         $sql_id = MySQL::SQLValue($id);
         $result = $db->QueryArray("SELECT id, o_id FROM $this->employeeTable WHERE id = $sql_id");
 
@@ -99,7 +104,7 @@ class Users {
             header("location: /account/logout/");
             exit;
         } else {
-            $result = $db->Query("UPDATE $this->employeeTable SET laction=$laction WHERE id=$sql_id");
+            $result = $db->Query("UPDATE $this->employeeTable SET laction=$laction, lpage=$lpage WHERE id=$sql_id");
             if (! $result) { $db->killDisplay(); }
         }
         return;

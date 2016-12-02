@@ -202,7 +202,6 @@ echo $template->notify();
                 // Shorten locale.feature.properties to just `prop` so we're not
                 // writing this long form over and over again.
                 var prop = locale.feature.properties;
-
                 // Each marker on the map.
                 var popup = '<b>SGS#:</b>  ' + prop.sgs + '<br>'
                     + '<b>Job Type:</b>  ' + prop.jobType + '<br>'
