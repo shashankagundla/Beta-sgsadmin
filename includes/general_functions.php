@@ -133,7 +133,7 @@ function fileSizeConvert($bytes)
     return $result;
 }
 
-function reportSize($sgs, $site, $state){
+function reportSize($sgs, $site, $state, $type = null){
     $sgs_floor = floor($sgs);
     $sgs_50 = substr($sgs_floor, -2);
     $sgs_4 = substr($sgs_floor, 0, -2);
@@ -143,9 +143,16 @@ function reportSize($sgs, $site, $state){
     }else{
         $sgs_2 = '00';
     };
-    foreach (glob('/data/box/SGS WIP/' . $sgs_year . '/SGS WIP ' . $sgs_4 . $sgs_2 . '/' . $sgs_floor . ' - ' . $site . ' - ' . $state . '/Inspection/Deliverables/*.pdf') as $filename) {
-        $filename = basename($filename);
-        $report = '/data/box/SGS WIP/' . $sgs_year . '/SGS WIP ' . $sgs_4 . $sgs_2 . '/' . $sgs_floor . ' - ' . $site . ' - ' . $state . '/Inspection/Deliverables/' . $filename;
+    if ($type === 'Rigging') {
+        foreach (glob('/data/box/SGS WIP/' . $sgs_year . '/SGS WIP ' . $sgs_4 . $sgs_2 . '/' . $sgs_floor . ' - ' . $site . ' - ' . $state . '/Rigging Plan/06 - Deliverables/*.pdf') as $filename) {
+            $filename = basename($filename);
+            $report = '/data/box/SGS WIP/' . $sgs_year . '/SGS WIP ' . $sgs_4 . $sgs_2 . '/' . $sgs_floor . ' - ' . $site . ' - ' . $state . '//Rigging Plan/06 - Deliverables/' . $filename;
+        }
+    }else {
+        foreach (glob('/data/box/SGS WIP/' . $sgs_year . '/SGS WIP ' . $sgs_4 . $sgs_2 . '/' . $sgs_floor . ' - ' . $site . ' - ' . $state . '/Inspection/Deliverables/*.pdf') as $filename) {
+            $filename = basename($filename);
+            $report = '/data/box/SGS WIP/' . $sgs_year . '/SGS WIP ' . $sgs_4 . $sgs_2 . '/' . $sgs_floor . ' - ' . $site . ' - ' . $state . '/Inspection/Deliverables/' . $filename;
+        }
     }
     $size = fileSizeConvert(filesize($report));
 

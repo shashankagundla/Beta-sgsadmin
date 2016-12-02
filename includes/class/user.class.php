@@ -92,6 +92,7 @@ class Users {
     {
         $db = New MySQL();
         $laction = MySQL::SQLValue(date("Y-m-d H:i:s"));
+        $lpage = MySQL::SQLValue($_SERVER['REQUEST_URI']);
         $sql_id = MySQL::SQLValue($id);
         $result = $db->QueryArray("SELECT id, o_id FROM $this->employeeTable WHERE id = $sql_id");
 
@@ -100,6 +101,7 @@ class Users {
             exit;
         } else {
             $result = $db->Query("UPDATE $this->employeeTable SET laction=$laction WHERE id=$sql_id");
+            $result = $db->Query("UPDATE $this->employeeTable SET lpage=$lpage WHERE id=$sql_id");
             if (! $result) { $db->killDisplay(); }
         }
         return;

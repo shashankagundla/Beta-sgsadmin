@@ -24,7 +24,9 @@ class Dashboard
         //columns needed for this column
         unset($select);
         $select[] = 'overall_status_date';
-        $select[] = 'overall_status_id';
+        $select[] = 'tower_type';
+        $select[] = 'fname';
+        $select[] = 'lname';
 
         /*
          * FWC Table
@@ -34,7 +36,7 @@ class Dashboard
         $where = 'overall_status = "FWC" AND report_status = "-" AND inspection_status = "-" AND 
                 (job_type = "TIA" OR job_type = "SI") ORDER BY overall_status_date ASC';
         //add join
-        $join = ' LEFT JOIN ' .$this->revTable . ' ON admin_jobs.id = admin_revisions_current.admin_id';
+        $join = ' LEFT JOIN ' .$this->revTable . ' ON admin_jobs.id = admin_revisions_current.admin_id LEFT JOIN ' .$this->empTable . ' ON admin_revisions_current.overall_status_id = employee.id';
         //build query
         $result['fwc'] = $this->runQuery($where,$select,$join);
 
@@ -45,7 +47,7 @@ class Dashboard
         $where = 'overall_status = "FWC" AND report_status = "-" AND inspection_status != "-" AND 
             (job_type = "TIA" OR job_type = "SI") ORDER BY overall_status_date ASC';
         //add join
-        $join = ' LEFT JOIN ' .$this->revTable . ' ON admin_jobs.id = admin_revisions_current.admin_id';
+        $join = ' LEFT JOIN ' .$this->revTable . ' ON admin_jobs.id = admin_revisions_current.admin_id LEFT JOIN ' .$this->empTable . ' ON admin_revisions_current.overall_status_id = employee.id';
         //build query
         $result['reportNotStarted'] = $this->runQuery($where,$select,$join);
 
@@ -56,8 +58,10 @@ class Dashboard
         //columns needed for these queries
         unset($select);
         $select[] = 'report_status';
-        $select[] = 'report_status_id';
         $select[] = 'report_status_date';
+        $select[] = 'fname';
+        $select[] = 'lname';
+        $select[] = 'tower_type';
 
         /*
          * Report Status Table
@@ -65,7 +69,7 @@ class Dashboard
         //build where
         $where = '(report_status = "Writing Report") AND (job_type = "TIA" OR job_type = "SI") AND (overall_status = "FWC") ORDER BY report_status_date ASC';
         //add join
-        $join = ' LEFT JOIN ' .$this->revTable . ' ON admin_jobs.id = admin_revisions_current.admin_id';
+        $join = ' LEFT JOIN ' .$this->revTable . ' ON admin_jobs.id = admin_revisions_current.admin_id LEFT JOIN ' .$this->empTable . ' ON admin_revisions_current.report_status_id = employee.id';
         //build query
         $result['reportWritten'] = $this->runQuery($where,$select,$join);
 
@@ -73,6 +77,11 @@ class Dashboard
          * Report Review Table
          */
         //build where
+        //columns needed for these queries
+        unset($select);
+        $select[] = 'report_status';
+        $select[] = 'report_status_date';
+        $select[] = 'tower_type';
         $where = '(report_status = "Initial Review" OR report_status = "Final Review" OR report_status = "Reviewing") AND (job_type = "TIA" OR job_type = "SI") ORDER BY report_status_date ASC';
         //add join
         $join = ' LEFT JOIN ' .$this->revTable . ' ON admin_jobs.id = admin_revisions_current.admin_id';
@@ -95,6 +104,8 @@ class Dashboard
         //columns needed for these queries
         unset($select);
         $select[] = 'state';
+        $select[] = 'site_num';
+        $select[] = 'tower_type';
 
         /*
          * Ready for Seal Table
@@ -295,7 +306,8 @@ class Dashboard
          * Go Column
          */
         //columns needed for this query
-        $select[] = 'crew_1';
+        $select[] = 'fname';
+        $select[] = 'lname';
         $select[] = 'overall_status_date';
 
         //build where
@@ -303,7 +315,7 @@ class Dashboard
         job_type = "T Mapping" OR job_type = "F Mapping" OR job_type = "Residential") ORDER BY overall_status_date ASC';
 
         //add join
-        $join = ' LEFT JOIN ' .$this->revTable . ' ON admin_jobs.id = admin_revisions_current.admin_id';
+        $join = ' LEFT JOIN ' .$this->revTable . ' ON admin_jobs.id = admin_revisions_current.admin_id LEFT JOIN ' .$this->empTable . ' ON admin_jobs.crew_1 = employee.id';
 
         //build query
         $result['go'] = $this->runQuery($where,$select,$join);
@@ -313,15 +325,17 @@ class Dashboard
          */
         //columns needed for these queries
         unset($select);
-        $select[] = 'eng_assigned';
+        $select[] = 'fname';
+        $select[] = 'lname';
         $select[] = 'date_due';
 
         //build where
         $where = 'overall_status = "FWC" AND report_status = "-" AND (job_type = "Premod" OR job_type = "Rigging" OR 
         job_type = "Structural" OR job_type = "T Mapping" OR job_type = "F Mapping" OR job_type = "Residential") 
         ORDER BY date_due ASC';
+        $join = ' LEFT JOIN ' .$this->empTable . ' ON admin_jobs.eng_assigned = employee.id';
         //build query
-        $result['fwc'] = $this->runQuery($where,$select);
+        $result['fwc'] = $this->runQuery($where,$select,$join);
 
 
         /*
@@ -329,9 +343,11 @@ class Dashboard
         */
         //columns needed for these queries
         unset($select);
-        $select[] = 'eng_assigned';
         $select[] = 'date_due';
         $select[] = 'state';
+        $select[] = 'site_num';
+        $select[] = 'fname';
+        $select[] = 'lname';
 
         /*
         * Reports Being Written
@@ -342,10 +358,10 @@ class Dashboard
         job_type = "Residential") ORDER BY job_type ASC';
 
         //add join
-        $join = ' LEFT JOIN ' .$this->revTable . ' ON admin_jobs.id = admin_revisions_current.admin_id';
+        $join = ' LEFT JOIN ' .$this->empTable . ' ON admin_jobs.eng_assigned = employee.id';
 
         //build query
-        $result['reportsWritten'] = $this->runQuery($where,$select);
+        $result['reportsWritten'] = $this->runQuery($where,$select,$join);
 
         /*
          * Reports in Review
@@ -356,18 +372,12 @@ class Dashboard
         job_type = "Rigging" OR job_type = "Structural" OR job_type = "T Mapping" OR job_type = "F Mapping" OR 
         job_type = "Residential") ORDER BY job_type ASC';
 
-        //build query
-        $result['reportsReview'] = $this->runQuery($where,$select);
-
-        /*
-         * Ready for Seal Table
-         */
-
-        //build where
-        $where = '(report_status = "Ready for Seal") ORDER BY job_type ASC';
+        //add join
+        $join = ' LEFT JOIN ' .$this->empTable . ' ON admin_jobs.eng_assigned = employee.id';
 
         //build query
-        $result['sealReady'] = $this->runQuery($where,$select);
+        $result['reportsReview'] = $this->runQuery($where,$select,$join);
+
 
         /*
          * Sealed in Box Table
@@ -378,8 +388,26 @@ class Dashboard
         job_type != "SI" AND job_type != "CWI" AND job_type != "NDE" AND job_type != "Pulltest" AND 
         job_type != "Foundation") ORDER BY job_type ASC';
 
+        //add join
+        $join = ' LEFT JOIN ' .$this->empTable . ' ON admin_jobs.eng_assigned = employee.id';
+
         //build query
-        $result['sealed'] = $this->runQuery($where,$select);
+        $result['sealed'] = $this->runQuery($where,$select,$join);
+
+        /*
+         * Ready for Seal Table
+         */
+        unset($select);
+        $select[] = 'date_due';
+        $select[] = 'state';
+        $select[] = 'site_num';
+
+        //build where
+        $where = '(report_status = "Ready for Seal") ORDER BY job_type ASC';
+
+        //build query
+        $result['sealReady'] = $this->runQuery($where,$select,$join);
+
 
 
         return $result;

@@ -66,9 +66,7 @@ $html .= '
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Jobs <b class="caret"></b></a>
                   <ul class="dropdown-menu">
-                    <li><a href="/list/inspection/">Inspections</a></li>
-                    <li><a href="/list/standard/">Standard</a></li>
-                    <li><a href="/list/construction/">Construction</a></li>
+                    <li><a href="/list/active/">Active</a></li>
                     <li><a href="/list/history/">History</a></li>
 		            <li role="separator" class="divider"></li>
                     <li><a href="/job/add/">Add Job</a></li>

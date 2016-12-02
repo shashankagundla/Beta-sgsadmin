@@ -5,9 +5,8 @@ include("src/contrib/Google_Oauth2Service.php");
 ######### edit details ##########
 $clientId = '94937420735-tbq29gtr5akj5gjermf58itn8hb95m56.apps.googleusercontent.com'; //Google CLIENT ID
 $clientSecret = 'RwB53vzf1-NSuaE9du62hWDC'; //Google CLIENT SECRET
-$redirectUrl = 'https://beta.sgsadmin.com';  //return url (url to script)
-$homeUrl = 'http://beta.sgsadmin.com';  //return to home
-
+$redirectUrl = 'https://beta.sgsadmin.com/login/';  //return url (url to script)
+$homeUrl = 'http://beta.sgsadmin.com/login/';  //return to home
 ##################################
 
 $gClient = new Google_Client();
@@ -17,4 +16,5 @@ $gClient->setClientSecret($clientSecret);
 $gClient->setRedirectUri($redirectUrl);
 
 $google_oauthV2 = new Google_Oauth2Service($gClient);
+
 ?>

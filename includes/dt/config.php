@@ -14,6 +14,6 @@ $sql_details = array(
 	"pass" => "8UWGozkMw3mpak",       // Database password
 	"host" => "sgsdb.cxdcv7nlogaf.us-east-1.rds.amazonaws.com",       // Database host
 	"port" => "",       // Database connection port (can be left empty for default)
-	"db"   => "sgsadmin_beta",       // Database name
-	"dsn"  => ""        // PHP DSN extra information. Set as `charset=utf8` if you are using MySQL
+	"db"   => "sgsadmin",       // Database name
+	"dsn"  => "charset=utf8"        // PHP DSN extra information. Set as `charset=utf8` if you are using MySQL
 );

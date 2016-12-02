@@ -80,6 +80,7 @@ class Form
         return $result;
     }
 
+
     /**
      * Get a client list from the wordpress tables
      *
@@ -106,7 +107,7 @@ class Form
     public function selectCrew()
     {
         $db = New MySQL();
-        $result = $db->Query("select id, CONCAT_WS(' ', fname, lname) as name from employee");
+        $result = $db->Query("select id, display_name as name from employee where climber > 0 ORDER BY fname");
         if (!$result) {
             $this->dbError($db->Kill());
         }
@@ -384,7 +385,6 @@ class Form
         if($_POST['reportLevel']){$insert['report_level'] = MySQL::SQLValue($_POST['reportLevel']);}
         if($_POST['statusNotes']){$insert['status_notes'] = MySQL::SQLValue($_POST['statusNotes']);}
         $insert = $this->addUpdated($insert);
-
         return $insert;
 
     }

@@ -128,3 +128,7 @@
 .table-padding{
     padding: 10px;
 }
+
+.column_filter{
+    width: 100%;
+}

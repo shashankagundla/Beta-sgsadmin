@@ -9,7 +9,7 @@ require_once("../../includes/init.php");
 $dash = New Dashboard();
 $dashTable = $dash->dashEngineering();
 
-$page = 'Engineering Dashboard <span class="pull-right small"><span class="label label-default hidden-sm hidden-xs">PO: '.$dashTable['poTotal'].'</span><span class="label label-success hidden-sm hidden-xs">GO: '.$dashTable['goTotal'].' </span><span class="label label-primary hidden-sm hidden-xs">FWC: '.$dashTable['fwcTotal'].'</span></span>';
+$page = 'Engineering Dashboard <span class="pull-right small"><span class="label label-default hidden-xs">PO: '.$dashTable['poTotal'].'</span><span class="label label-success hidden-xs">GO: '.$dashTable['goTotal'].' </span><span class="label label-primary hidden-xs">FWC: '.$dashTable['fwcTotal'].'</span></span>';
 $subtitle = '';
 echo $template->header($page,$subtitle);
 ?>
@@ -36,7 +36,7 @@ echo $template->header($page,$subtitle);
                                     <td><?=$row['sgs_num']?></td>
                                     <td><?=substr($row['site_name'],0,15)?></td>
                                     <td><?=$row['job_type']?></td>
-                                    <td><?=$row['crew_1']?></td>
+                                    <td><?=$row['fname']?> <?=$row['lname']?></td>
                                     <td><?=timeAgo(strtotime($row['overall_status_date']))?></td>
                                 </tr>
                             <?php } ?>
@@ -67,7 +67,7 @@ echo $template->header($page,$subtitle);
                                     <td><?=$row['sgs_num']?></td>
                                     <td><?=substr($row['site_name'],0,15)?></td>
                                     <td><?=$row['job_type']?></td>
-                                    <td><?=$row['eng_assigned']?></td>
+                                    <td><?=$row['fname']?> <?=$row['lname']?></td>
                                     <td><?=$row['date_due']?></td>
                                 </tr>
                             <?php } ?>
@@ -101,7 +101,7 @@ echo $template->header($page,$subtitle);
                                     <td><?=$row['sgs_num']?></td>
                                     <td><?=substr($row['site_name'],0,15)?></td>
                                     <td><?=$row['job_type']?></td>
-                                    <td><?=$row['eng_assigned']?></td>
+                                    <td><?=$row['fname']?> <?=$row['lname']?></td>
                                     <td><?=$row['date_due']?></td>
                                 </tr>
                             <?php } ?>
@@ -127,7 +127,7 @@ echo $template->header($page,$subtitle);
                                     <td><?=$row['sgs_num']?></td>
                                     <td><?=substr($row['site_name'],0,15)?></td>
                                     <td><?=$row['job_type']?></td>
-                                    <td><?=$row['eng_assigned']?></td>
+                                    <td><?=$row['fname']?> <?=$row['lname']?></td>
                                     <td><?=$row['date_due']?></td>
                                 </tr>
                             <?php } ?>
@@ -149,12 +149,15 @@ echo $template->header($page,$subtitle);
                         </thead>
                         <tbody>
                             <?php foreach($dashTable['sealReady'] as $row){?>
-                                <tr class="clickable-row <?php if ($row['priority'] != 0){ echo 'danger'; } ?>" data-href="/job/?sgs=<?=$row['sgs_num']?>">
-                                    <td><?=$row['sgs_num']?></td>
-                                    <td><?=substr($row['site_name'],0,15)?></td>
-                                    <td><?=$row['state']?></td>
-                                    <td><?=$row['job_type']?></td>
-                                    <td><?=$row['-']?></td>
+                                <tr class="<?php if ($row['priority'] != 0){ echo 'danger'; } ?>" data-href="/job/?sgs=<?=$row['sgs_num']?>">
+                                    <td class="clickable-row" data-href="/job/?sgs=<?=$row['sgs_num']?>"><?=$row['sgs_num']?></td>
+                                    <td class="clickable-row" data-href="/job/?sgs=<?=$row['sgs_num']?>"><?=substr($row['site_name'],0,15)?></td>
+                                    <td class="clickable-row" data-href="/job/?sgs=<?=$row['sgs_num']?>"><?=$row['state']?></td>
+                                    <td class="clickable-row" data-href="/job/?sgs=<?=$row['sgs_num']?>"><?=$row['job_type']?></td>
+                                    <td>
+                                        <a href="/download/report/?sgs=<?=$row['sgs_num']?>&site=<?=$row['site_num']?>&state=<?=$row['state']?>&type=<?=$row['job_type']?>" target="_blank"><i class="fa fa-download"></i></a>
+                                        <?=reportSize($row['sgs_num'],$row['site_num'],$row['state'],$row[job_type])?>
+                                    </td>
                                 </tr>
                             <?php } ?>
                         </tbody>
@@ -179,7 +182,7 @@ echo $template->header($page,$subtitle);
                                     <td><?=$row['sgs_num']?></td>
                                     <td><?=substr($row['site_name'],0,15)?></td>
                                     <td><?=$row['job_type']?></td>
-                                    <td><?=$row['eng_assigned']?></td>
+                                    <td><?=$row['fname']?> <?=$row['lname']?></td>
                                     <td><?=$row['state']?></td>
                                 </tr>
                             <?php } ?>

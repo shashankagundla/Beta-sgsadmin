@@ -18,13 +18,14 @@ error_reporting(E_ALL ^ E_NOTICE);
 // ini_set('display_errors', 1);
 require_once 'vfm-admin/include/head.php';
 if (isset($_GET['root'])){
+    session_start();
     $_SESSION['root'] = $_GET['root'];
 }
 ?>
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title><?php print $_SESSION['root'] ?></title>
+    <title>SGS Admin - File Browser</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="Content-Language" content="<?php print $encodeExplorer->lang; ?>" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">

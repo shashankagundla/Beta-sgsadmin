@@ -56,7 +56,7 @@ echo $template->header($page);
                                     <div class="col-sm-6 col-md-3 col-lg-3">
                                         <div class="form-group">
                                             <div>
-                                                <label for="sgs">Crew</label>
+                                                <label for="crew">Crew</label>
                                                 <span class="pull-right">
                                             </div>
                                             <select class="form-control input-sm" id="crew" name="crew" autocomplete="off">
@@ -298,7 +298,7 @@ echo $template->header($page);
                                         </li>
                                         <li class="list-group-item">
                                             <strong>Manufacturer</strong>
-                                            <span class="pull-right"><?=substr($j['tower_man'],?></span>
+                                            <span class="pull-right"><?=substr($j['tower_man'],0,15)?></span>
                                         </li>
                                         <li class="list-group-item">
                                             <strong>Owner</strong>

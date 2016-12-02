@@ -9,7 +9,7 @@ require_once("../../includes/init.php");
 $dash = New Dashboard();
 $dashTable = $dash->dashInspections();
 
-$page = 'Inspection Dashboard <span class="pull-right small"><span class="label label-default hidden-sm hidden-xs">PO: '.$dashTable['poTotal'].'</span><span class="label label-success hidden-sm hidden-xs">GO: '.$dashTable['goTotal'].' </span><span class="label label-primary hidden-sm hidden-xs">FWC: '.$dashTable['fwcTotal'].'</span></span>';
+$page = 'Inspection Dashboard <span class="pull-right small"><span class="label label-default hidden-xs">PO: '.$dashTable['poTotal'].'</span><span class="label label-success hidden-xs">GO: '.$dashTable['goTotal'].' </span><span class="label label-primary hidden-xs">FWC: '.$dashTable['fwcTotal'].'</span></span>';
 $subtitle = '';
 echo $template->header($page,$subtitle);
 
@@ -87,7 +87,7 @@ echo $template->header($page,$subtitle);
                             <tr>
                                 <th class="col-xs-2">SGS#</th>
                                 <th class="col-xs-3">Site</th>
-                                <th class="col-xs-3">TSR</th>
+                                <th class="col-xs-3">TS-R</th>
                                 <th class="col-xs-4">Punch Missing</th>
                             </tr>
                         </thead>
