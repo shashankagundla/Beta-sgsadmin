@@ -72,7 +72,7 @@ $allSelect = $form->allSelectFields();
                                     foreach($allSelect as $key => $val){
                                         if ($val['field'] === 'overallStatus'){;
                                             ?>
-                                        <option value="<?php echo $val['selectID']; ?>" <?php if ($val['selectID'] === $j['overall_status']){ echo 'selected'; } ?>
+                                        <option value="<?php echo $val['selectID']; ?>"
                                             <?php if($val['selectID'] === 'Pending' || $val['selectID'] === 'Cancel' || $val['selectID'] === 'Paid' AND $_SESSION['user']['role'] > '4'){ echo 'disabled'; }?>>
                                             <?php echo $val['selectField']; ?></option><?php
                                         }
@@ -190,11 +190,12 @@ echo $template->notify();
     }
     L.mapbox.accessToken = 'pk.eyJ1IjoiYmV5ZXJhIiwiYSI6ImNpbWxoYmI3NTA1ZnF0cWx2eTA0b2Ztd2QifQ.fnGoJA1Vv4Coaz2ieC7NMQ';
     var map = L.mapbox.map('map', 'mapbox.streets')
-        .setView([39.50, -98.35], 5);
+        .setView([39.50, -98.35], <?php if($_SESSION['mobile']){ echo '3'; }else{ echo '5';}; ?>);
 
     var locations;
     function loadMarkers(){
-        locations = L.mapbox.featureLayer().loadURL('/includes/queries/tia.map.php').addTo(map);
+        <?php if($_SESSION['mobile']){ echo 'locations = L.mapbox.featureLayer().loadURL(\'/includes/queries/tia.mobile.map.php?m=1\').addTo(map);';
+        }else{ echo 'locations = L.mapbox.featureLayer().loadURL(\'/includes/queries/tia.map.php\').addTo(map);';}; ?>
         locations.on('ready', function() {
             locations.eachLayer(function(locale) {
 

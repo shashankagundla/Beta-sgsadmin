@@ -76,6 +76,31 @@ echo $template->header($page);
                                             <input type="date" class="form-control input-sm" id="edos" name="edos" value="<?=$j['date_eos']?>">
                                         </div>
                                     </div>
+                                    <?php if($j['job_type'] === 'Premod' || 'T Mapping' || 'F Mapping' || 'Rigging' || 'Structural' || 'Residential'){?>
+                                    <div class="col-sm-6 col-md-3 col-lg-3">
+                                        <div class="form-group">
+                                            <div>
+                                                <label for="crew">Assigned To</label>
+                                                <span class="pull-right">
+                                            </div>
+                                            <select class="form-control input-sm" id="assignedTo" name="assignedTo" autocomplete="off">
+                                                <option value="">Select</option>
+                                                <?php
+                                                foreach($form->selectEng() as $key => $val){ ?>
+                                                <option value="<?php echo $val['id']; ?>" <?php if ($val['id'] === $j['eng_assigned']){ echo 'selected'; } ?>>
+                                                    <?php echo $val['name']; ?></option><?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-3 col-lg-3">
+                                        <div class="form-group">
+                                            <label for="followUpDate">Job Due</label>
+                                            <input type="date" class="form-control input-sm" id="dateDue" name="dateDue" value="<?=$j['date_due']?>">
+                                        </div>
+                                    </div>
+                                    <?php }?>
                                     <div class="clearfix"></div>
                                     <div class="col-sm-6 col-md-3 col-lg-3">
                                         <div class="form-group">
@@ -97,7 +122,8 @@ echo $template->header($page);
                                             </select>
                                         </div>
                                     </div>
-                                    <?php if($_SESSION['user']['role'] === '7'){}else{?>
+                                    <?php if($_SESSION['mobile']){}else{?>
+                                    <?php if($j['job_type'] === 'Premod' || 'T Mapping' || 'F Mapping' || 'Rigging' || 'Structural' || 'Residential'){}else{?>
                                     <div class="col-sm-6 col-md-3 col-lg-3">
                                         <div class="form-group">
                                             <div>
@@ -136,6 +162,7 @@ echo $template->header($page);
                                             </select>
                                         </div>
                                     </div>
+                                    <?php } ?>
                                     <div class="col-sm-6 col-md-3 col-lg-3">
                                         <div class="form-group">
                                             <div>
@@ -155,6 +182,7 @@ echo $template->header($page);
                                             </select>
                                         </div>
                                     </div>
+                                    <?php if($j['job_type'] === 'Premod' || 'T Mapping' || 'F Mapping' || 'Rigging' || 'Structural' || 'Residential'){}else{?>
                                     <div class="col-sm-6 col-md-4 col-lg-4">
                                         <div class="form-group">
                                             <label for="appID">Missing Closeout #:</label>
@@ -187,6 +215,7 @@ echo $template->header($page);
                                             </select>
                                         </div>
                                     </div>
+                                    <?php } ?>
                                     <?php } ?>
                                 </div>
                                 <div class="row">

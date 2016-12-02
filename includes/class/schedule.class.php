@@ -46,7 +46,6 @@ class Schedule
         $select[] = 'crew_1';
         $select[] = 'fname';
         $select[] = 'lname';
-        $select[] = 'color';
         $select[] = 'priority';
 
         //merge arrays if select is input

@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 /**
  * VFM - veno file manager index
  *
@@ -12,14 +12,14 @@
  * @license   Exclusively sold on CodeCanyon: http://bit.ly/veno-file-manager
  * @link      http://filemanager.veno.it/
  */
-
 error_reporting(E_ALL ^ E_NOTICE);
 // error_reporting(E_ALL);
 // ini_set('display_errors', 1);
 require_once 'vfm-admin/include/head.php';
 if (isset($_GET['root'])){
-    session_start();
     $_SESSION['root'] = $_GET['root'];
+    header("Location: https://beta.sgsadmin.com/fm/");
+    exit;
 }
 ?>
 <!DOCTYPE HTML>

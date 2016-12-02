@@ -3,6 +3,15 @@ include( "../init.php" );
 
 $conn = new PDO('mysql:host=sgsdb.cxdcv7nlogaf.us-east-1.rds.amazonaws.com;dbname=sgsadmin','sgsadmin','8UWGozkMw3mpak');
 # Build SQL SELECT statement including x and y columns
+if ($_GET['m'] === 1){
+$sql = 'SELECT admin_jobs.id, sgs_num, site_name, site_num, state, date_eos, overall_status, job_type, overall_status, field_status, state, latitude, longitude, date_eos, tower_type, tower_height, crew_1, employee.color, display_name, DATEDIFF(CURDATE(),overall_status_date) AS go_days
+        FROM admin_jobs
+        LEFT JOIN employee
+        ON admin_jobs.crew_1=employee.id
+        LEFT JOIN admin_revisions_current
+        ON admin_jobs.id=admin_revisions_current.admin_id
+        WHERE (`overall_status` = "GO" AND `job_type` = "TIA" AND `crew_1` != "null")';
+}else{
 $sql = 'SELECT admin_jobs.id, sgs_num, site_name, site_num, state, date_eos, overall_status, job_type, overall_status, field_status, state, latitude, longitude, date_eos, tower_type, tower_height, crew_1, employee.color, display_name, DATEDIFF(CURDATE(),overall_status_date) AS go_days
         FROM admin_jobs
         LEFT JOIN employee
@@ -10,7 +19,7 @@ $sql = 'SELECT admin_jobs.id, sgs_num, site_name, site_num, state, date_eos, ove
         LEFT JOIN admin_revisions_current
         ON admin_jobs.id=admin_revisions_current.admin_id
         WHERE (`overall_status` = "GO" AND `job_type` = "TIA")';
-
+}
 /*
 * If bbox variable is set, only return records that are within the bounding box
 * bbox should be a string in the form of 'southwest_lng,southwest_lat,northeast_lng,northeast_lat'

@@ -23,10 +23,9 @@ if (!$_SESSION['google_data']){
     header("location: /account/logout/");
     exit;
 }
+
 $user = new Users;
 $user->checkAuth($_SESSION['user']['id'],$_SESSION['user']['o_id']);
-$SESSION['lpage'] = $_SERVER['REQUEST_URI'];
-
 //check if mobile
 $_SESSION['mobile'] = checkMobile();
 ?>

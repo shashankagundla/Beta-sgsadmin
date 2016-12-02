@@ -3,6 +3,7 @@
 class Template {
 
     function header($page = null, $subtitle = null) {
+    $_SESSION['user']['lpage'] = $_SERVER['REQUEST_URI'];
     if ($subtitle){
         $subtitle = '<small>'.$subtitle.'</small>';
     }
@@ -30,6 +31,7 @@ $html .= '
 }
     //TODO: Add Profile Image and Padding CSS class for right nav bar
     //Nav Bar
+
         $html .= '
 <body>
     <div class="navbar navbar-default navbar-static-top" role="navigation">
@@ -80,6 +82,17 @@ $html .= '
                   </ul>
                 </li>
             </ul>
+            <ul class="nav navbar-nav navbar-right">
+		        <li class="dropdown">
+		          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+		          <span class="glyphicon glyphicon-user" aria-hidden="true"></span>'. $_SESSION['user']['fname'] . ' <span class="caret"></span> </a>
+		          <ul class="dropdown-menu dropdown-menu">
+		            <li><a onclick="window.open(\'https://speedtest.sgsadmin.com\',\'Connection Test\',\'width=750,height=2000\')">Test Connection</a></li>
+					<li role="separator" class="divider"></li>
+		            <li><a href="/account/logout/">Logout</a></li>
+		          </ul>
+		        </li>
+	      </ul>
           <div class="col-sm-3 col-md-3 pull-right">
                 <form class="navbar-form" role="search">
                     <div class="input-group">

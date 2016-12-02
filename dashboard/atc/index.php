@@ -11,9 +11,6 @@ $dashTable = $dash->dashATC();
 $page = 'ATC Dashboard <span class="pull-right small"><span class="label label-default hidden-xs">PO: '.$dashTable['poTotal'].'</span><span class="label label-success hidden-xs">GO: '.$dashTable['goTotal'].' </span><span class="label label-primary hidden-xs">FWC: '.$dashTable['fwcTotal'].'</span></span>';
 $subtitle = '';
 echo $template->header($page,$subtitle);
-
-
-
 ?>
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">

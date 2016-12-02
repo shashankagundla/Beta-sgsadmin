@@ -107,7 +107,19 @@ class Form
     public function selectCrew()
     {
         $db = New MySQL();
-        $result = $db->Query("select id, display_name as name from employee where climber > 0 ORDER BY fname");
+        $result = $db->Query("select id, display_name as name from employee where climber > 0");
+        if (!$result) {
+            $this->dbError($db->Kill());
+        }
+        $result = $db->RecordsArray();
+        $db->Close();
+        return $result;
+    }
+
+    public function selectEng()
+    {
+        $db = New MySQL();
+        $result = $db->Query("select id, display_name as name from employee where eng > 0");
         if (!$result) {
             $this->dbError($db->Kill());
         }
@@ -385,6 +397,7 @@ class Form
         if($_POST['reportLevel']){$insert['report_level'] = MySQL::SQLValue($_POST['reportLevel']);}
         if($_POST['statusNotes']){$insert['status_notes'] = MySQL::SQLValue($_POST['statusNotes']);}
         $insert = $this->addUpdated($insert);
+
         return $insert;
 
     }
